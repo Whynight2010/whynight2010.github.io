@@ -1,0 +1,102 @@
+{
+  "id": "j20",
+  "name": "歼-20",
+  "fullName": "歼-20 \"威龙\" 隐身战斗机",
+  "category": "airforce",
+  "images": [
+    {
+      "file": "images/j20-01.jpg",
+      "currentFallback": "",
+      "originalUrl": "http://www.81.cn/kj_208559/_attachment/2023/01/12/10211531_e0be033607c92529b7530a.jpg",
+      "pageUrl": "http://www.81.cn/kj/2023-01/12/content_10211531.htm",
+      "sourceName": "中国军网",
+      "downloadedAt": "2026-07-09",
+      "licenseNote": "公开网页匿名可访问；仅本地自用展示；版权归原权利人所有。",
+      "reviewStatus": "verified",
+      "notes": "收藏！12张歼-20高清大图 - 中国军网 · 图片 1"
+    },
+    {
+      "file": "images/j20-02.jpg",
+      "currentFallback": "",
+      "originalUrl": "http://www.81.cn/kj_208559/_attachment/2023/01/12/10211531_e0be033607c92529b7530b.jpg",
+      "pageUrl": "http://www.81.cn/kj/2023-01/12/content_10211531.htm",
+      "sourceName": "中国军网",
+      "downloadedAt": "2026-07-09",
+      "licenseNote": "公开网页匿名可访问；仅本地自用展示；版权归原权利人所有。",
+      "reviewStatus": "verified",
+      "notes": "收藏！12张歼-20高清大图 - 中国军网 · 图片 2"
+    },
+    {
+      "file": "images/j20-03.jpg",
+      "currentFallback": "",
+      "originalUrl": "http://www.81.cn/kj_208559/_attachment/2023/01/12/10211531_e0be033607c92529b7530c.jpg",
+      "pageUrl": "http://www.81.cn/kj/2023-01/12/content_10211531.htm",
+      "sourceName": "中国军网",
+      "downloadedAt": "2026-07-09",
+      "licenseNote": "公开网页匿名可访问；仅本地自用展示；版权归原权利人所有。",
+      "reviewStatus": "verified",
+      "notes": "收藏！12张歼-20高清大图 - 中国军网 · 图片 3"
+    },
+    {
+      "file": "images/j20-04.jpg",
+      "currentFallback": "",
+      "originalUrl": "http://www.81.cn/kj_208559/_attachment/2023/01/12/10211531_e0be033607c92529b7540d.jpg",
+      "pageUrl": "http://www.81.cn/kj/2023-01/12/content_10211531.htm",
+      "sourceName": "中国军网",
+      "downloadedAt": "2026-07-09",
+      "licenseNote": "公开网页匿名可访问；仅本地自用展示；版权归原权利人所有。",
+      "reviewStatus": "verified",
+      "notes": "收藏！12张歼-20高清大图 - 中国军网 · 图片 4"
+    },
+    {
+      "file": "images/j20-05.jpg",
+      "currentFallback": "",
+      "originalUrl": "http://www.81.cn/kj_208559/_attachment/2023/01/12/10211531_e0be033607c92529b7540e.jpg",
+      "pageUrl": "http://www.81.cn/kj/2023-01/12/content_10211531.htm",
+      "sourceName": "中国军网",
+      "downloadedAt": "2026-07-09",
+      "licenseNote": "公开网页匿名可访问；仅本地自用展示；版权归原权利人所有。",
+      "reviewStatus": "verified",
+      "notes": "收藏！12张歼-20高清大图 - 中国军网 · 图片 5"
+    },
+    {
+      "file": "images/j20-06.jpg",
+      "currentFallback": "",
+      "originalUrl": "http://www.81.cn/kj_208559/_attachment/2023/01/12/10211531_e0be033607c92529b7540f.jpg",
+      "pageUrl": "http://www.81.cn/kj/2023-01/12/content_10211531.htm",
+      "sourceName": "中国军网",
+      "downloadedAt": "2026-07-09",
+      "licenseNote": "公开网页匿名可访问；仅本地自用展示；版权归原权利人所有。",
+      "reviewStatus": "verified",
+      "notes": "收藏！12张歼-20高清大图 - 中国军网 · 图片 6"
+    },
+    {
+      "file": "images/j20-07.jpg",
+      "currentFallback": "",
+      "originalUrl": "http://www.81.cn/kj_208559/_attachment/2023/01/12/10211531_e0be033607c92529b75410.jpg",
+      "pageUrl": "http://www.81.cn/kj/2023-01/12/content_10211531.htm",
+      "sourceName": "中国军网",
+      "downloadedAt": "2026-07-09",
+      "licenseNote": "公开网页匿名可访问；仅本地自用展示；版权归原权利人所有。",
+      "reviewStatus": "verified",
+      "notes": "收藏！12张歼-20高清大图 - 中国军网 · 图片 7"
+    }
+  ],
+  "video": {
+    "file": "video/j20.mp4",
+    "poster": "video/j20-poster.jpg",
+    "currentFallbackPoster": "",
+    "pageUrl": "",
+    "sourceName": "公开图片生成",
+    "downloadedAt": "2026-07-09",
+    "licenseNote": "未找到可稳定合规下载的对应视频时，由本地图片生成离线 MP4。",
+    "reviewStatus": "generated",
+    "notes": "由已下载公开图片或本地生成图片生成，保证离线可播放。"
+  },
+  "completeness": {
+    "images": 7,
+    "video": 1,
+    "missingImages": 0,
+    "missingVideo": 0
+  }
+}

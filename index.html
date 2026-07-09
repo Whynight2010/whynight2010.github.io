@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中国防务观察 · 现代国防装备专题索引</title>
+<style>
+/* ====== News Briefing Design System ====== */
+:root{
+  --bg:#f4f3ef;
+  --paper:#fffdfa;
+  --paper-strong:#ffffff;
+  --ink:#111817;
+  --ink-soft:#26312f;
+  --muted:#68736f;
+  --muted-2:#8b9691;
+  --line:#ddd8cf;
+  --line-soft:#ece7dd;
+  --accent:#8f2f22;
+  --accent-dark:#5f1f18;
+  --accent-soft:#f4e5df;
+  --steel:#3f5158;
+  --shadow-soft:0 18px 50px rgba(20,28,25,.08);
+  --shadow-card:0 22px 56px rgba(20,28,25,.12);
+  --radius-lg:24px;
+  --radius-md:16px;
+  --radius-sm:10px;
+  --motion-fast:180ms cubic-bezier(.2,.8,.2,1);
+  --motion-smooth:380ms cubic-bezier(.2,.8,.2,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:"Microsoft YaHei","PingFang SC","Noto Sans SC",system-ui,sans-serif;background:radial-gradient(circle at top left,rgba(143,47,34,.08),transparent 30rem),var(--bg);color:var(--ink);line-height:1.75;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body.menu-open,body.modal-open{overflow:hidden}
+button,input{font:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid rgba(143,47,34,.32);outline-offset:4px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* ====== Header ====== */
+.topbar{position:sticky;top:0;z-index:50;background:rgba(255,253,250,.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--line);display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:22px;padding:0 34px;min-height:68px;box-shadow:0 1px 0 rgba(17,24,23,.02)}
+.topbar-brand{display:flex;align-items:baseline;gap:10px;color:var(--ink);white-space:nowrap;letter-spacing:-.03em}
+.topbar-brand span:first-child{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 6px rgba(143,47,34,.1);font-size:0;flex-shrink:0}
+.topbar-brand .txt{font-family:"Noto Serif SC","Songti SC","SimSun",serif;font-size:1.15rem;font-weight:800}
+.topbar-brand::after{content:"DEFENSE BRIEF";font-size:.62rem;letter-spacing:.18em;color:var(--muted-2);margin-left:4px}
+.topbar-nav{display:flex;align-items:center;justify-content:center;gap:4px;overflow-x:auto;scrollbar-width:none}
+.topbar-nav::-webkit-scrollbar{display:none}
+.nav-link{position:relative;padding:8px 15px;border:1px solid transparent;border-radius:999px;background:transparent;color:var(--muted);font-size:.86rem;font-weight:650;white-space:nowrap;transition:color var(--motion-fast),background-color var(--motion-fast),border-color var(--motion-fast),transform var(--motion-fast)}
+.nav-link:hover{color:var(--ink);background:#f0ece4;border-color:var(--line-soft);transform:translateY(-1px)}
+.nav-link.active,.nav-link[aria-current="page"]{color:#fff;background:var(--ink);border-color:var(--ink);box-shadow:0 10px 24px rgba(17,24,23,.12)}
+.topbar-actions{display:flex;align-items:center;gap:10px;justify-content:flex-end}
+.topbar-search{display:flex;align-items:center;gap:8px;background:#f6f2eb;border:1px solid transparent;border-radius:999px;padding:8px 14px;transition:border-color var(--motion-fast),background-color var(--motion-fast),box-shadow var(--motion-fast);min-width:220px}
+.topbar-search:focus-within{border-color:rgba(143,47,34,.45);background:#fff;box-shadow:0 10px 28px rgba(143,47,34,.08)}
+.topbar-search input{border:none;outline:none;background:transparent;font-size:.86rem;width:170px;color:var(--ink)}
+.topbar-search input::placeholder{color:var(--muted-2)}
+.topbar-search svg{width:16px;height:16px;color:var(--muted-2);flex-shrink:0}
+.clear-search{width:24px;height:24px;border:none;border-radius:50%;background:transparent;color:var(--muted-2);display:none;align-items:center;justify-content:center;transition:background-color var(--motion-fast),color var(--motion-fast),transform var(--motion-fast)}
+.clear-search.visible{display:flex}
+.clear-search:hover{background:var(--accent-soft);color:var(--accent);transform:rotate(90deg)}
+.topbar-toggle{display:none;background:#fff;border:1px solid var(--line);border-radius:999px;width:40px;height:40px;color:var(--ink);font-size:1.1rem;align-items:center;justify-content:center;transition:transform var(--motion-fast),box-shadow var(--motion-fast),background-color var(--motion-fast)}
+.topbar-toggle:hover{transform:translateY(-1px);box-shadow:0 12px 26px rgba(20,28,25,.1)}
+
+/* ====== Hero ====== */
+.hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#161d1b 0%,#243233 58%,#4e211b 100%);color:#fff;padding:78px 32px 68px;border-bottom:1px solid rgba(255,255,255,.08)}
+.hero::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(0deg,rgba(255,255,255,.028) 1px,transparent 1px);background-size:48px 48px;mask-image:linear-gradient(180deg,#000,transparent 85%)}
+.hero::after{content:"";position:absolute;width:520px;height:520px;border:1px solid rgba(255,255,255,.08);border-radius:50%;right:-180px;top:-190px;box-shadow:0 0 0 70px rgba(255,255,255,.018),0 0 0 140px rgba(255,255,255,.012)}
+.hero-content{position:relative;z-index:1;max-width:980px;margin:0 auto;animation:heroIn .62s var(--motion-smooth) both}
+@keyframes heroIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.hero-kicker{display:inline-flex;align-items:center;gap:10px;font-size:.75rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.68);margin-bottom:18px;border:1px solid rgba(255,255,255,.18);padding:6px 16px;border-radius:999px;background:rgba(255,255,255,.06);backdrop-filter:blur(10px)}
+.hero-kicker::before{content:"";width:7px;height:7px;border-radius:50%;background:#d96652;box-shadow:0 0 18px rgba(217,102,82,.85)}
+.hero h1{font-family:"Noto Serif SC","Songti SC","SimSun",serif;font-size:clamp(2.1rem,5vw,4.8rem);font-weight:900;line-height:1.08;letter-spacing:-.05em;max-width:760px;margin-bottom:18px}
+.hero p{font-size:1.05rem;color:rgba(255,255,255,.72);max-width:650px;line-height:1.9;margin-bottom:34px}
+.hero-stats{display:flex;gap:12px;flex-wrap:wrap}
+.hero-stat{text-align:left;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);padding:13px 18px;border-radius:16px;min-width:120px;backdrop-filter:blur(12px)}
+.hero-stat .num{font-size:1.65rem;line-height:1;font-weight:850;color:#fff;letter-spacing:-.04em}
+.hero-stat .label{font-size:.72rem;color:rgba(255,255,255,.52);margin-top:8px;letter-spacing:.08em}
+
+/* ====== Main Content ====== */
+.main-wrap{max-width:1260px;margin:0 auto;padding:34px 24px 68px}
+.results-bar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px;padding:16px 18px;border:1px solid var(--line-soft);background:rgba(255,253,250,.72);border-radius:var(--radius-md);box-shadow:0 12px 34px rgba(20,28,25,.04)}
+.results-title{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.results-title strong{font-family:"Noto Serif SC","Songti SC","SimSun",serif;font-size:1.15rem;color:var(--ink)}
+.results-title span{font-size:.86rem;color:var(--muted)}
+.results-hint{font-size:.78rem;color:var(--muted-2)}
+.cat-heading{display:flex;align-items:center;gap:10px;margin:26px 0 8px;padding:8px 2px 12px;border-bottom:1px solid var(--line)}
+.cat-heading .icon{font-size:1.05rem;filter:saturate(.7)}
+.cat-heading h2{font-family:"Noto Serif SC","Songti SC","SimSun",serif;font-size:1.22rem;font-weight:800;color:var(--ink)}
+.cat-heading .count{font-size:.76rem;color:var(--muted);background:#ebe6dd;padding:3px 11px;border-radius:999px}
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:18px;transition:opacity var(--motion-smooth),transform var(--motion-smooth),filter var(--motion-smooth)}
+.cards-grid.is-filtering{opacity:.28;transform:translateY(10px);filter:blur(1px)}
+.card{position:relative;background:var(--paper);border:1px solid var(--line-soft);border-radius:var(--radius-lg);overflow:hidden;cursor:pointer;min-height:100%;box-shadow:0 1px 0 rgba(17,24,23,.02);transition:transform var(--motion-smooth),box-shadow var(--motion-smooth),border-color var(--motion-fast),background-color var(--motion-fast);opacity:0;animation:cardIn .48s var(--motion-smooth) forwards;animation-delay:var(--delay,0ms)}
+@keyframes cardIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.card::before{content:"";position:absolute;left:18px;right:18px;top:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);transform:scaleX(0);transform-origin:left;transition:transform .46s var(--motion-smooth);z-index:2}
+.card:hover,.card:focus-visible{transform:translateY(-6px);box-shadow:var(--shadow-card);border-color:#d5ccc0;background:#fff}
+.card:hover::before,.card:focus-visible::before{transform:scaleX(1)}
+.card:active,.card.is-pressed{transform:translateY(-2px) scale(.985)}
+.card-img{position:relative;height:150px;overflow:hidden;background:#ece7dd;border-bottom:1px solid var(--line-soft)}
+.card-img svg{width:100%;height:100%;display:block;transition:transform .7s var(--motion-smooth),filter .7s var(--motion-smooth);filter:saturate(.78) contrast(.98)}
+.card:hover .card-img svg{transform:scale(1.035);filter:saturate(.95) contrast(1.02)}
+.card-cat{position:absolute;top:14px;left:14px;z-index:1;padding:6px 12px;border-radius:999px;font-size:.72rem;background:rgba(17,24,23,.72);color:#fff;backdrop-filter:blur(8px);font-weight:700;letter-spacing:.02em}
+.card-body{padding:20px 22px 22px}
+.card-eyebrow{font-size:.72rem;color:var(--accent);font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
+.card-body h3{font-family:"Noto Serif SC","Songti SC","SimSun",serif;font-size:1.28rem;font-weight:900;color:var(--ink);line-height:1.32;margin-bottom:7px;letter-spacing:-.03em}
+.card-body .model{font-size:.82rem;color:var(--muted-2);margin-bottom:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card-body .excerpt{font-size:.9rem;color:var(--muted);line-height:1.75;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.card-meta{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:18px;padding-top:15px;border-top:1px solid var(--line-soft);font-size:.78rem;color:var(--muted)}
+.card-meta span:last-child{color:var(--accent);font-weight:800;transition:transform var(--motion-fast)}
+.card:hover .card-meta span:last-child{transform:translateX(4px)}
+.no-results{text-align:center;padding:82px 20px;color:var(--muted);border:1px dashed var(--line);border-radius:var(--radius-lg);background:rgba(255,253,250,.58)}
+.no-results .icon{font-size:2.8rem;margin-bottom:14px;filter:saturate(.72)}
+.no-results h3{font-family:"Noto Serif SC","Songti SC","SimSun",serif;font-size:1.3rem;color:var(--ink);margin-bottom:8px}
+
+/* ====== Modal ====== */
+.modal-overlay{position:fixed;inset:0;z-index:100;background:rgba(17,24,23,.72);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;padding:24px;visibility:hidden;opacity:0;pointer-events:none;transition:opacity var(--motion-smooth),visibility var(--motion-smooth)}
+.modal-overlay.show{visibility:visible;opacity:1;pointer-events:auto}
+.modal{background:var(--paper-strong);border-radius:26px;width:100%;max-width:940px;max-height:88vh;overflow-y:auto;box-shadow:0 34px 92px rgba(0,0,0,.32);transform:translateY(28px) scale(.985);opacity:0;transition:transform var(--motion-smooth),opacity var(--motion-smooth);position:relative;border:1px solid rgba(255,255,255,.45)}
+.modal-overlay.show .modal{transform:translateY(0) scale(1);opacity:1}
+.modal::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:.9}
+.modal-close{position:sticky;top:18px;float:right;z-index:10;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.86);border:1px solid var(--line);color:var(--ink);font-size:1.05rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform var(--motion-fast),background-color var(--motion-fast),color var(--motion-fast),border-color var(--motion-fast);margin:18px 18px -60px auto;box-shadow:0 12px 28px rgba(20,28,25,.1)}
+.modal-close:hover{background:var(--accent);border-color:var(--accent);color:#fff;transform:rotate(90deg)}
+.modal-img-wrap{position:relative;width:100%;height:300px;overflow:hidden;background:#ece7dd;border-radius:26px 26px 0 0;border-bottom:1px solid var(--line-soft)}
+.modal-img-wrap svg{width:100%;height:100%;display:block;filter:saturate(.82)}
+.modal-body{padding:30px 38px 40px}
+.modal-tags{margin-bottom:14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.modal-tag,.modal-status{padding:6px 13px;border-radius:999px;font-size:.76rem;font-weight:800;border:1px solid var(--line-soft)}
+.modal-tag{background:#f4f0e8;color:var(--steel)}
+.tag-active{background:#e8f3ea;color:#2d6e40;border-color:#cfe5d5}
+.tag-test{background:#fff4da;color:#a16207;border-color:#efd38f}
+.modal-body h2{font-family:"Noto Serif SC","Songti SC","SimSun",serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;color:var(--ink);line-height:1.16;letter-spacing:-.04em;margin-bottom:8px}
+.modal-body .model-name{font-size:1rem;color:var(--muted);margin-bottom:24px}
+.specs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:1px;margin-bottom:26px;background:var(--line);border-radius:16px;overflow:hidden;border:1px solid var(--line)}
+.spec-item{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 14px;background:#fffdf9;font-size:.86rem}
+.spec-label{color:var(--muted);font-weight:700;flex-shrink:0}
+.spec-value{color:var(--ink);font-weight:750;text-align:right;word-break:break-word}
+.radar-block{display:flex;gap:28px;align-items:center;flex-wrap:wrap;margin:22px 0 28px;padding:22px 24px;background:#f7f3ec;border-radius:18px;border:1px solid var(--line-soft)}
+.radar-canvas-wrap{flex-shrink:0}
+.radar-canvas-wrap canvas{display:block;max-width:100%}
+.radar-info{flex:1;min-width:220px}
+.radar-info h4{font-size:.92rem;color:var(--ink);margin-bottom:14px;font-weight:850;letter-spacing:.04em}
+.radar-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:.83rem}
+.radar-row .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.radar-row .lbl{color:var(--muted);width:68px;flex-shrink:0}
+.radar-row .bar-wrap{flex:1;height:6px;border-radius:999px;background:#e2ddd4;overflow:hidden}
+.radar-row .bar-fill{height:100%;border-radius:999px;transition:width .8s var(--motion-smooth)}
+.radar-row .val{font-weight:850;color:var(--ink);width:30px;text-align:right;flex-shrink:0}
+.desc-block{border-top:1px solid var(--line-soft);padding-top:6px}
+.desc-block h4{font-family:"Noto Serif SC","Songti SC","SimSun",serif;font-size:1.05rem;color:var(--ink);margin:18px 0 8px;font-weight:900}
+.desc-block p{font-size:.94rem;color:var(--ink-soft);line-height:1.95;margin-bottom:12px;text-indent:2em}
+.footer{text-align:center;padding:38px 20px;border-top:1px solid var(--line);color:var(--muted-2);font-size:.78rem;line-height:2.2;background:rgba(255,253,250,.8)}
+.btt{position:fixed;bottom:28px;right:28px;z-index:45;width:44px;height:44px;border-radius:50%;background:#fff;border:1px solid var(--line);color:var(--muted);cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:opacity var(--motion-fast),transform var(--motion-fast),background-color var(--motion-fast),color var(--motion-fast),border-color var(--motion-fast);opacity:0;pointer-events:none;box-shadow:0 12px 28px rgba(20,28,25,.1)}
+.btt.visible{opacity:1;pointer-events:auto}
+.btt:hover{background:var(--ink);color:#fff;border-color:var(--ink);transform:translateY(-3px)}
+
+
+/* ====== Offline Media Gallery ====== */
+.card-img img{width:100%;height:100%;display:block;object-fit:cover;transition:transform .7s var(--motion-smooth),filter .7s var(--motion-smooth);filter:saturate(.82) contrast(.98)}
+.card:hover .card-img img{transform:scale(1.035);filter:saturate(.96) contrast(1.02)}
+.card-media-badge{position:absolute;right:12px;top:12px;z-index:1;padding:6px 10px;border-radius:999px;background:rgba(255,253,250,.86);color:var(--ink);font-size:.68rem;font-weight:850;box-shadow:0 10px 22px rgba(20,28,25,.12);backdrop-filter:blur(10px)}
+.modal-media{border-bottom:1px solid var(--line-soft);background:#f7f3ec;border-radius:26px 26px 0 0;overflow:hidden}
+.media-stage{position:relative;min-height:380px;background:#151d1b;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.media-stage img,.media-stage video{width:100%;height:100%;max-height:430px;object-fit:cover;display:block;background:#151d1b}
+.media-stage video{object-fit:contain;background:#0f1413}
+.media-missing{width:100%;min-height:380px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#fff;background:linear-gradient(135deg,#151d1b,#4e211b);padding:34px}
+.media-missing img{width:100%;height:100%;position:absolute;inset:0;object-fit:cover;opacity:.36;filter:saturate(.7)}
+.media-missing strong,.media-missing span{position:relative;z-index:1}
+.media-missing strong{font-family:"Noto Serif SC","Songti SC","SimSun",serif;font-size:1.4rem;margin-bottom:8px}
+.media-missing span{font-size:.9rem;color:rgba(255,255,255,.72)}
+.media-missing a{position:relative;z-index:1;margin-top:16px;padding:9px 16px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);color:#fff;text-decoration:none;font-size:.86rem;font-weight:800;transition:background-color var(--motion-fast),transform var(--motion-fast)}
+.media-missing a:hover{background:rgba(255,255,255,.24);transform:translateY(-1px)}
+.media-thumbs{display:flex;gap:10px;padding:14px 16px;overflow-x:auto;background:rgba(255,253,250,.9);scrollbar-width:thin}
+.media-thumb{position:relative;flex:0 0 118px;height:76px;border:2px solid transparent;border-radius:14px;overflow:hidden;background:#ebe6dd;color:var(--ink);cursor:pointer;transition:transform var(--motion-fast),border-color var(--motion-fast),box-shadow var(--motion-fast),opacity var(--motion-fast)}
+.media-thumb:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(20,28,25,.14)}
+.media-thumb.active{border-color:var(--accent);box-shadow:0 0 0 3px rgba(143,47,34,.12)}
+.media-thumb img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.82)}
+.media-thumb .thumb-label{position:absolute;left:6px;bottom:5px;padding:2px 6px;border-radius:999px;background:rgba(17,24,23,.74);color:#fff;font-size:.62rem;font-weight:800;backdrop-filter:blur(6px)}
+.media-thumb .play-mark{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.35rem;text-shadow:0 2px 12px rgba(0,0,0,.5)}
+.media-thumb.fallback{opacity:.72}
+.media-source{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 18px;background:#fffdf9;color:var(--muted);font-size:.78rem;border-top:1px solid var(--line-soft)}
+.media-source a{color:var(--accent);text-decoration:none;font-weight:800}
+.media-source a:hover{text-decoration:underline}
+@media(max-width:768px){
+  .media-stage,.media-missing{min-height:240px}
+  .media-stage img,.media-stage video{max-height:280px}
+  .media-thumbs{padding:10px 12px;gap:8px}
+  .media-thumb{flex-basis:94px;height:62px;border-radius:10px}
+  .media-source{align-items:flex-start;flex-direction:column}
+}
+
+/* ====== Responsive ====== */
+@media(max-width:1024px){
+  .topbar{grid-template-columns:auto auto 1fr;min-height:62px;padding:0 18px;gap:12px}
+  .topbar-toggle{display:flex;order:2}
+  .topbar-actions{order:3}
+  .topbar-nav{position:absolute;top:calc(100% + 1px);left:14px;right:14px;display:flex;flex-direction:column;align-items:stretch;background:rgba(255,253,250,.98);border:1px solid var(--line);border-radius:18px;padding:12px;gap:6px;box-shadow:var(--shadow-soft);opacity:0;transform:translateY(-10px) scale(.98);visibility:hidden;pointer-events:none;transition:opacity var(--motion-smooth),transform var(--motion-smooth),visibility var(--motion-smooth)}
+  body.menu-open .topbar-nav{opacity:1;transform:translateY(0) scale(1);visibility:visible;pointer-events:auto}
+  .nav-link{text-align:left;border-radius:12px;padding:10px 12px}
+  .topbar-brand::after{display:none}
+  .cards-grid{grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+}
+@media(max-width:768px){
+  .topbar{grid-template-columns:auto auto;align-items:center;padding:10px 14px;min-height:auto}
+  .topbar-actions{grid-column:1/-1;width:100%}
+  .topbar-search{width:100%;min-width:0}
+  .topbar-search input{width:100%}
+  .hero{padding:52px 18px 44px}
+  .hero p{font-size:.96rem}
+  .hero-stats{gap:10px}
+  .hero-stat{min-width:calc(50% - 5px);padding:12px 14px}
+  .main-wrap{padding:24px 14px 54px}
+  .results-bar{align-items:flex-start;flex-direction:column}
+  .cards-grid{grid-template-columns:1fr;gap:14px}
+  .modal-overlay{padding:12px;align-items:flex-end}
+  .modal{max-height:92vh;border-radius:22px 22px 0 0}
+  .modal-img-wrap{height:210px;border-radius:22px 22px 0 0}
+  .modal-body{padding:22px 18px 28px}
+  .radar-block{flex-direction:column;align-items:center;padding:18px 14px}
+  .btt{right:18px;bottom:18px}
+}
+@media(max-width:480px){
+  .topbar-brand .txt{font-size:1rem}
+  .hero h1{font-size:2rem}
+  .hero-stat{min-width:100%}
+  .card-img{height:132px}
+  .modal-close{width:38px;height:38px;margin:14px 14px -54px auto}
+  .specs-grid{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:1ms!important;animation-iteration-count:1!important;transition-duration:1ms!important;scroll-behavior:auto!important}
+}
+</style>
+</head>
+<body>
+
+<!-- ====== Topbar ====== -->
+<header class="topbar" id="topbar">
+  <div class="topbar-brand"><span aria-hidden="true">●</span><span class="txt">中国防务观察</span></div>
+  <button class="topbar-toggle" id="menuBtn" type="button" aria-label="打开分类菜单" aria-expanded="false" aria-controls="topbarNav">☰</button>
+  <nav class="topbar-nav" id="topbarNav" aria-label="装备分类与模拟栏目">
+    <button class="nav-link active" type="button" data-cat="all" aria-current="page">全部</button>
+    <button class="nav-link" type="button" data-cat="airforce">空军</button>
+    <button class="nav-link" type="button" data-cat="navy">海军</button>
+    <button class="nav-link" type="button" data-cat="army">陆军</button>
+    <button class="nav-link" type="button" data-page="air-defense/index.html">防空模拟</button>
+    <button class="nav-link" type="button" data-page="drone-strategy/index.html">无人机战略模拟</button>
+  </nav>
+  <div class="topbar-actions">
+    <label class="topbar-search" for="searchInput">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <span class="sr-only">搜索装备条目</span>
+      <input type="search" id="searchInput" placeholder="搜索型号、分类、关键词…" autocomplete="off" aria-label="搜索装备条目">
+      <button class="clear-search" id="clearSearch" type="button" aria-label="清除搜索">×</button>
+    </label>
+  </div>
+</header>
+
+<!-- ====== Hero ====== -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-kicker">专题索引 · Defense Briefing</div>
+    <h1>中国现代国防装备专题索引</h1>
+    <p>以公开资料为基础，按空中、海上、陆上、导弹与无人系统快速检索装备条目，像阅读新闻专题一样浏览关键信息。</p>
+    <div class="hero-stats" aria-label="页面统计">
+      <div class="hero-stat"><div class="num" id="statTotal">8</div><div class="label">当前结果</div></div>
+      <div class="hero-stat"><div class="num">3</div><div class="label">装备频道</div></div>
+      <div class="hero-stat"><div class="num">2025-26</div><div class="label">资料年度</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== Cards Grid ====== -->
+<main class="main-wrap">
+  <div class="results-bar" aria-live="polite">
+    <div class="results-title"><strong>装备专题报道</strong><span id="resultSummary">正在加载条目…</span></div>
+    <div class="results-hint">点击卡片查看详情，支持搜索与分类联动</div>
+  </div>
+  <div class="cards-grid" id="cardsGrid" aria-live="polite"></div>
+  <div class="no-results" id="noResults" hidden>
+    <div class="icon">🔍</div><h3>未找到匹配条目</h3><p>请尝试更短的关键词，或切换到“全部”频道。</p>
+  </div>
+</main>
+
+<!-- ====== Modal ====== -->
+<div class="modal-overlay" id="modalOverlay" aria-hidden="true">
+  <article class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <button class="modal-close" id="modalClose" type="button" aria-label="关闭详情">✕</button>
+    <div id="modalContent"></div>
+  </article>
+</div>
+
+<button class="btt" id="btt" type="button" title="回到顶部" aria-label="回到顶部">▲</button>
+
+<footer class="footer">
+  <p>中国防务观察 · 公开资料专题索引</p>
+  <p>当前版本仅保留已正常下载并通过公开来源核验的离线图片装备条目；未正常下载图片的装备已从展示项目中清理。</p>
+  <p>© 2025-2026 Defense Briefing Archive</p>
+</footer>
+
+<script src="assets/data/media-manifest.js"></script>
+<script>
+// ====== SVG Placeholder Generator ======
+function makeSVG(cat, name) {
+  const P = {
+    airforce:   {bg:'#e8f0f8',a:'#3a7bd5',b:'#5a9ae6',c:'#a0c8f0'},
+    navy:       {bg:'#e6f0f5',a:'#1a6b8a',b:'#2e9ec0',c:'#8ad0e8'},
+    army:       {bg:'#eaf5e5',a:'#3d7a3d',b:'#5a9f4a',c:'#a0d090'},
+    rocket:     {bg:'#f8ece8',a:'#b84030',b:'#d96a5a',c:'#f0a090'},
+    airdefense: {bg:'#efeaf8',a:'#5b3faf',b:'#7a6ad9',c:'#c0b0f0'},
+    uav:        {bg:'#e6eff6',a:'#3a6a9a',b:'#5a9aca',c:'#a0c8f0'},
+    space:      {bg:'#e8e8f6',a:'#3a3ac0',b:'#6a6ad8',c:'#b0b0f0'},
+    infantry:   {bg:'#f5f0e5',a:'#7a6a30',b:'#9a8a4a',c:'#c8b880'}
+  };
+  const p=P[cat]||P.airforce;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${p.bg}"/><stop offset="1" stop-color="${p.a}" stop-opacity=".12"/></linearGradient>
+      <pattern id="dot" width="28" height="28" patternUnits="userSpaceOnUse"><circle cx="14" cy="14" r=".8" fill="${p.a}" opacity=".08"/></pattern>
+    </defs>
+    <rect fill="url(#bg)" width="400" height="200"/>
+    <rect fill="url(#dot)" width="400" height="200"/>
+    <g transform="translate(200,105)">
+      <ellipse cx="0" cy="0" rx="100" ry="55" fill="none" stroke="${p.c}" stroke-width="1" opacity=".3"/>
+      <ellipse cx="0" cy="0" rx="70" ry="35" fill="none" stroke="${p.b}" stroke-width="1.3" opacity=".4"/>
+      <circle cx="-45" cy="-15" r="15" fill="none" stroke="${p.a}" stroke-width="2.5" opacity=".5"/>
+      <circle cx="0" cy="0" r="20" fill="none" stroke="${p.a}" stroke-width="3" opacity=".7"/>
+      <circle cx="40" cy="10" r="12" fill="none" stroke="${p.a}" stroke-width="2" opacity=".4"/>
+      <line x1="-120" y1="-75" x2="120" y2="75" stroke="${p.a}" opacity=".05" stroke-width=".5"/>
+      <line x1="-120" y1="75" x2="120" y2="-75" stroke="${p.a}" opacity=".05" stroke-width=".5"/>
+    </g>
+    <text x="200" y="184" text-anchor="middle" fill="${p.a}" opacity=".35" font-size="13" font-weight="600" font-family="sans-serif">${name}</text>
+  </svg>`;
+}
+
+// ====== CATEGORY METADATA ======
+const catMeta = {
+  airforce:   {name:'空军装备',icon:'🛩️'},
+  navy:       {name:'海军装备',icon:'🚢'},
+  army:       {name:'陆军装备',icon:'🎖️'},
+  rocket:     {name:'火箭军',icon:'🚀'},
+  airdefense: {name:'防空系统',icon:'🛡️'},
+  uav:        {name:'无人机系统',icon:'🛸'},
+  space:      {name:'太空与电子战',icon:'🛰️'},
+  infantry:   {name:'单兵装备',icon:'🔫'}
+};
+
+const radarPresets = {
+  airforce:   {labels:['火力打击','机动性能','隐身能力','航电系统','作战半径'],color:'#3a7bd5'},
+  navy:       {labels:['火力打击','防护能力','机动航速','电子战','持续作战'],color:'#1a6b8a'},
+  army:       {labels:['火力打击','装甲防护','机动越野','信息化','战场感知'],color:'#3d7a3d'},
+  rocket:     {labels:['射程覆盖','毁伤威力','命中精度','突防能力','反应速度'],color:'#b84030'},
+  airdefense: {labels:['拦截距离','命中精度','反应速度','抗干扰','多目标能力'],color:'#5b3faf'},
+  uav:        {labels:['续航时间','隐身性能','载荷能力','侦察能力','打击精度'],color:'#3a6a9a'},
+  space:      {labels:['覆盖范围','技术水平','抗毁能力','信息优势','体系融合'],color:'#3a3ac0'},
+  infantry:   {labels:['杀伤威力','射击精度','可靠耐用','人机工效','模块扩展'],color:'#7a6a30'}
+};
+
+// ====== EQUIPMENT DATA ======
+var E = [
+  {
+    "id": "j20",
+    "c": "airforce",
+    "n": "歼-20",
+    "fn": "歼-20 \"威龙\" 隐身战斗机",
+    "rd": [
+      98,
+      92,
+      98,
+      95,
+      88
+    ],
+    "sp": {
+      "类型": "第五代单座双发隐身战斗机",
+      "制造商": "成都飞机工业集团",
+      "首飞": "2011.1.11",
+      "服役": "2017年",
+      "产量": "200+架(2025)",
+      "长度": "21.2m",
+      "最大速度": "2.5马赫",
+      "作战半径": "2000+km",
+      "发动机": "涡扇-15(国产)",
+      "武器": "PL-10/12/15空空导弹",
+      "单价": "约7亿人民币"
+    },
+    "ds": [
+      "歼-20\"威龙\"是中国自主研制的第五代隐身战斗机，采用独创的鸭式气动布局配合DSI进气道和全动V型尾翼，在隐身性能、超音速巡航和高态势感知方面均达到世界先进水平。2025年已换装国产涡扇-15发动机，年产约40-50架，装备规模突破200架。",
+      "2025年九三阅兵中，歼-20、歼-20A、歼-20S等五型隐身战机同场受阅。歼-20可与攻击-11隐身无人机、歼-16组成\"新三剑客\"编队实现有人/无人协同——飞行员在空中指挥无人机前出侦察和打击，自身保持安全距离。",
+      "歼-20承担夺取制空权、猎杀敌方预警机和加油机等高价值目标的核心任务，是中国空天防御的\"国之利刃\"。预计到2027年建军百年时将装备超过300架。"
+    ],
+    "s": "active"
+  },
+  {
+    "id": "y20",
+    "c": "airforce",
+    "n": "运-20",
+    "fn": "运-20 \"鲲鹏\" 战略运输机",
+    "rd": [
+      30,
+      55,
+      65,
+      75,
+      92
+    ],
+    "sp": {
+      "类型": "大型战略运输机",
+      "制造商": "西安飞机工业集团",
+      "服役": "2016年",
+      "最大起飞重量": "220吨",
+      "最大载重": "66吨",
+      "最大航程": "7800km(涡扇-20)",
+      "货舱": "20×4×4m",
+      "改型": "运油-20、空警-3000平台"
+    },
+    "ds": [
+      "运-20\"鲲鹏\"是中国首款200吨级大型运输机，货舱可装载99A主战坦克和直升机，终结了\"大装备运不了、远距离投不动\"的历史。换装国产涡扇-20后航程达7800公里，具备跨洲际战略投送能力。",
+      "近年来运-20多次参与海外撤侨和国际人道主义救援。运油-20空中加油改型解决了歼-20等战机远程作战的瓶颈。截至2025年装备超80架，持续以每年15-20架速度生产。"
+    ],
+    "s": "active"
+  },
+  {
+    "id": "fujian",
+    "c": "navy",
+    "n": "福建舰",
+    "fn": "003型航空母舰 \"福建舰\"",
+    "rd": [
+      95,
+      88,
+      72,
+      92,
+      90
+    ],
+    "sp": {
+      "类型": "大型航空母舰(电磁弹射)",
+      "排水量": "约8万吨",
+      "长度": "约316m",
+      "入列": "2025.11.5",
+      "弹射": "电磁弹射×3",
+      "舰载机": "歼-35/歼-15T/空警-600/直-20",
+      "动力": "常规动力(综合电力)",
+      "造价": "约500亿人民币",
+      "母港": "海南三亚"
+    },
+    "ds": [
+      "福建舰(舷号18)是中国首艘完全自主设计建造的电磁弹射型航母，2025年11月5日在三亚入列。全球仅中美掌握电磁弹射技术——加速更平稳、能量利用率更高、可自动调节弹射力度适应不同机型。",
+      "福建舰排水量约8万吨，可搭载50-60架各型舰载机。电磁弹射使其可弹射从轻型的攻击-11无人机到重载歼-15T的全系列机型，作战效能远超滑跃起飞航母。",
+      "入列标志着中国海军迈入\"三航母时代\"。2026年正进行高强度舰机适配和多航母编队协同演练，加速向\"完全形成战斗力\"推进。"
+    ],
+    "s": "active"
+  },
+  {
+    "id": "shandong",
+    "c": "navy",
+    "n": "山东舰",
+    "fn": "002型航空母舰 \"山东舰\"",
+    "rd": [
+      82,
+      80,
+      65,
+      78,
+      82
+    ],
+    "sp": {
+      "类型": "中型航母(滑跃)",
+      "排水量": "约6-7万吨",
+      "入列": "2019.12.17",
+      "舰载机": "歼-15(约36架)",
+      "母港": "三亚",
+      "特点": "中国首艘国产航母"
+    },
+    "ds": [
+      "山东舰(舷号17)是中国首艘自主设计建造的航母，在辽宁舰经验上优化：舰岛缩小25%增加甲板面积、机库扩容、雷达升级。可搭载约36架歼-15，入列后迅速形成战斗力，近年来多次率编队参与南海和台海实战化训练。"
+    ],
+    "s": "active"
+  },
+  {
+    "id": "liaoning",
+    "c": "navy",
+    "n": "辽宁舰",
+    "fn": "001型航空母舰 \"辽宁舰\"",
+    "rd": [
+      78,
+      75,
+      62,
+      72,
+      75
+    ],
+    "sp": {
+      "类型": "中型航母(滑跃)",
+      "排水量": "约6万吨",
+      "入列": "2012.9.25",
+      "舰载机": "歼-15(约24架)",
+      "母港": "青岛",
+      "特点": "中国第一艘航母"
+    },
+    "ds": [
+      "辽宁舰(舷号16)是中国首艘航母，由苏联\"瓦良格\"号续建而成，2012年入列结束了中国没有航母的历史。十余年来为中国培养了第一批舰载机飞行员和航母指挥官，近年完成多次西太平洋远海实战化训练。"
+    ],
+    "s": "active"
+  },
+  {
+    "id": "type055",
+    "c": "navy",
+    "n": "055型驱逐舰",
+    "fn": "055型 万吨级导弹驱逐舰",
+    "rd": [
+      98,
+      82,
+      80,
+      95,
+      88
+    ],
+    "sp": {
+      "类型": "万吨级导弹驱逐舰",
+      "排水量": "约1.2-1.3万吨",
+      "服役": "2020年(南昌舰)",
+      "垂发": "112单元通用VLS",
+      "武器": "鹰击-21高超音速导弹、HHQ-9B",
+      "雷达": "双波段相控阵",
+      "造价": "约60亿/艘"
+    },
+    "ds": [
+      "055型是当今世界排水量最大的驱逐舰(美方归类为巡洋舰)。一体化桅杆和综合射频系统将上百部天线集成为少数共形天线，隐身性能卓越。112单元通用垂发兼容防空、反舰、反潜和对陆攻击导弹。",
+      "055最具威慑力的武器是鹰击-21舰载高超音速反舰导弹，末端速度10马赫，现有任何防空系统几乎无法拦截，一艘055的鹰击-21齐射足以重创超级航母。首批8艘已全部入列，第二批改进型055A正在建造中。"
+    ],
+    "s": "active"
+  },
+  {
+    "id": "type052d",
+    "c": "navy",
+    "n": "052D型驱逐舰",
+    "fn": "052D型 导弹驱逐舰",
+    "rd": [
+      88,
+      72,
+      75,
+      85,
+      82
+    ],
+    "sp": {
+      "类型": "多用途导弹驱逐舰",
+      "排水量": "约7500吨",
+      "服役": "2014年",
+      "垂发": "64单元通用VLS",
+      "武器": "HHQ-9B、鹰击-18",
+      "雷达": "346A型有源相控阵",
+      "数量": "30+艘"
+    },
+    "ds": [
+      "052D型是中国建造数量最多的现代化驱逐舰，装备64单元垂发和\"中华神盾\"相控阵雷达。最新052DL型延长甲板搭载直-20反潜直升机，换装新型反隐身雷达可探测F-22/F-35。30+艘服役或在建，是水面舰艇部队的中坚。"
+    ],
+    "s": "active"
+  },
+  {
+    "id": "type99a",
+    "c": "army",
+    "n": "99A式主战坦克",
+    "fn": "99A式 主战坦克",
+    "rd": [
+      96,
+      95,
+      78,
+      90,
+      85
+    ],
+    "sp": {
+      "类型": "第三代信息化主战坦克",
+      "战斗全重": "约58吨",
+      "乘员": "3人",
+      "主炮": "125mm滑膛炮(自动装填)",
+      "发动机": "1500马力",
+      "最大速度": "80km/h",
+      "装甲": "复合装甲+FY-5爆反",
+      "特点": "激光压制观瞄系统"
+    },
+    "ds": [
+      "99A式是中国陆军最新型主战坦克。125mm滑膛炮发射钨合金穿甲弹时2000米穿透800mm+均质钢装甲。独门激光压制系统可自动致盲敌方观瞄设备，正面防护等效超1000mm均质钢。",
+      "99A装备数字战场管理系统，通过数据链与无人机和友邻坦克实时共享态势。已大规模装备重型合成旅，是地面突击力量无可争议的核心。"
+    ],
+    "s": "active"
+  }
+];
+
+// ====== DOM REFS ======
+var grid=document.getElementById('cardsGrid'),noR=document.getElementById('noResults');
+var mOver=document.getElementById('modalOverlay'),mCont=document.getElementById('modalContent');
+var mClose=document.getElementById('modalClose'),sIn=document.getElementById('searchInput');
+var tNav=document.getElementById('topbarNav'),mBtn=document.getElementById('menuBtn');
+var btt=document.getElementById('btt'),stT=document.getElementById('statTotal');
+var clearSearch=document.getElementById('clearSearch'),resultSummary=document.getElementById('resultSummary');
+var state={category:'all',query:'',activeModalId:null,lastFocusedElement:null};
+var renderTimer=null,searchTimer=null;
+
+// ====== HELPERS ======
+function normalizeText(value){return String(value||'').toLowerCase().replace(/\s+/g,'').trim()}
+function flattenSearchText(value){
+  if(Array.isArray(value))return value.map(flattenSearchText).join(' ');
+  if(value&&typeof value==='object')return Object.keys(value).map(function(k){return k+' '+flattenSearchText(value[k])}).join(' ');
+  return value==null?'':String(value);
+}
+function getSearchText(x){
+  var m=catMeta[x.c]||{name:x.c,icon:''};
+  var status=x.s==='active'?'现役 active':'测试中 testing';
+  return flattenSearchText([x.n,x.fn,x.c,m.name,status,x.sp,x.ds]);
+}
+function findItemById(id){for(var i=0;i<E.length;i++){if(E[i].id===id)return E[i]}return null}
+function currentCatName(){return state.category==='all'?'全部频道':((catMeta[state.category]&&catMeta[state.category].name)||state.category)}
+function safeClosest(el,selector){while(el&&el.nodeType===1){if(el.matches&&el.matches(selector))return el;el=el.parentElement}return null}
+function escapeHtml(value){return String(value==null?'':value).replace(/[&<>"']/g,function(ch){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]})}
+
+var IMAGE_PLACEHOLDER='assets/shared/placeholders/image-placeholder.svg';
+var VIDEO_PLACEHOLDER='assets/shared/placeholders/video-placeholder.svg';
+function getMedia(id){return window.EQUIPMENT_MEDIA&&window.EQUIPMENT_MEDIA[id]?window.EQUIPMENT_MEDIA[id]:null}
+function normalizeMediaStatus(status){return status==='ready'?'verified':(status==='placeholder'?'fallback':status)}
+function fallbackImage(x,index){return {src:IMAGE_PLACEHOLDER,alt:x.n+' 图片槽位 '+(index+1)+'（暂无官方公开图片）',caption:'图片 '+(index+1)+' · 暂无官方公开素材',sourceName:'本地占位',sourceUrl:'',status:'fallback',slot:index+1}}
+function getMediaImages(x){
+  var media=getMedia(x.id),imgs=media&&Array.isArray(media.images)?media.images.slice(0,7):[];
+  for(var i=imgs.length;i<7;i++)imgs.push(fallbackImage(x,i));
+  return imgs.map(function(img,i){return Object.assign(fallbackImage(x,i),img||{})});
+}
+function getMediaVideo(x){
+  var media=getMedia(x.id),v=media&&media.video?media.video:{};
+  return Object.assign({src:'',poster:VIDEO_PLACEHOLDER,title:x.n+' 官方公开视频槽位',sourceName:'本地占位',sourceUrl:'',status:'fallback',note:'暂无官方公开视频素材'},v);
+}
+function realImageCount(x){return getMediaImages(x).filter(function(img){var s=normalizeMediaStatus(img.status);return s!=='fallback'&&s!=='missing'}).length}
+function hasRealVideo(x){var v=getMediaVideo(x),s=normalizeMediaStatus(v.status);return !!(v.src&&s!=='fallback'&&s!=='missing')}
+function hasWebVideo(x){var v=getMediaVideo(x),s=normalizeMediaStatus(v.status);return !!(!v.src&&s==='web_only'&&v.sourceUrl)}
+function mediaBadgeText(x){return realImageCount(x)+' / 7 图 · '+(hasRealVideo(x)?'1 视频':(hasWebVideo(x)?'网页视频':'暂无视频'))}
+function imgTag(img,cls){return '<img class="'+(cls||'media-img')+'" src="'+escapeHtml(img.src||IMAGE_PLACEHOLDER)+'" alt="'+escapeHtml(img.alt||img.caption||'装备图片')+'" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=\''+IMAGE_PLACEHOLDER+'\';">'}
+function mediaSourceHtml(item,type){
+  var statusMap={
+    verified:'已审核官方/央媒素材',
+    ready:'已下载公开来源素材',
+    web_only:'公开网页可观看，未下载本地视频',
+    generated:'本地生成兜底素材',
+    needs_review:'素材待复核',
+    rejected:'来源不符合规则，未入库',
+    fallback:'暂无官方公开素材，当前显示本地占位',
+    placeholder:'暂无官方公开素材，当前显示本地占位',
+    missing:'暂无官方公开素材，当前显示本地占位'
+  };
+  var status=statusMap[item.status]||statusMap.fallback;
+  var src=item.sourceName?escapeHtml(item.sourceName):(item.status==='web_only'?'公开视频网页':'本地占位');
+  var link=item.sourceUrl?'<a href="'+escapeHtml(item.sourceUrl)+'" target="_blank" rel="noopener noreferrer">查看来源</a>':'';
+  return '<span>'+escapeHtml(type)+' · '+src+' · '+status+'</span>'+link;
+}
+function buildImageStage(img,x,index){return '<figure class="media-figure">'+imgTag(img,'media-img')+'</figure>'}
+function buildVideoStage(video,x){
+  if(video.src){return '<video controls preload="metadata" poster="'+escapeHtml(video.poster||VIDEO_PLACEHOLDER)+'" title="'+escapeHtml(video.title||x.n+' 视频')+'"><source src="'+escapeHtml(video.src)+'" type="video/mp4">当前浏览器不支持视频播放。</video>'}
+  if(video.status==='web_only'&&video.sourceUrl){return '<div class="media-missing web-only"><img src="'+escapeHtml(video.poster||VIDEO_PLACEHOLDER)+'" alt="" aria-hidden="true"><strong>公开视频需联网查看</strong><span>该素材页面可匿名访问，但未找到无需鉴权、无需绕过限制的稳定本地视频文件。</span><a href="'+escapeHtml(video.sourceUrl)+'" target="_blank" rel="noopener noreferrer">打开来源视频网页</a></div>'}
+  return '<div class="media-missing"><img src="'+escapeHtml(video.poster||VIDEO_PLACEHOLDER)+'" alt="" aria-hidden="true"><strong>暂无官方公开视频</strong><span>当前装备的视频槽位已保留，待补充官方或央媒公开 720p 短片。</span></div>';
+}
+function buildMediaGallery(x){
+  var imgs=getMediaImages(x),video=getMediaVideo(x),first=imgs[0];
+  var thumbs=imgs.map(function(img,i){return '<button class="media-thumb '+(i===0?'active ':'')+(normalizeMediaStatus(img.status)==='fallback'||normalizeMediaStatus(img.status)==='missing'?'fallback':'')+'" type="button" data-media-type="image" data-media-index="'+i+'" aria-label="查看第 '+(i+1)+' 张图片">'+imgTag(img,'')+'<span class="thumb-label">图 '+(i+1)+'</span></button>'}).join('');
+  thumbs+='<button class="media-thumb '+(!video.src?'fallback':'')+'" type="button" data-media-type="video" data-media-index="0" aria-label="查看视频">'+imgTag({src:video.poster||VIDEO_PLACEHOLDER,alt:video.title||x.n+' 视频封面'},'')+'<span class="play-mark">▶</span><span class="thumb-label">视频</span></button>';
+  return '<section class="modal-media" data-equipment-id="'+escapeHtml(x.id)+'"><div class="media-stage" id="mediaStage">'+buildImageStage(first,x,0)+'</div><div class="media-thumbs" role="listbox" aria-label="媒体缩略图">'+thumbs+'</div><div class="media-source" id="mediaSource">'+mediaSourceHtml(first,'图片 1')+'</div></section>';
+}
+function pauseModalVideo(){if(!mCont||!mCont.querySelectorAll)return;var videos=mCont.querySelectorAll('video');for(var i=0;i<videos.length;i++)videos[i].pause&&videos[i].pause()}
+function switchModalMedia(type,index){
+  var item=findItemById(state.activeModalId);if(!item)return;
+  var stage=document.getElementById('mediaStage'),source=document.getElementById('mediaSource');if(!stage||!source)return;
+  pauseModalVideo();
+  var label='',sourceItem=null;
+  if(type==='video'){var video=getMediaVideo(item);stage.innerHTML=buildVideoStage(video,item);sourceItem=video;label='视频'}
+  else{var imgs=getMediaImages(item);var img=imgs[index]||imgs[0];stage.innerHTML=buildImageStage(img,item,index);sourceItem=img;label='图片 '+(index+1)}
+  source.innerHTML=mediaSourceHtml(sourceItem,label);
+  var thumbs=mCont.querySelectorAll('.media-thumb');for(var i=0;i<thumbs.length;i++)thumbs[i].classList.remove('active');
+  var active=mCont.querySelector('[data-media-type="'+type+'"][data-media-index="'+index+'"]');if(active)active.classList.add('active');
+}
+
+
+// ====== FILTER ======
+function filterItems(){
+  var q=normalizeText(state.query);
+  return E.filter(function(x){
+    var matchCat=state.category==='all'||x.c===state.category;
+    var matchQ=!q||normalizeText(getSearchText(x)).indexOf(q)>-1;
+    return matchCat&&matchQ;
+  });
+}
+
+// ====== RENDER ======
+function render(items){
+  items=items||filterItems();
+  if(renderTimer)clearTimeout(renderTimer);
+  grid.classList.add('is-filtering');
+  renderTimer=setTimeout(function(){
+    grid.innerHTML='';
+    noR.hidden=items.length!==0;
+    noR.style.display=items.length?'none':'block';
+    if(items.length){
+      var grouped={};
+      items.forEach(function(x){if(!grouped[x.c])grouped[x.c]=[];grouped[x.c].push(x)});
+      if(state.category==='all'&&state.query===''){
+        Object.keys(grouped).forEach(function(c){
+          var h=document.createElement('div');h.className='cat-heading';h.style.gridColumn='1/-1';
+          var m=catMeta[c]||{name:c,icon:''};
+          h.innerHTML='<span class="icon">'+m.icon+'</span><h2>'+escapeHtml(m.name)+'</h2><span class="count">'+grouped[c].length+' 条报道</span>';
+          grid.appendChild(h);
+          grouped[c].forEach(function(x,i){grid.appendChild(card(x,i))});
+        });
+      }else{
+        items.forEach(function(x,i){grid.appendChild(card(x,i))});
+      }
+    }
+    stT.textContent=items.length;
+    updateSummary(items.length);
+    requestAnimationFrame(function(){grid.classList.remove('is-filtering')});
+  },130);
+}
+
+function updateSummary(count){
+  var q=state.query.trim();
+  var summary='当前显示 '+count+' 条 · '+currentCatName();
+  if(q)summary='搜索“'+q+'” · '+currentCatName()+' · '+count+' 条结果';
+  if(resultSummary)resultSummary.textContent=summary;
+  if(clearSearch)clearSearch.classList.toggle('visible',!!q);
+}
+
+function card(x,i){
+  var d=document.createElement('article');
+  d.className='card';
+  d.setAttribute('role','button');
+  d.setAttribute('tabindex','0');
+  d.setAttribute('data-id',x.id);
+  d.setAttribute('aria-label','查看 '+x.n+' 详情');
+  d.style.setProperty('--delay',(i*35)+'ms');
+  var m=catMeta[x.c]||{name:x.c,icon:''},primary=getMediaImages(x)[0];
+  d.innerHTML='<div class="card-img"><div class="card-cat">'+m.icon+' '+escapeHtml(m.name)+'</div><div class="card-media-badge">'+mediaBadgeText(x)+'</div>'+imgTag(primary,'media-img')+'</div>'+
+    '<div class="card-body"><div class="card-eyebrow">装备档案</div><h3>'+escapeHtml(x.n)+'</h3><div class="model">'+escapeHtml(x.fn)+'</div>'+
+    '<div class="excerpt">'+escapeHtml(x.ds[0])+'</div>'+
+    '<div class="card-meta"><span>'+escapeHtml(m.name)+' · 离线媒体</span><span>查看详情 →</span></div></div>';
+  return d;
+}
+
+// ====== RADAR ======
+function drawRadar(canvas,labels,scores,color){
+  var ctx=canvas.getContext('2d'),w=canvas.width=250,h=canvas.height=250;
+  var cx=w/2,cy=h/2,r=96,n=labels.length,step=(Math.PI*2)/n;
+  ctx.clearRect(0,0,w,h);
+  for(var i=1;i<=4;i++){var gr=r/4*i;ctx.beginPath();
+    for(var j=0;j<=n;j++){var a=step*j-Math.PI/2,x2=cx+gr*Math.cos(a),y2=cy+gr*Math.sin(a);j===0?ctx.moveTo(x2,y2):ctx.lineTo(x2,y2);}
+    ctx.closePath();ctx.strokeStyle='rgba(0,0,0,.08)';ctx.stroke();}
+  for(var i2=0;i2<n;i2++){var a2=step*i2-Math.PI/2;ctx.beginPath();ctx.moveTo(cx,cy);
+    ctx.lineTo(cx+r*Math.cos(a2),cy+r*Math.sin(a2));ctx.strokeStyle='rgba(0,0,0,.08)';ctx.stroke();}
+  ctx.beginPath();
+  for(var i3=0;i3<n;i3++){var a3=step*i3-Math.PI/2,sc=scores[i3]/100,x3=cx+r*sc*Math.cos(a3),y3=cy+r*sc*Math.sin(a3);i3===0?ctx.moveTo(x3,y3):ctx.lineTo(x3,y3);}
+  ctx.closePath();
+  var rr=parseInt(color.slice(1,3),16),gg=parseInt(color.slice(3,5),16),bb=parseInt(color.slice(5,7),16);
+  ctx.fillStyle='rgba('+rr+','+gg+','+bb+',.16)';ctx.fill();
+  ctx.strokeStyle='rgba('+rr+','+gg+','+bb+',.75)';ctx.lineWidth=2.2;ctx.stroke();
+  for(var i4=0;i4<n;i4++){var a4=step*i4-Math.PI/2,sc2=scores[i4]/100,x4=cx+r*sc2*Math.cos(a4),y4=cy+r*sc2*Math.sin(a4);
+    ctx.beginPath();ctx.arc(x4,y4,3.5,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();}
+  ctx.fillStyle='#3f5158';ctx.font='bold 11px "Microsoft YaHei",sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
+  for(var i5=0;i5<n;i5++){var a5=step*i5-Math.PI/2,lx=cx+(r+26)*Math.cos(a5),ly=cy+(r+26)*Math.sin(a5);ctx.fillText(labels[i5],lx,ly);}
+}
+
+// ====== MODAL ======
+function openModal(x,triggerEl){
+  if(!x)return;
+  state.activeModalId=x.id;
+  state.lastFocusedElement=triggerEl||document.activeElement;
+  var pre=radarPresets[x.c]||radarPresets.airforce,rid='radarC';
+  var sr=Object.keys(x.sp).map(function(k){return'<div class="spec-item"><span class="spec-label">'+escapeHtml(k)+'</span><span class="spec-value">'+escapeHtml(x.sp[k])+'</span></div>'}).join('');
+  var ri=x.rd.map(function(s,i){return'<div class="radar-row"><div class="dot" style="background:'+pre.color+'"></div><span class="lbl">'+escapeHtml(pre.labels[i])+'</span><div class="bar-wrap"><div class="bar-fill" style="width:'+s+'%;background:'+pre.color+'"></div></div><span class="val">'+s+'</span></div>'}).join('');
+  var dh=x.ds.map(function(p,i){var t=['概述','技术特点','战略意义'];return'<h4>'+(t[i]||'补充信息')+'</h4><p>'+escapeHtml(p)+'</p>'}).join('');
+  var sc=x.s==='active'?'tag-active':'tag-test',st=x.s==='active'?'● 现役':'◎ 测试中';
+  var cm=catMeta[x.c]||{name:x.c,icon:''};
+  mCont.innerHTML=buildMediaGallery(x)+
+    '<div class="modal-body">'+
+    '<div class="modal-tags"><span class="modal-tag">'+cm.icon+' '+escapeHtml(cm.name)+'</span><span class="modal-status '+sc+'">'+st+'</span></div>'+
+    '<h2 id="modalTitle">'+escapeHtml(x.n)+'</h2><div class="model-name">'+escapeHtml(x.fn)+'</div>'+
+    '<div class="specs-grid">'+sr+'</div>'+
+    '<div class="radar-block"><div class="radar-canvas-wrap"><canvas id="'+rid+'" width="250" height="250"></canvas></div><div class="radar-info"><h4>五维能力观察</h4>'+ri+'</div></div>'+
+    '<div class="desc-block">'+dh+'</div></div>';
+  mOver.classList.add('show');
+  mOver.setAttribute('aria-hidden','false');
+  document.body.classList.add('modal-open');
+  document.body.style.overflow='hidden';
+  mCont.parentElement.scrollTop=0;
+  setTimeout(function(){var c=document.getElementById(rid);if(c)drawRadar(c,pre.labels,x.rd,pre.color);if(mClose)mClose.focus()},160);
+}
+function closeModal(){
+  pauseModalVideo();
+  if(!mOver.classList.contains('show'))return;
+  mOver.classList.remove('show');
+  mOver.setAttribute('aria-hidden','true');
+  document.body.classList.remove('modal-open');
+  document.body.style.overflow='';
+  state.activeModalId=null;
+  var last=state.lastFocusedElement;
+  setTimeout(function(){if(last&&document.body.contains(last))last.focus()},180);
+}
+
+// ====== INTERACTIONS ======
+function updateActiveNav(){
+  var links=tNav.querySelectorAll('.nav-link');
+  for(var i=0;i<links.length;i++){
+    var active=links[i].dataset.cat===state.category;
+    links[i].classList.toggle('active',active);
+    if(active)links[i].setAttribute('aria-current','page');else links[i].removeAttribute('aria-current');
+  }
+}
+function scheduleRender(){clearTimeout(searchTimer);searchTimer=setTimeout(function(){render(filterItems())},90)}
+function closeMenu(){document.body.classList.remove('menu-open');if(mBtn){mBtn.setAttribute('aria-expanded','false');mBtn.setAttribute('aria-label','打开分类菜单')}}
+function toggleMenu(){var open=document.body.classList.toggle('menu-open');mBtn.setAttribute('aria-expanded',open?'true':'false');mBtn.setAttribute('aria-label',open?'关闭分类菜单':'打开分类菜单')}
+function openItemFromCard(el){
+  if(!el)return;
+  var item=findItemById(el.dataset.id);
+  if(!item)return;
+  el.classList.add('is-pressed');
+  setTimeout(function(){el.classList.remove('is-pressed');openModal(item,el)},120);
+}
+function bindEvents(){
+  grid.addEventListener('click',function(e){var c=safeClosest(e.target,'.card[data-id]');if(c&&grid.contains(c)){e.preventDefault();openItemFromCard(c)}});
+  grid.addEventListener('keydown',function(e){if(e.key!=='Enter'&&e.key!==' ')return;var c=safeClosest(e.target,'.card[data-id]');if(c&&grid.contains(c)){e.preventDefault();openItemFromCard(c)}});
+  tNav.addEventListener('click',function(e){var b=safeClosest(e.target,'.nav-link');if(!b)return;e.preventDefault();if(b.dataset.page){window.location.href=b.dataset.page;return}state.category=b.dataset.cat||'all';updateActiveNav();closeMenu();closeModal();render(filterItems())});
+  sIn.addEventListener('input',function(){state.query=sIn.value.trim();scheduleRender()});
+  clearSearch.addEventListener('click',function(){sIn.value='';state.query='';render(filterItems());sIn.focus()});
+  mClose.addEventListener('click',closeModal);
+  mOver.addEventListener('click',function(e){if(e.target===mOver)closeModal()});
+  mCont.addEventListener('click',function(e){var b=safeClosest(e.target,'[data-media-type]');if(!b||!mCont.contains(b))return;switchModalMedia(b.dataset.mediaType,parseInt(b.dataset.mediaIndex||'0',10))});
+  mBtn.addEventListener('click',function(e){e.stopPropagation();toggleMenu()});
+  document.addEventListener('click',function(e){if(!safeClosest(e.target,'#topbar')&&document.body.classList.contains('menu-open'))closeMenu()});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'){if(mOver.classList.contains('show'))closeModal();else if(document.body.classList.contains('menu-open'))closeMenu();else if(state.query){sIn.value='';state.query='';render(filterItems())}}});
+  window.addEventListener('scroll',function(){if(window.scrollY>500)btt.classList.add('visible');else btt.classList.remove('visible')});
+  btt.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+}
+
+// ====== INIT ======
+function init(){updateActiveNav();bindEvents();render(E)}
+init();
+</script>
+</body>
+</html>

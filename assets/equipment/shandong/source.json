@@ -1,0 +1,102 @@
+{
+  "id": "shandong",
+  "name": "山东舰",
+  "fullName": "002型航空母舰 \"山东舰\"",
+  "category": "navy",
+  "images": [
+    {
+      "file": "images/shandong-01.jpg",
+      "currentFallback": "",
+      "originalUrl": "http://www.81.cn/hj_208557/_attachment/2020/01/08/9874341_16f82cbdf2497122010981.jpg",
+      "pageUrl": "http://www.81.cn/hj_208557/9874341.html",
+      "sourceName": "中国军网",
+      "downloadedAt": "2026-07-09",
+      "licenseNote": "中国军网公开网页匿名可访问；仅本地自用展示；版权归原权利人所有。",
+      "reviewStatus": "verified",
+      "notes": "山东舰高清大图震撼来袭，你想要的角度这都有！ - 中国军网 · 图片 1"
+    },
+    {
+      "file": "images/shandong-02.jpg",
+      "currentFallback": "",
+      "originalUrl": "http://www.81.cn/hj_208557/_attachment/2020/01/08/9874341_16f82cbdf4c97122011343.jpg",
+      "pageUrl": "http://www.81.cn/hj_208557/9874341.html",
+      "sourceName": "中国军网",
+      "downloadedAt": "2026-07-09",
+      "licenseNote": "中国军网公开网页匿名可访问；仅本地自用展示；版权归原权利人所有。",
+      "reviewStatus": "verified",
+      "notes": "山东舰高清大图震撼来袭，你想要的角度这都有！ - 中国军网 · 图片 2"
+    },
+    {
+      "file": "images/shandong-03.jpg",
+      "currentFallback": "",
+      "originalUrl": "http://www.81.cn/hj_208557/_attachment/2020/01/08/9874341_16f82cbdf7297122012443.jpg",
+      "pageUrl": "http://www.81.cn/hj_208557/9874341.html",
+      "sourceName": "中国军网",
+      "downloadedAt": "2026-07-09",
+      "licenseNote": "中国军网公开网页匿名可访问；仅本地自用展示；版权归原权利人所有。",
+      "reviewStatus": "verified",
+      "notes": "山东舰高清大图震撼来袭，你想要的角度这都有！ - 中国军网 · 图片 3"
+    },
+    {
+      "file": "images/shandong-04.jpg",
+      "currentFallback": "",
+      "originalUrl": "http://www.81.cn/hj_208557/_attachment/2020/01/08/9874341_16f82cbdf9a97122013847.jpg",
+      "pageUrl": "http://www.81.cn/hj_208557/9874341.html",
+      "sourceName": "中国军网",
+      "downloadedAt": "2026-07-09",
+      "licenseNote": "中国军网公开网页匿名可访问；仅本地自用展示；版权归原权利人所有。",
+      "reviewStatus": "verified",
+      "notes": "山东舰高清大图震撼来袭，你想要的角度这都有！ - 中国军网 · 图片 4"
+    },
+    {
+      "file": "images/shandong-05.jpg",
+      "currentFallback": "",
+      "originalUrl": "http://www.81.cn/hj_208557/_attachment/2020/01/08/9874341_16f82cbdfbf97122014018.jpg",
+      "pageUrl": "http://www.81.cn/hj_208557/9874341.html",
+      "sourceName": "中国军网",
+      "downloadedAt": "2026-07-09",
+      "licenseNote": "中国军网公开网页匿名可访问；仅本地自用展示；版权归原权利人所有。",
+      "reviewStatus": "verified",
+      "notes": "山东舰高清大图震撼来袭，你想要的角度这都有！ - 中国军网 · 图片 5"
+    },
+    {
+      "file": "images/shandong-06.jpg",
+      "currentFallback": "",
+      "originalUrl": "http://www.81.cn/hj_208557/_attachment/2020/01/08/9874341_16f82cbdfe497122015827.jpg",
+      "pageUrl": "http://www.81.cn/hj_208557/9874341.html",
+      "sourceName": "中国军网",
+      "downloadedAt": "2026-07-09",
+      "licenseNote": "中国军网公开网页匿名可访问；仅本地自用展示；版权归原权利人所有。",
+      "reviewStatus": "verified",
+      "notes": "山东舰高清大图震撼来袭，你想要的角度这都有！ - 中国军网 · 图片 6"
+    },
+    {
+      "file": "images/shandong-07.jpg",
+      "currentFallback": "",
+      "originalUrl": "http://www.81.cn/hj_208557/_attachment/2020/01/08/9874341_16f82cbe00597122016413.jpg",
+      "pageUrl": "http://www.81.cn/hj_208557/9874341.html",
+      "sourceName": "中国军网",
+      "downloadedAt": "2026-07-09",
+      "licenseNote": "中国军网公开网页匿名可访问；仅本地自用展示；版权归原权利人所有。",
+      "reviewStatus": "verified",
+      "notes": "山东舰高清大图震撼来袭，你想要的角度这都有！ - 中国军网 · 图片 7"
+    }
+  ],
+  "video": {
+    "file": "video/shandong.mp4",
+    "poster": "video/shandong-poster.jpg",
+    "currentFallbackPoster": "",
+    "pageUrl": "",
+    "sourceName": "公开图片生成",
+    "downloadedAt": "2026-07-09",
+    "licenseNote": "未找到可稳定合规下载的对应视频时，由本地图片生成离线 MP4。",
+    "reviewStatus": "generated",
+    "notes": "由已下载中国军网公开图片生成，保证离线可播放。"
+  },
+  "completeness": {
+    "images": 7,
+    "video": 1,
+    "missingImages": 0,
+    "missingVideo": 0
+  }
+}

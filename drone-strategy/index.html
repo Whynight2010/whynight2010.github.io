@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>飞控战略模拟游戏</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">✈️ 飞控战略</div>
+        <div class="nav-links">
+            <a href="#" id="nav-home" class="active">首页</a>
+            <a href="#" id="nav-rules">规则说明</a>
+            <a href="#" id="nav-battle">对战模式</a>
+            <a href="#" id="nav-report">战报分析</a>
+        </div>
+    </div>
+
+    <!-- 门户首页 -->
+    <div id="page-home" class="page active home-page">
+        <h1>飞控战略模拟</h1>
+        <p class="subtitle">指挥无人机集群，制定战术策略，完成侦察、打击、防守等作战任务。体验现代无人机作战的完整闭环，成为顶尖战场指挥官！</p>
+        <button class="btn" onclick="startQuickBattle()">快速开战</button>
+        
+        <div class="features">
+            <div class="feature-card">
+                <h3>🎯 多类型无人机</h3>
+                <p>侦察无人机、察打一体无人机、攻击无人机、无人蜂群，组成强大作战编队</p>
+            </div>
+            <div class="feature-card">
+                <h3>⚔️ 实时战场态势</h3>
+                <p>卫星视图、侦察机分视图，全方位掌握战场动态，做出精准决策</p>
+            </div>
+            <div class="feature-card">
+                <h3>🧠 AI智能对手</h3>
+                <p>动态难度适配，贪心算法+动态规划，体验真实战术对抗</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 规则说明页 -->
+    <div id="page-rules" class="page rules-page">
+        <div class="rules-sidebar">
+            <h3>目录</h3>
+            <ul>
+                <li id="rule-0" class="active" onclick="showRule(0)">游戏核心目标</li>
+                <li id="rule-1" onclick="showRule(1)">作战单位</li>
+                <li id="rule-2" onclick="showRule(2)">单位操作</li>
+                <li id="rule-3" onclick="showRule(3)">战场地形</li>
+                <li id="rule-4" onclick="showRule(4)">交战规则</li>
+                <li id="rule-5" onclick="showRule(5)">评分标准</li>
+            </ul>
+        </div>
+        <div class="rules-content" id="rules-content">
+            <div id="rule-content-0">
+                <h2>游戏核心目标与胜负判定规则</h2>
+                <p>本游戏是一款以无人机协同作战为核心的战术模拟类游戏。玩家扮演战场指挥官，通过调度多类型无人机单位、规划作战路径、编组协同打击，完成侦察、精确打击、阵地防守等既定作战任务。</p>
+                <h3>胜利条件</h3>
+                <p>达成任务目标（如摧毁敌方指挥中心、完成区域侦察、保护我方基地等）即判定胜利。</p>
+                <h3>失败条件</h3>
+                <ul style="margin-left: 20px; color: #8892b0;">
+                    <li>我方基地被摧毁（生命值归零）</li>
+                    <li>我方单位全灭</li>
+                    <li>超出任务时限</li>
+                </ul>
+            </div>
+            <div id="rule-content-1" style="display: none;">
+                <h2>作战单位属性与功能说明</h2>
+                <h3>我方作战单位</h3>
+                <table>
+                    <tr><th>单位名称</th><th>类型</th><th>生命值</th><th>单发战力</th><th>作战半径</th><th>侦察半径</th><th>载弹量</th></tr>
+                    <tr><td>侦察无人机</td><td>空中/侦察型</td><td>80</td><td>0</td><td>200km</td><td>50km</td><td>0</td></tr>
+                    <tr><td>察打一体无人机</td><td>空中/多用途</td><td>150</td><td>40</td><td>150km</td><td>30km</td><td>4枚</td></tr>
+                    <tr><td>攻击无人机</td><td>空中/精确打击型</td><td>120</td><td>80</td><td>120km</td><td>10km</td><td>2枚</td></tr>
+                    <tr><td>攻击无人机（僚机）</td><td>空中/协同打击型</td><td>100</td><td>35</td><td>100km</td><td>8km</td><td>2枚</td></tr>
+                    <tr><td>无人蜂群发射车</td><td>地面/投送型</td><td>200</td><td>-</td><td>80km</td><td>-</td><td>24架</td></tr>
+                </table>
+                <h3>敌方作战单位</h3>
+                <table>
+                    <tr><th>单位名称</th><th>类型</th><th>生命值</th><th>单发战力</th><th>攻击射程</th><th>侦察半径</th></tr>
+                    <tr><td>近程防空系统</td><td>地面/防空型</td><td>180</td><td>25</td><td>15km</td><td>20km</td></tr>
+                    <tr><td>中远程防空导弹</td><td>地面/防空型</td><td>250</td><td>70</td><td>40km</td><td>50km</td></tr>
+                    <tr><td>预警雷达站</td><td>地面/侦察型</td><td>120</td><td>0</td><td>0</td><td>80km</td></tr>
+                    <tr><td>敌方察打一体无人机</td><td>空中/多用途</td><td>130</td><td>35</td><td>20km</td><td>35km</td></tr>
+                    <tr><td>装甲作战单位</td><td>地面/打击型</td><td>300</td><td>45</td><td>10km</td><td>15km</td></tr>
+                    <tr><td>敌方指挥中心</td><td>地面/核心目标</td><td>500</td><td>0</td><td>0</td><td>0</td></tr>
+                </table>
+            </div>
+            <div id="rule-content-2" style="display: none;">
+                <h2>单位操作与编组系统说明</h2>
+                <h3>单位操作</h3>
+                <table>
+                    <tr><th>操作</th><th>触发效果</th><th>状态切换</th><th>适用单位</th></tr>
+                    <tr><td>部署/出动</td><td>将单位从基地派出，进入可操控状态</td><td>待命→部署</td><td>所有单位</td></tr>
+                    <tr><td>侦察任务</td><td>玩家框选侦察区域后，单位前往执行巡逻索敌</td><td>部署/任务→侦察</td><td>侦察无人机、察打一体无人机</td></tr>
+                    <tr><td>攻击任务</td><td>玩家指定敌方目标后，单位前往目标区域并发起打击</td><td>部署/任务→攻击</td><td>察打一体无人机、攻击无人机</td></tr>
+                    <tr><td>陪护护航</td><td>单位跟随目标同步移动，自动攻击进入范围的敌方目标</td><td>部署/任务→陪护子状态</td><td>攻击无人机（僚机）</td></tr>
+                    <tr><td>防守部署</td><td>单位在点位周边巡逻，敌方进入后自动拦截</td><td>部署/任务→防守子状态</td><td>所有可攻击单位</td></tr>
+                    <tr><td>转移机动</td><td>单位以最高速度移动至指定坐标</td><td>部署/任务→转移</td><td>所有空中单位</td></tr>
+                    <tr><td>编组管理</td><td>将单位加入指定编组或创建新编组</td><td>不改变状态</td><td>所有可部署单位</td></tr>
+                    <tr><td>召回待命</td><td>单位返回基地，补充弹药与生命值</td><td>任意→待命</td><td>所有可部署单位</td></tr>
+                </table>
+                <h3>编组系统</h3>
+                <p>编组创建方式：按住Ctrl框选多个单位后点击「创建编组」，或在单位操作弹窗中选择编组。单编组上限为8架，同类型单位协同效率最高。</p>
+            </div>
+            <div id="rule-content-3" style="display: none;">
+                <h2>战场地形与环境干扰机制</h2>
+                <h3>地形要素</h3>
+                <ul style="margin-left: 20px; color: #8892b0;">
+                    <li><strong>我方基地：</strong>绿色实线勾勒，单位返回可补充弹药和生命值，自带基础防空</li>
+                    <li><strong>山地地形：</strong>棕色填充，飞行高度低于山体海拔无法穿越，可遮挡雷达与卫星视野</li>
+                    <li><strong>丘陵片区：</strong>浅灰色纹理，敌方单位可伪装，仅能通过近距离侦察探明</li>
+                    <li><strong>开阔平原：</strong>浅黄绿色填充，无视野遮挡，双方侦察距离达到最大值</li>
+                </ul>
+                <h3>环境干扰机制</h3>
+                <p><strong>云层遮挡：</strong>随机生成3-5片动态云层，每15秒移动一次。云层覆盖区域内卫星视图无法探测敌方单位，但侦察机不受影响。</p>
+                <p><strong>电子干扰（高级难度）：</strong>敌方雷达站释放局部电子干扰区，我方侦察精度下降30%、攻击命中概率降低20%。</p>
+            </div>
+            <div id="rule-content-4" style="display: none;">
+                <h2>交战规则与伤害计算逻辑</h2>
+                <h3>侦察与发现机制</h3>
+                <p>战场采用"分层视野"规则，不同探测手段的视野权限不同：</p>
+                <ul style="margin-left: 20px; color: #8892b0;">
+                    <li><strong>卫星探测：</strong>仅可探测无云层遮挡、非伪装、飞行高度高于山体的敌方单位</li>
+                    <li><strong>侦察机探测：</strong>不受云层、伪装影响，可识别丘陵伪装单位与山体低空单位</li>
+                    <li><strong>敌方探测：</strong>以雷达站为核心探测节点，低空飞行、山体遮挡可缩短敌方探测距离</li>
+                </ul>
+                <h3>攻击交战流程</h3>
+                <ol style="margin-left: 20px; color: #8892b0;">
+                    <li>目标锁定：单位探测到目标后自动锁定（玩家指定目标优先级最高）</li>
+                    <li>开火判定：目标处于攻击射程内且锁定完成后自动开火</li>
+                    <li>命中判定：命中概率受目标速度、距离、体积、电子干扰等因素影响</li>
+                    <li>伤害结算：命中后扣除目标生命值，生命值归零则单位损毁</li>
+                    <li>目标切换：当前目标损毁后自动切换至下一威胁目标</li>
+                </ol>
+                <h3>伤害计算公式</h3>
+                <p style="font-family: monospace; background: rgba(30, 58, 95, 0.5); padding: 10px; border-radius: 4px;">
+                    最终伤害 = 单位单发战力 × 命中系数 - 目标护甲值
+                </p>
+                <p>命中系数基础值为1，浮动范围0.3-1.5。地面单位自带10-20点护甲，空中单位无护甲。</p>
+            </div>
+            <div id="rule-content-5" style="display: none;">
+                <h2>任务类型与评分标准说明</h2>
+                <h3>任务类型</h3>
+                <ul style="margin-left: 20px; color: #8892b0;">
+                    <li><strong>侦察任务：</strong>在指定区域完成全面侦察，发现所有敌方单位</li>
+                    <li><strong>打击任务：</strong>摧毁指定敌方目标（如指挥中心、防空系统等）</li>
+                    <li><strong>防守任务：</strong>保护我方基地或关键点位，阻止敌方入侵</li>
+                    <li><strong>综合任务：</strong>包含侦察、打击、防守等多个子目标</li>
+                </ul>
+                <h3>评分标准</h3>
+                <table>
+                    <tr><th>评分项目</th><th>权重</th><th>说明</th></tr>
+                    <tr><td>任务完成度</td><td>40%</td><td>目标达成情况</td></tr>
+                    <tr><td>战损比</td><td>30%</td><td>我方损失与敌方损失的比值</td></tr>
+                    <tr><td>作战效率</td><td>20%</td><td>完成任务的时间效率</td></tr>
+                    <tr><td>战术运用</td><td>10%</td><td>编组协同、侦察运用等战术表现</td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- 对战主页面 -->
+    <div id="page-battle" class="page battle-page">
+        <div class="battle-main">
+            <div class="battle-map">
+                <div class="satellite-view" id="satellite-view">
+                    <div class="map-container"></div>
+                    <div class="base" title="我方基地"></div>
+                </div>
+                
+                <!-- 战前准备覆盖层 -->
+                <div class="preparation-overlay" id="preparation-overlay">
+                    <div class="mission-card">
+                        <h2>🎯 任务简报</h2>
+                        <p>本次任务：摧毁敌方指挥中心。敌方部署有近程防空系统和预警雷达站，需先进行侦察探明敌方部署，再制定打击方案。</p>
+                        <div class="mission-stats">
+                            <div class="stat"><div class="stat-value">5</div><div class="stat-label">我方单位</div></div>
+                            <div class="stat"><div class="stat-value">6</div><div class="stat-label">敌方单位</div></div>
+                            <div class="stat"><div class="stat-value">10</div><div class="stat-label">任务时限(分)</div></div>
+                            <div class="stat"><div class="stat-value">中等</div><div class="stat-label">难度</div></div>
+                        </div>
+                        <button class="start-btn" onclick="startBattle()">开始作战</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="battle-info">
+                <div class="info-header">
+                    <h3>我方单位</h3>
+                    <button class="filter-btn" onclick="toggleGroupView()">编组视图</button>
+                </div>
+                <div class="units-list" id="units-list"></div>
+                <div class="info-header" style="border-top: 2px solid #1e3a5f;">
+                    <h3 style="color: #ff6b6b;">🛑 已发现敌军</h3>
+                    <span class="filter-btn" style="font-size: 11px; cursor: default;" id="enemy-count-label">0 单位</span>
+                </div>
+                <div class="units-list enemy-list" id="enemy-list"></div>
+            </div>
+        </div>
+        
+        <div class="battle-controls">
+            <div class="control-panel">
+                <h4>宏观操作</h4>
+                <div class="btn-group">
+                    <button class="action-btn" id="btn-pause" onclick="togglePause()">⏸️ 暂停</button>
+                    <button class="speed-btn" onclick="setSpeed(1)" id="speed-1">1x</button>
+                    <button class="speed-btn active" onclick="setSpeed(2)" id="speed-2">2x</button>
+                    <button class="speed-btn" onclick="setSpeed(4)" id="speed-4">4x</button>
+                    <button class="action-btn" onclick="retreatAll()">🏃 全局撤退</button>
+                </div>
+            </div>
+            <div class="control-panel">
+                <h4>态势监控</h4>
+                <div class="status-display">
+                    <div>我方战损: <span class="value" id="friendly-loss">0/5</span></div>
+                    <div>敌方发现: <span class="value" id="enemy-found">0/6</span></div>
+                    <div>基地生命: <span class="value" id="base-health">100%</span></div>
+                </div>
+                <div style="margin-top: 10px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 12px; color: #8892b0;">
+                        <span>任务进度</span>
+                        <span id="mission-progress-text">0%</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill" id="mission-progress" style="width: 0%"></div></div>
+                </div>
+            </div>
+            <div class="control-panel">
+                <h4>作战日志</h4>
+                <div class="battle-log" id="battle-log"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 战报分析页 -->
+    <div id="page-report" class="page report-page">
+        <div class="report-list">
+            <h3>历史对局</h3>
+            <div id="report-items"></div>
+        </div>
+        <div class="report-detail" id="report-detail">
+            <h2>选择一局对局查看详情</h2>
+            <p style="color: #8892b0;">点击左侧列表中的对局记录，查看详细战报分析</p>
+        </div>
+    </div>
+
+    <!-- 操作帮助弹窗 -->
+    <div class="help-btn" onclick="toggleHelp()">?</div>
+    <div class="help-modal" id="help-modal">
+        <div class="close-btn" onclick="toggleHelp()">✕</div>
+        <h3>操作帮助</h3>
+        <table>
+            <tr><td>点击单位</td><td>打开操作弹窗</td></tr>
+            <tr><td>拖拽地图</td><td>平移战场视图</td></tr>
+            <tr><td>滚轮</td><td>缩放战场视图</td></tr>
+            <tr><td>Ctrl+框选</td><td>创建编组</td></tr>
+            <tr><td>空格键</td><td>暂停/继续</td></tr>
+            <tr><td>1/2/4</td><td>切换游戏速度</td></tr>
+        </table>
+    </div>
+
+    <!-- 单位操作弹窗 -->
+    <div class="unit-modal" id="unit-modal">
+        <div class="modal-header">
+            <h3 id="modal-unit-name">单位信息</h3>
+            <div class="close-btn" onclick="closeUnitModal()">✕</div>
+        </div>
+        <div class="unit-info">
+            <div class="info-row"><span class="info-label">生命值</span><span class="info-value" id="modal-health">100/100</span></div>
+            <div class="info-row"><span class="info-label">弹药量</span><span class="info-value" id="modal-ammo">4/4</span></div>
+            <div class="info-row"><span class="info-label">当前位置</span><span class="info-value" id="modal-position">(120, 80)</span></div>
+            <div class="info-row"><span class="info-label">当前状态</span><span class="info-value" id="modal-status">待命</span></div>
+        </div>
+        <div class="action-buttons" id="modal-actions"></div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/terrain.js"></script>
+    <script src="js/units.js"></script>
+    <script src="js/enemy.js"></script>
+    <script src="js/movement.js"></script>
+    <script src="js/battle.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

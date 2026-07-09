@@ -1,0 +1,172 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>城市要地防空推演 · Annual Defense Review</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body><div id="jsError" style="position:fixed;top:0;left:0;right:0;background:#ff0040;color:white;padding:8px;font-size:13px;z-index:99999;display:none;font-family:monospace;white-space:pre-wrap"></div>
+<script>
+window.addEventListener('error', function(e) {
+    var el = document.getElementById('jsError');
+    if (!el) return;
+    el.style.display = 'block';
+    el.textContent += '\n' + (e.message || e.error || 'Unknown error');
+    e.preventDefault();
+});
+</script>
+    <div class="app">
+        <!-- 顶部导航栏 56px -->
+        <div class="topbar">
+            <div class="brand-mark">
+                <span class="brand-dot"></span>
+                <div>
+                    <div class="brand-name">AIR DEFENSE REVIEW</div>
+                    <div class="brand-kicker">2025 · 城市要地防空推演</div>
+                </div>
+            </div>
+            <div class="tab-nav">
+                <div class="tab-btn active" data-tab="combat"><span>Air Defense Simulation</span><em>防空推演</em></div>
+                <div class="tab-btn" data-tab="science"><span>Equipment Encyclopedia</span><em>装备百科</em></div>
+            </div>
+            <div class="top-actions">
+                <button type="button" class="top-action audio-toggle" aria-label="Audio off"><span></span> Audio off</button>
+                <button type="button" class="top-action share-action" aria-label="Share">Share ↗</button>
+            </div>
+        </div>
+
+        <!-- 主内容区 -->
+        <div class="main-area">
+
+            <!-- ====== 作战模拟 ====== -->
+            <div class="tab-content active" id="combat">
+                <div class="combat-layout">
+
+                    <!-- 左侧面板 -->
+                    <div class="side-panel left-panel">
+                        <div class="panel-section equip-section">
+                            <div class="section-title">Deploy Air Defense</div>
+                            <div class="equip-list">
+                                <div class="equip-item" data-type="gun">⊙ 近防炮 <span>Close-in weapon</span></div>
+                                <div class="equip-item" data-type="missile">△ 防空导弹 <span>Interceptor missile</span></div>
+                                <div class="equip-item" data-type="radar">◈ 预警雷达 <span>Early warning radar</span></div>
+                            </div>
+                            <div class="cancel-section">
+                                <button id="btnSelectMode">✕ 取消部署</button>
+                            </div>
+                            <!-- 型号选择面板（内嵌） -->
+                            <div class="model-panel" id="modelPanel">
+                                <div class="model-header">
+                                    <span class="model-title">选择装备型号</span>
+                                    <span class="model-close" id="closeModelPanel">✕</span>
+                                </div>
+                                <div class="model-list" id="modelList"></div>
+                            </div>
+                        </div>
+
+                        <div class="panel-divider"></div>
+
+                       <div class="panel-section">
+                           <div class="section-title">Command Control</div>
+                            <button id="btnStart" class="btn-primary">▶ 开始推演</button>
+                            <button id="btnReset">↻ 重置航图</button>
+                        </div>
+
+                        <div class="panel-divider"></div>
+
+                        <div class="panel-section">
+                            <div class="section-title">Defense Formations</div>
+                            <button id="btnAuto1" class="btn-plan">◎ 基础防御</button>
+                            <button id="btnAuto2" class="btn-plan">◈ 均衡防御</button>
+                            <button id="btnAuto3" class="btn-plan">◇ 反隐身防御</button>
+                            <button id="btnAuto4" class="btn-plan">◉ 密集火力</button>
+                        </div>
+                    </div>
+
+                    <!-- 中央画布 -->
+                    <div class="canvas-box">
+                        <div class="surface-noise"></div>
+                        <div class="ocean-hero-copy">
+                            <span>AIR DEFENSE · 2025 REVIEW</span>
+                            <strong>城市防空推演</strong>
+                        </div>
+                        <div class="voyage-meta">
+                            <span>Command center online</span>
+                            <span>Airspace radar · live</span>
+                        </div>
+                        <canvas id="gameCanvas" width="900" height="600"></canvas>
+                        <div class="canvas-tools">
+                            <label class="switch-item"><input type="checkbox" id="toggleRange" checked> 显示射程范围</label>
+                        </div>
+                        <div class="canvas-hint">
+                            左键部署装备 · 右键删除 · 拖动调整 · 1/2/3 切换装备 · 空格开始
+                        </div>
+                    </div>
+
+                    <!-- 右侧面板 -->
+                    <div class="side-panel right-panel">
+                        <div class="sub-tab-nav">
+                            <div class="sub-tab-btn active" data-subtab="stats">Battle Log</div>
+                            <div class="sub-tab-btn" data-subtab="enemy-info">Threat Index</div>
+                        </div>
+
+                        <div class="sub-tab-content active" id="subtab-stats">
+                            <div class="section-title">Battle Telemetry</div>
+                            <div class="data-list">
+                                <div class="data-row"><span>来袭目标</span><span id="dataTotal">0</span></div>
+                                <div class="data-row"><span>已拦截</span><span id="dataKill">0</span></div>
+                                <div class="data-row"><span>突防成功</span><span id="dataBreak">0</span></div>
+                               <div class="data-row"><span>拦截成功率</span><span id="dataRate">0%</span></div>
+                           </div>
+                            <div class="score-area">
+                                <span>防空评分</span>
+                                <span id="dataScore">0</span>
+                            </div>
+                        </div>
+
+                        <div class="sub-tab-content" id="subtab-enemy-info">
+                            <div class="section-title">Threat Intelligence</div>
+                            <div class="enemy-info-list" id="enemyInfoList"></div>
+                        </div>
+                    </div>
+
+                </div><!-- /.combat-layout -->
+                <div class="equip-tooltip" id="equipTooltip"></div>
+            </div><!-- /#combat -->
+
+            <!-- ====== 国防科普 ====== -->
+            <div class="tab-content" id="science">
+                <div class="science-layout">
+                    <div class="science-side">
+                        <div class="section-title">装备章节</div>
+                        <div class="science-nav-list" id="scienceNavList"></div>
+                    </div>
+                    <div class="science-main">
+                        <div class="science-content" id="scienceContent"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- /.main-area -->
+    </div><!-- /.app -->
+
+    <script src="js/scienceData.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/map.js"></script>
+    <script src="js/equipment.js"></script>
+    <script src="js/enemy.js"></script>
+    <script src="js/combat.js"></script>
+    <script src="js/effect.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+

@@ -1,0 +1,102 @@
+{
+  "id": "liaoning",
+  "name": "辽宁舰",
+  "fullName": "001型航空母舰 \"辽宁舰\"",
+  "category": "navy",
+  "images": [
+    {
+      "file": "images/liaoning-01.jpg",
+      "currentFallback": "",
+      "originalUrl": "http://www.81.cn/tp_207717/_attachment/2023/04/23/16219108_63c408758b186c6155adb8920b33118b.jpg",
+      "pageUrl": "http://www.81.cn/tp_207717/16219108.html",
+      "sourceName": "中国军网",
+      "downloadedAt": "2026-07-09",
+      "licenseNote": "中国军网公开网页匿名可访问；仅本地自用展示；版权归原权利人所有。",
+      "reviewStatus": "verified",
+      "notes": "线上阅舰式①：一起去看舰——航母 - 中国军网 · 图片 1"
+    },
+    {
+      "file": "images/liaoning-02.jpg",
+      "currentFallback": "",
+      "originalUrl": "http://www.81.cn/tp_207717/_attachment/2023/04/23/16219108_e142846e3d889aafa0e726895c9d80a4.jpg",
+      "pageUrl": "http://www.81.cn/tp_207717/16219108.html",
+      "sourceName": "中国军网",
+      "downloadedAt": "2026-07-09",
+      "licenseNote": "中国军网公开网页匿名可访问；仅本地自用展示；版权归原权利人所有。",
+      "reviewStatus": "verified",
+      "notes": "线上阅舰式①：一起去看舰——航母 - 中国军网 · 图片 2"
+    },
+    {
+      "file": "images/liaoning-03.jpg",
+      "currentFallback": "",
+      "originalUrl": "http://www.81.cn/tp_207717/_attachment/2023/04/23/16219108_11415bf515d1e2ed00654fce31ea5095.jpg",
+      "pageUrl": "http://www.81.cn/tp_207717/16219108.html",
+      "sourceName": "中国军网",
+      "downloadedAt": "2026-07-09",
+      "licenseNote": "中国军网公开网页匿名可访问；仅本地自用展示；版权归原权利人所有。",
+      "reviewStatus": "verified",
+      "notes": "线上阅舰式①：一起去看舰——航母 - 中国军网 · 图片 3"
+    },
+    {
+      "file": "images/liaoning-04.jpg",
+      "currentFallback": "",
+      "originalUrl": "http://www.81.cn/tp_207717/_attachment/2023/04/23/16219108_2fb6fa2f02c6e059b14939ecfd5f75f5.jpg",
+      "pageUrl": "http://www.81.cn/tp_207717/16219108.html",
+      "sourceName": "中国军网",
+      "downloadedAt": "2026-07-09",
+      "licenseNote": "中国军网公开网页匿名可访问；仅本地自用展示；版权归原权利人所有。",
+      "reviewStatus": "verified",
+      "notes": "线上阅舰式①：一起去看舰——航母 - 中国军网 · 图片 4"
+    },
+    {
+      "file": "images/liaoning-05.jpg",
+      "currentFallback": "",
+      "originalUrl": "http://www.81.cn/tp_207717/_attachment/2023/04/23/16219108_da0ee8d6bfaeb479066f4fa19bf3186f.jpg",
+      "pageUrl": "http://www.81.cn/tp_207717/16219108.html",
+      "sourceName": "中国军网",
+      "downloadedAt": "2026-07-09",
+      "licenseNote": "中国军网公开网页匿名可访问；仅本地自用展示；版权归原权利人所有。",
+      "reviewStatus": "verified",
+      "notes": "线上阅舰式①：一起去看舰——航母 - 中国军网 · 图片 5"
+    },
+    {
+      "file": "images/liaoning-06.jpg",
+      "currentFallback": "",
+      "originalUrl": "http://www.81.cn/tp_207717/_attachment/2023/04/23/16219108_2464a75bd2f7766be32425bad45ca233.jpg",
+      "pageUrl": "http://www.81.cn/tp_207717/16219108.html",
+      "sourceName": "中国军网",
+      "downloadedAt": "2026-07-09",
+      "licenseNote": "中国军网公开网页匿名可访问；仅本地自用展示；版权归原权利人所有。",
+      "reviewStatus": "verified",
+      "notes": "线上阅舰式①：一起去看舰——航母 - 中国军网 · 图片 6"
+    },
+    {
+      "file": "images/liaoning-07.jpg",
+      "currentFallback": "",
+      "originalUrl": "http://www.81.cn/tp_207717/_attachment/2023/04/23/16219108_f69bdd83fe7992b78ff0e1547075054d.jpg",
+      "pageUrl": "http://www.81.cn/tp_207717/16219108.html",
+      "sourceName": "中国军网",
+      "downloadedAt": "2026-07-09",
+      "licenseNote": "中国军网公开网页匿名可访问；仅本地自用展示；版权归原权利人所有。",
+      "reviewStatus": "verified",
+      "notes": "线上阅舰式①：一起去看舰——航母 - 中国军网 · 图片 7"
+    }
+  ],
+  "video": {
+    "file": "video/liaoning.mp4",
+    "poster": "video/liaoning-poster.jpg",
+    "currentFallbackPoster": "",
+    "pageUrl": "",
+    "sourceName": "公开图片生成",
+    "downloadedAt": "2026-07-09",
+    "licenseNote": "未找到可稳定合规下载的对应视频时，由本地图片生成离线 MP4。",
+    "reviewStatus": "generated",
+    "notes": "由已下载中国军网公开图片生成，保证离线可播放。"
+  },
+  "completeness": {
+    "images": 7,
+    "video": 1,
+    "missingImages": 0,
+    "missingVideo": 0
+  }
+}

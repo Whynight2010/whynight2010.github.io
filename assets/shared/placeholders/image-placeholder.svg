@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4f0e8"/><stop offset="1" stop-color="#d8dfdc"/></linearGradient>
+    <pattern id="p" width="44" height="44" patternUnits="userSpaceOnUse"><path d="M44 0H0v44" fill="none" stroke="#8f2f22" stroke-opacity=".08"/></pattern>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#g)"/>
+  <rect width="1600" height="1000" fill="url(#p)"/>
+  <circle cx="800" cy="420" r="108" fill="none" stroke="#8f2f22" stroke-width="10" stroke-opacity=".26"/>
+  <path d="M735 430l45 45 92-116" fill="none" stroke="#8f2f22" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".42"/>
+  <text x="800" y="605" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="48" font-weight="700" fill="#26312f">暂无官方公开图片</text>
+  <text x="800" y="668" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="28" fill="#68736f">Official media placeholder · offline</text>
+</svg>

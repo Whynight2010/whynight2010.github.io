@@ -1,0 +1,102 @@
+{
+  "id": "fujian",
+  "name": "福建舰",
+  "fullName": "003型航空母舰 \"福建舰\"",
+  "category": "navy",
+  "images": [
+    {
+      "file": "images/fujian-01.jpg",
+      "currentFallback": "",
+      "originalUrl": "http://www.81.cn/hj_208557/_attachment/2026/06/17/16467862_91e7903049da3b0ebf20d3c8424eb0c9.jpg",
+      "pageUrl": "http://www.81.cn/hj_208557/16467862.html",
+      "sourceName": "中国军网",
+      "downloadedAt": "2026-07-09",
+      "licenseNote": "公开网页匿名可访问；仅本地自用展示；版权归原权利人所有。",
+      "reviewStatus": "verified",
+      "notes": "今天，福建舰下水4周年 - 中国军网 · 图片 1"
+    },
+    {
+      "file": "images/fujian-02.jpg",
+      "currentFallback": "",
+      "originalUrl": "http://www.81.cn/hj_208557/_attachment/2026/06/17/16467862_1c1ff9bf13c4a5d2b7dbb732d68c3097.jpg",
+      "pageUrl": "http://www.81.cn/hj_208557/16467862.html",
+      "sourceName": "中国军网",
+      "downloadedAt": "2026-07-09",
+      "licenseNote": "公开网页匿名可访问；仅本地自用展示；版权归原权利人所有。",
+      "reviewStatus": "verified",
+      "notes": "今天，福建舰下水4周年 - 中国军网 · 图片 2"
+    },
+    {
+      "file": "images/fujian-03.png",
+      "currentFallback": "",
+      "originalUrl": "http://www.81.cn/hj_208557/_attachment/2026/06/17/16467862_1571cae811fe5c2559fc7a9f348e9288.png",
+      "pageUrl": "http://www.81.cn/hj_208557/16467862.html",
+      "sourceName": "中国军网",
+      "downloadedAt": "2026-07-09",
+      "licenseNote": "公开网页匿名可访问；仅本地自用展示；版权归原权利人所有。",
+      "reviewStatus": "verified",
+      "notes": "今天，福建舰下水4周年 - 中国军网 · 图片 3"
+    },
+    {
+      "file": "images/fujian-04.jpg",
+      "currentFallback": "",
+      "originalUrl": "http://www.81.cn/hj_208557/_attachment/2026/06/17/16467862_01a6613879080276a8577c51ce484562.jpg",
+      "pageUrl": "http://www.81.cn/hj_208557/16467862.html",
+      "sourceName": "中国军网",
+      "downloadedAt": "2026-07-09",
+      "licenseNote": "公开网页匿名可访问；仅本地自用展示；版权归原权利人所有。",
+      "reviewStatus": "verified",
+      "notes": "今天，福建舰下水4周年 - 中国军网 · 图片 4"
+    },
+    {
+      "file": "images/fujian-05.jpg",
+      "currentFallback": "",
+      "originalUrl": "http://www.81.cn/hj_208557/_attachment/2026/06/17/16467862_49308b7b462c7140b7d6c00152c0340d.jpg",
+      "pageUrl": "http://www.81.cn/hj_208557/16467862.html",
+      "sourceName": "中国军网",
+      "downloadedAt": "2026-07-09",
+      "licenseNote": "公开网页匿名可访问；仅本地自用展示；版权归原权利人所有。",
+      "reviewStatus": "verified",
+      "notes": "今天，福建舰下水4周年 - 中国军网 · 图片 5"
+    },
+    {
+      "file": "images/fujian-06.jpg",
+      "currentFallback": "",
+      "originalUrl": "http://www.81.cn/hj_208557/_attachment/2026/06/17/16467862_eaace477a56e3537995fb8521706e2e2.jpg",
+      "pageUrl": "http://www.81.cn/hj_208557/16467862.html",
+      "sourceName": "中国军网",
+      "downloadedAt": "2026-07-09",
+      "licenseNote": "公开网页匿名可访问；仅本地自用展示；版权归原权利人所有。",
+      "reviewStatus": "verified",
+      "notes": "今天，福建舰下水4周年 - 中国军网 · 图片 6"
+    },
+    {
+      "file": "images/fujian-07.jpg",
+      "currentFallback": "",
+      "originalUrl": "http://www.81.cn/hj_208557/_attachment/2026/06/17/16467862_0d9f51ba918da1e52240af6d2b690ddc.jpg",
+      "pageUrl": "http://www.81.cn/hj_208557/16467862.html",
+      "sourceName": "中国军网",
+      "downloadedAt": "2026-07-09",
+      "licenseNote": "公开网页匿名可访问；仅本地自用展示；版权归原权利人所有。",
+      "reviewStatus": "verified",
+      "notes": "今天，福建舰下水4周年 - 中国军网 · 图片 7"
+    }
+  ],
+  "video": {
+    "file": "video/fujian.mp4",
+    "poster": "video/fujian-poster.jpg",
+    "currentFallbackPoster": "",
+    "pageUrl": "",
+    "sourceName": "公开图片生成",
+    "downloadedAt": "2026-07-09",
+    "licenseNote": "未找到可稳定合规下载的对应视频时，由本地图片生成离线 MP4。",
+    "reviewStatus": "generated",
+    "notes": "由已下载公开图片或本地生成图片生成，保证离线可播放。"
+  },
+  "completeness": {
+    "images": 7,
+    "video": 1,
+    "missingImages": 0,
+    "missingVideo": 0
+  }
+}
