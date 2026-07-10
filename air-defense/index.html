@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>城市要地防空推演 · Annual Defense Review</title>
+    <title>城市要地防空推演 · 公开防务复盘</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body><div id="jsError" style="position:fixed;top:0;left:0;right:0;background:#ff0040;color:white;padding:8px;font-size:13px;z-index:99999;display:none;font-family:monospace;white-space:pre-wrap"></div>
@@ -12,7 +12,7 @@ window.addEventListener('error', function(e) {
     var el = document.getElementById('jsError');
     if (!el) return;
     el.style.display = 'block';
-    el.textContent += '\n' + (e.message || e.error || 'Unknown error');
+    el.textContent += '\n' + (e.message || e.error || '未知错误');
     e.preventDefault();
 });
 </script>
@@ -22,17 +22,18 @@ window.addEventListener('error', function(e) {
             <div class="brand-mark">
                 <span class="brand-dot"></span>
                 <div>
-                    <div class="brand-name">AIR DEFENSE REVIEW</div>
+                    <div class="brand-name">防空态势复盘</div>
                     <div class="brand-kicker">2025 · 城市要地防空推演</div>
                 </div>
             </div>
             <div class="tab-nav">
-                <div class="tab-btn active" data-tab="combat"><span>Air Defense Simulation</span><em>防空推演</em></div>
-                <div class="tab-btn" data-tab="science"><span>Equipment Encyclopedia</span><em>装备百科</em></div>
+                <div class="tab-btn active" data-tab="combat"><span>防空推演</span><em>城市要地</em></div>
+                <div class="tab-btn" data-tab="science"><span>装备百科</span><em>公开资料</em></div>
             </div>
             <div class="top-actions">
-                <button type="button" class="top-action audio-toggle" aria-label="Audio off"><span></span> Audio off</button>
-                <button type="button" class="top-action share-action" aria-label="Share">Share ↗</button>
+                <button type="button" class="top-action home-action" id="btnBackHome" aria-label="返回主界面">返回主页</button>
+                <button type="button" class="top-action audio-toggle" aria-label="静音"><span></span> 静音</button>
+                <button type="button" class="top-action share-action" aria-label="分享">分享 ↗</button>
             </div>
         </div>
 
@@ -46,11 +47,11 @@ window.addEventListener('error', function(e) {
                     <!-- 左侧面板 -->
                     <div class="side-panel left-panel">
                         <div class="panel-section equip-section">
-                            <div class="section-title">Deploy Air Defense</div>
+                            <div class="section-title">部署防空装备</div>
                             <div class="equip-list">
-                                <div class="equip-item" data-type="gun">⊙ 近防炮 <span>Close-in weapon</span></div>
-                                <div class="equip-item" data-type="missile">△ 防空导弹 <span>Interceptor missile</span></div>
-                                <div class="equip-item" data-type="radar">◈ 预警雷达 <span>Early warning radar</span></div>
+                                <div class="equip-item" data-type="gun">⊙ 近防炮 <span>近程末端拦截</span></div>
+                                <div class="equip-item" data-type="missile">△ 防空导弹 <span>区域防空拦截</span></div>
+                                <div class="equip-item" data-type="radar">◈ 预警雷达 <span>空情预警探测</span></div>
                             </div>
                             <div class="cancel-section">
                                 <button id="btnSelectMode">✕ 取消部署</button>
@@ -68,7 +69,7 @@ window.addEventListener('error', function(e) {
                         <div class="panel-divider"></div>
 
                        <div class="panel-section">
-                           <div class="section-title">Command Control</div>
+                           <div class="section-title">指挥控制</div>
                             <button id="btnStart" class="btn-primary">▶ 开始推演</button>
                             <button id="btnReset">↻ 重置航图</button>
                         </div>
@@ -76,7 +77,7 @@ window.addEventListener('error', function(e) {
                         <div class="panel-divider"></div>
 
                         <div class="panel-section">
-                            <div class="section-title">Defense Formations</div>
+                            <div class="section-title">防御阵型</div>
                             <button id="btnAuto1" class="btn-plan">◎ 基础防御</button>
                             <button id="btnAuto2" class="btn-plan">◈ 均衡防御</button>
                             <button id="btnAuto3" class="btn-plan">◇ 反隐身防御</button>
@@ -88,12 +89,12 @@ window.addEventListener('error', function(e) {
                     <div class="canvas-box">
                         <div class="surface-noise"></div>
                         <div class="ocean-hero-copy">
-                            <span>AIR DEFENSE · 2025 REVIEW</span>
+                            <span>防空推演 · 2025复盘</span>
                             <strong>城市防空推演</strong>
                         </div>
                         <div class="voyage-meta">
-                            <span>Command center online</span>
-                            <span>Airspace radar · live</span>
+                            <span>指挥中心在线</span>
+                            <span>空域雷达实时</span>
                         </div>
                         <canvas id="gameCanvas" width="900" height="600"></canvas>
                         <div class="canvas-tools">
@@ -107,12 +108,12 @@ window.addEventListener('error', function(e) {
                     <!-- 右侧面板 -->
                     <div class="side-panel right-panel">
                         <div class="sub-tab-nav">
-                            <div class="sub-tab-btn active" data-subtab="stats">Battle Log</div>
-                            <div class="sub-tab-btn" data-subtab="enemy-info">Threat Index</div>
+                            <div class="sub-tab-btn active" data-subtab="stats">战斗记录</div>
+                            <div class="sub-tab-btn" data-subtab="enemy-info">目标情报</div>
                         </div>
 
                         <div class="sub-tab-content active" id="subtab-stats">
-                            <div class="section-title">Battle Telemetry</div>
+                            <div class="section-title">战场统计</div>
                             <div class="data-list">
                                 <div class="data-row"><span>来袭目标</span><span id="dataTotal">0</span></div>
                                 <div class="data-row"><span>已拦截</span><span id="dataKill">0</span></div>
@@ -126,7 +127,7 @@ window.addEventListener('error', function(e) {
                         </div>
 
                         <div class="sub-tab-content" id="subtab-enemy-info">
-                            <div class="section-title">Threat Intelligence</div>
+                            <div class="section-title">威胁情报</div>
                             <div class="enemy-info-list" id="enemyInfoList"></div>
                         </div>
                     </div>

@@ -13,7 +13,7 @@ function simulateEnemyAI() {
                 enemy.targetX = playerTarget.x;
                 enemy.targetY = playerTarget.y;
                 var targetName = playerTarget.name || playerTarget.id || '未知单位';
-                addBattleLog('🔍 ' + enemy.name + ' 发现我方 ' + targetName + '，主动追击！');
+                addBattleLog(enemy.name + ' 发现我方 ' + targetName + '，主动追击');
 
                 // 检查是否进入攻击范围，是则发动攻击
                 const dx = playerTarget.x - enemy.x;
@@ -23,11 +23,11 @@ function simulateEnemyAI() {
                     enemy.lastAttack = Date.now();
                     const damage = calculateDamage(enemy, playerTarget);
                     playerTarget.health -= damage;
-                    addBattleLog('💥 ' + enemy.name + ' 攻击 ' + targetName + '，造成 ' + damage + ' 点伤害！');
+                    addBattleLog(enemy.name + ' 攻击 ' + targetName + '，造成 ' + damage + ' 点伤害');
                     if (playerTarget.health <= 0) {
                         playerTarget.health = 0;
                         playerTarget.status = 'damaged';
-                        addBattleLog('💀 ' + targetName + ' 被摧毁！');
+                        addBattleLog(targetName + ' 被摧毁');
                     }
                     // 根据目标类型更新显示
                     if (playerTarget.id && playerTarget.squadId) {
@@ -84,7 +84,7 @@ function simulateEnemyAI() {
                 if (!enemy.visible && player.scoutRadius > 0) {
                     enemy.visible = true;
                     markEnemyDiscovered(enemy);
-                    addBattleLog('🔍 发现敌方 ' + enemy.name + '！');
+                    addBattleLog('发现敌方 ' + enemy.name);
                     updateEnemyDisplay();
                 }
 
@@ -118,10 +118,10 @@ function simulateEnemyAI() {
                         enemy.lastAttack = now;
                         var damage = calculateDamage(enemy, { x: drone.x, y: drone.y, type: 'mini_drone' });
                         drone.health -= damage;
-                        addBattleLog('💥 ' + enemy.name + ' 攻击蜂群无人机 ' + drone.id + '，造成 ' + damage + ' 点伤害！');
+                        addBattleLog(enemy.name + ' 攻击蜂群无人机 ' + drone.id + '，造成 ' + damage + ' 点伤害');
                         if (drone.health <= 0) {
                             drone.health = 0;
-                            addBattleLog('💀 蜂群无人机 ' + drone.id + ' 被摧毁！');
+                            addBattleLog('蜂群无人机 ' + drone.id + ' 被摧毁');
                             updateDroneDisplay(drone);
                         }
                     }
@@ -339,12 +339,12 @@ function executeEnemyAttack(enemy, target) {
         const damage = calculateDamage(enemy, bestTarget);
         const targetName = bestTarget.name || bestTarget.id || '未知单位';
         bestTarget.health -= damage;
-        addBattleLog('💥 ' + enemy.name + ' 攻击 ' + targetName + '，造成 ' + damage + ' 点伤害！');
+        addBattleLog(enemy.name + ' 攻击 ' + targetName + '，造成 ' + damage + ' 点伤害');
 
         if (bestTarget.health <= 0) {
             bestTarget.health = 0;
             bestTarget.status = 'damaged';
-            addBattleLog('💀 ' + targetName + ' 被摧毁！');
+            addBattleLog(targetName + ' 被摧毁');
             if (bestTarget.squadId && !bestTarget.name) {
                 updateDroneDisplay(bestTarget);
             } else {
@@ -415,11 +415,11 @@ function calculateDamage(attacker, target) {
 
 function getEnemyTypeText(type) {
     var map = {
-        'command': '🎯 指挥中心',
-        'aa_short': '🛡️ 近程防空',
-        'aa_long': '🚀 远程防空',
-        'radar': '📡 预警雷达',
-        'enemy_uav': '✈️ 敌方无人机'
+        'command': '指挥中心',
+        'aa_short': '近程防空',
+        'aa_long': '远程防空',
+        'radar': '预警雷达',
+        'enemy_uav': '敌方无人机'
     };
     return map[type] || type;
 }
@@ -428,7 +428,7 @@ function getEnemyTypeText(type) {
 function markEnemyDiscovered(enemy) {
     if (!enemy.discovered) {
         enemy.discovered = true;
-        addBattleLog('📋 ' + enemy.name + ' 已录入战场情报！');
+        addBattleLog(enemy.name + ' 已录入战场情报');
     }
     // 更新最后目击信息
     enemy.lastSeenX = enemy.x;
@@ -500,16 +500,16 @@ function updateEnemyList() {
 
         var statusText, statusClass;
         if (destroyed) {
-            statusText = '💀 已摧毁';
+            statusText = '已摧毁';
             statusClass = 'damaged';
         } else if (isStale) {
-            statusText = '📡 无最新信息';
+            statusText = '情报过期';
             statusClass = 'scout';
         } else if (!enemy.visible && enemy.discovered) {
-            statusText = '📡 信号丢失';
+            statusText = '信号丢失';
             statusClass = 'scout';
         } else {
-            statusText = '⚡ 活跃';
+            statusText = '活动中';
             statusClass = 'deployed';
         }
 
@@ -525,7 +525,7 @@ function updateEnemyList() {
         var staleNote = '';
         if (isStale || (!destroyed && enemy.discovered && !enemy.visible)) {
             var timeSince = enemy.lastSeenTime > 0 ? (gameTime - enemy.lastSeenTime) : '?';
-            staleNote = '<div class="enemy-dist stale-note">⚠ 最后目击: ' + timeSince + '秒前 (' + displayX + ', ' + displayY + ')</div>';
+            staleNote = '<div class="enemy-dist stale-note">最后目击: ' + timeSince + '秒前 (' + displayX + ', ' + displayY + ')</div>';
         }
 
         return '<div class="unit-item ' + itemClass + '" data-enemy-id="' + enemy.id + '">' +
@@ -537,8 +537,8 @@ function updateEnemyList() {
                 '<div class="enemy-health-fill ' + healthClass + '" style="width:' + (healthPct * 100) + '%"></div>' +
             '</div>' +
             '<div class="unit-stats">' +
-                '<span>❤️ ' + Math.max(0, enemy.health) + '/' + enemy.maxHealth + '</span>' +
-                '<span>📍 距基地 ' + dist + '</span>' +
+                '<span>生命 ' + Math.max(0, enemy.health) + '/' + enemy.maxHealth + '</span>' +
+                '<span>距基地 ' + dist + '</span>' +
             '</div>' +
             '<div class="enemy-dist">坐标: (' + displayX + ', ' + displayY + ')' + attackInfo + '</div>' +
             staleNote +

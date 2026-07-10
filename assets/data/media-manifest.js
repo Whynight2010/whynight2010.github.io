@@ -3,7 +3,7 @@ window.EQUIPMENT_MEDIA = {
     "images": [
       {
         "src": "assets/equipment/j20/images/j20-01.jpg",
-        "alt": "j20 官方公开图片 1",
+        "alt": "歼-20官方公开图片1",
         "caption": "收藏！12张歼-20高清大图 - 中国军网 · 图片 1",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/kj/2023-01/12/content_10211531.htm",
@@ -16,7 +16,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/j20/images/j20-02.jpg",
-        "alt": "j20 官方公开图片 2",
+        "alt": "歼-20官方公开图片2",
         "caption": "收藏！12张歼-20高清大图 - 中国军网 · 图片 2",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/kj/2023-01/12/content_10211531.htm",
@@ -29,7 +29,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/j20/images/j20-03.jpg",
-        "alt": "j20 官方公开图片 3",
+        "alt": "歼-20官方公开图片3",
         "caption": "收藏！12张歼-20高清大图 - 中国军网 · 图片 3",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/kj/2023-01/12/content_10211531.htm",
@@ -42,7 +42,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/j20/images/j20-04.jpg",
-        "alt": "j20 官方公开图片 4",
+        "alt": "歼-20官方公开图片4",
         "caption": "收藏！12张歼-20高清大图 - 中国军网 · 图片 4",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/kj/2023-01/12/content_10211531.htm",
@@ -55,7 +55,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/j20/images/j20-05.jpg",
-        "alt": "j20 官方公开图片 5",
+        "alt": "歼-20官方公开图片5",
         "caption": "收藏！12张歼-20高清大图 - 中国军网 · 图片 5",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/kj/2023-01/12/content_10211531.htm",
@@ -68,7 +68,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/j20/images/j20-06.jpg",
-        "alt": "j20 官方公开图片 6",
+        "alt": "歼-20官方公开图片6",
         "caption": "收藏！12张歼-20高清大图 - 中国军网 · 图片 6",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/kj/2023-01/12/content_10211531.htm",
@@ -81,7 +81,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/j20/images/j20-07.jpg",
-        "alt": "j20 官方公开图片 7",
+        "alt": "歼-20官方公开图片7",
         "caption": "收藏！12张歼-20高清大图 - 中国军网 · 图片 7",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/kj/2023-01/12/content_10211531.htm",
@@ -113,7 +113,7 @@ window.EQUIPMENT_MEDIA = {
     "images": [
       {
         "src": "assets/equipment/y20/images/y20-01.jpg",
-        "alt": "y20 官方公开图片 1",
+        "alt": "运-20官方公开图片1",
         "caption": "大国鲲鹏——人民空军运-20飞机强军影像纪实 - 中国军网 · 图片 1",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/syjdt/16283266.html",
@@ -126,7 +126,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/y20/images/y20-02.jpg",
-        "alt": "y20 官方公开图片 2",
+        "alt": "运-20官方公开图片2",
         "caption": "大国鲲鹏——人民空军运-20飞机强军影像纪实 - 中国军网 · 图片 2",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/syjdt/16283266.html",
@@ -139,7 +139,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/y20/images/y20-03.jpg",
-        "alt": "y20 官方公开图片 3",
+        "alt": "运-20官方公开图片3",
         "caption": "大国鲲鹏——人民空军运-20飞机强军影像纪实 - 中国军网 · 图片 3",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/syjdt/16283266.html",
@@ -152,7 +152,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/y20/images/y20-04.jpg",
-        "alt": "y20 官方公开图片 4",
+        "alt": "运-20官方公开图片4",
         "caption": "大国鲲鹏——人民空军运-20飞机强军影像纪实 - 中国军网 · 图片 4",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/syjdt/16283266.html",
@@ -165,7 +165,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/y20/images/y20-05.jpg",
-        "alt": "y20 官方公开图片 5",
+        "alt": "运-20官方公开图片5",
         "caption": "大国鲲鹏——人民空军运-20飞机强军影像纪实 - 中国军网 · 图片 5",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/syjdt/16283266.html",
@@ -178,7 +178,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/y20/images/y20-06.jpg",
-        "alt": "y20 官方公开图片 6",
+        "alt": "运-20官方公开图片6",
         "caption": "大国鲲鹏——人民空军运-20飞机强军影像纪实 - 中国军网 · 图片 6",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/syjdt/16283266.html",
@@ -191,7 +191,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/y20/images/y20-07.jpg",
-        "alt": "y20 官方公开图片 7",
+        "alt": "运-20官方公开图片7",
         "caption": "大国鲲鹏——人民空军运-20飞机强军影像纪实 - 中国军网 · 图片 7",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/syjdt/16283266.html",
@@ -223,7 +223,7 @@ window.EQUIPMENT_MEDIA = {
     "images": [
       {
         "src": "assets/equipment/fujian/images/fujian-01.jpg",
-        "alt": "fujian 官方公开图片 1",
+        "alt": "福建舰官方公开图片1",
         "caption": "今天，福建舰下水4周年 - 中国军网 · 图片 1",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/hj_208557/16467862.html",
@@ -236,7 +236,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/fujian/images/fujian-02.jpg",
-        "alt": "fujian 官方公开图片 2",
+        "alt": "福建舰官方公开图片2",
         "caption": "今天，福建舰下水4周年 - 中国军网 · 图片 2",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/hj_208557/16467862.html",
@@ -249,7 +249,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/fujian/images/fujian-03.png",
-        "alt": "fujian 官方公开图片 3",
+        "alt": "福建舰官方公开图片3",
         "caption": "今天，福建舰下水4周年 - 中国军网 · 图片 3",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/hj_208557/16467862.html",
@@ -262,7 +262,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/fujian/images/fujian-04.jpg",
-        "alt": "fujian 官方公开图片 4",
+        "alt": "福建舰官方公开图片4",
         "caption": "今天，福建舰下水4周年 - 中国军网 · 图片 4",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/hj_208557/16467862.html",
@@ -275,7 +275,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/fujian/images/fujian-05.jpg",
-        "alt": "fujian 官方公开图片 5",
+        "alt": "福建舰官方公开图片5",
         "caption": "今天，福建舰下水4周年 - 中国军网 · 图片 5",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/hj_208557/16467862.html",
@@ -288,7 +288,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/fujian/images/fujian-06.jpg",
-        "alt": "fujian 官方公开图片 6",
+        "alt": "福建舰官方公开图片6",
         "caption": "今天，福建舰下水4周年 - 中国军网 · 图片 6",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/hj_208557/16467862.html",
@@ -301,7 +301,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/fujian/images/fujian-07.jpg",
-        "alt": "fujian 官方公开图片 7",
+        "alt": "福建舰官方公开图片7",
         "caption": "今天，福建舰下水4周年 - 中国军网 · 图片 7",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/hj_208557/16467862.html",
@@ -333,7 +333,7 @@ window.EQUIPMENT_MEDIA = {
     "images": [
       {
         "src": "assets/equipment/shandong/images/shandong-01.jpg",
-        "alt": "shandong 中国军网公开图片 1",
+        "alt": "山东舰中国军网公开图片1",
         "caption": "山东舰高清大图震撼来袭，你想要的角度这都有！ - 中国军网 · 图片 1",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/hj_208557/9874341.html",
@@ -346,7 +346,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/shandong/images/shandong-02.jpg",
-        "alt": "shandong 中国军网公开图片 2",
+        "alt": "山东舰中国军网公开图片2",
         "caption": "山东舰高清大图震撼来袭，你想要的角度这都有！ - 中国军网 · 图片 2",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/hj_208557/9874341.html",
@@ -359,7 +359,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/shandong/images/shandong-03.jpg",
-        "alt": "shandong 中国军网公开图片 3",
+        "alt": "山东舰中国军网公开图片3",
         "caption": "山东舰高清大图震撼来袭，你想要的角度这都有！ - 中国军网 · 图片 3",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/hj_208557/9874341.html",
@@ -372,7 +372,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/shandong/images/shandong-04.jpg",
-        "alt": "shandong 中国军网公开图片 4",
+        "alt": "山东舰中国军网公开图片4",
         "caption": "山东舰高清大图震撼来袭，你想要的角度这都有！ - 中国军网 · 图片 4",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/hj_208557/9874341.html",
@@ -385,7 +385,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/shandong/images/shandong-05.jpg",
-        "alt": "shandong 中国军网公开图片 5",
+        "alt": "山东舰中国军网公开图片5",
         "caption": "山东舰高清大图震撼来袭，你想要的角度这都有！ - 中国军网 · 图片 5",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/hj_208557/9874341.html",
@@ -398,7 +398,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/shandong/images/shandong-06.jpg",
-        "alt": "shandong 中国军网公开图片 6",
+        "alt": "山东舰中国军网公开图片6",
         "caption": "山东舰高清大图震撼来袭，你想要的角度这都有！ - 中国军网 · 图片 6",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/hj_208557/9874341.html",
@@ -411,7 +411,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/shandong/images/shandong-07.jpg",
-        "alt": "shandong 中国军网公开图片 7",
+        "alt": "山东舰中国军网公开图片7",
         "caption": "山东舰高清大图震撼来袭，你想要的角度这都有！ - 中国军网 · 图片 7",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/hj_208557/9874341.html",
@@ -443,7 +443,7 @@ window.EQUIPMENT_MEDIA = {
     "images": [
       {
         "src": "assets/equipment/liaoning/images/liaoning-01.jpg",
-        "alt": "liaoning 中国军网公开图片 1",
+        "alt": "辽宁舰中国军网公开图片1",
         "caption": "线上阅舰式①：一起去看舰——航母 - 中国军网 · 图片 1",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/tp_207717/16219108.html",
@@ -456,7 +456,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/liaoning/images/liaoning-02.jpg",
-        "alt": "liaoning 中国军网公开图片 2",
+        "alt": "辽宁舰中国军网公开图片2",
         "caption": "线上阅舰式①：一起去看舰——航母 - 中国军网 · 图片 2",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/tp_207717/16219108.html",
@@ -469,7 +469,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/liaoning/images/liaoning-03.jpg",
-        "alt": "liaoning 中国军网公开图片 3",
+        "alt": "辽宁舰中国军网公开图片3",
         "caption": "线上阅舰式①：一起去看舰——航母 - 中国军网 · 图片 3",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/tp_207717/16219108.html",
@@ -482,7 +482,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/liaoning/images/liaoning-04.jpg",
-        "alt": "liaoning 中国军网公开图片 4",
+        "alt": "辽宁舰中国军网公开图片4",
         "caption": "线上阅舰式①：一起去看舰——航母 - 中国军网 · 图片 4",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/tp_207717/16219108.html",
@@ -495,7 +495,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/liaoning/images/liaoning-05.jpg",
-        "alt": "liaoning 中国军网公开图片 5",
+        "alt": "辽宁舰中国军网公开图片5",
         "caption": "线上阅舰式①：一起去看舰——航母 - 中国军网 · 图片 5",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/tp_207717/16219108.html",
@@ -508,7 +508,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/liaoning/images/liaoning-06.jpg",
-        "alt": "liaoning 中国军网公开图片 6",
+        "alt": "辽宁舰中国军网公开图片6",
         "caption": "线上阅舰式①：一起去看舰——航母 - 中国军网 · 图片 6",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/tp_207717/16219108.html",
@@ -521,7 +521,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/liaoning/images/liaoning-07.jpg",
-        "alt": "liaoning 中国军网公开图片 7",
+        "alt": "辽宁舰中国军网公开图片7",
         "caption": "线上阅舰式①：一起去看舰——航母 - 中国军网 · 图片 7",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/tp_207717/16219108.html",
@@ -553,7 +553,7 @@ window.EQUIPMENT_MEDIA = {
     "images": [
       {
         "src": "assets/equipment/type055/images/type055-01.jpg",
-        "alt": "type055 官方公开图片 1",
+        "alt": "055型驱逐舰官方公开图片1",
         "caption": "光知道万吨大驱上新可不够，这一篇建议你收藏 - 中国军网 · 图片 1",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/hj_208557/16448520.html",
@@ -566,7 +566,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/type055/images/type055-02.jpg",
-        "alt": "type055 官方公开图片 2",
+        "alt": "055型驱逐舰官方公开图片2",
         "caption": "光知道万吨大驱上新可不够，这一篇建议你收藏 - 中国军网 · 图片 2",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/hj_208557/16448520.html",
@@ -579,7 +579,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/type055/images/type055-03.jpg",
-        "alt": "type055 官方公开图片 3",
+        "alt": "055型驱逐舰官方公开图片3",
         "caption": "光知道万吨大驱上新可不够，这一篇建议你收藏 - 中国军网 · 图片 3",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/hj_208557/16448520.html",
@@ -592,7 +592,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/type055/images/type055-04.jpg",
-        "alt": "type055 官方公开图片 4",
+        "alt": "055型驱逐舰官方公开图片4",
         "caption": "光知道万吨大驱上新可不够，这一篇建议你收藏 - 中国军网 · 图片 4",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/hj_208557/16448520.html",
@@ -605,7 +605,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/type055/images/type055-05.jpg",
-        "alt": "type055 官方公开图片 5",
+        "alt": "055型驱逐舰官方公开图片5",
         "caption": "光知道万吨大驱上新可不够，这一篇建议你收藏 - 中国军网 · 图片 5",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/hj_208557/16448520.html",
@@ -618,7 +618,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/type055/images/type055-06.jpg",
-        "alt": "type055 官方公开图片 6",
+        "alt": "055型驱逐舰官方公开图片6",
         "caption": "光知道万吨大驱上新可不够，这一篇建议你收藏 - 中国军网 · 图片 6",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/hj_208557/16448520.html",
@@ -631,7 +631,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/type055/images/type055-07.jpg",
-        "alt": "type055 官方公开图片 7",
+        "alt": "055型驱逐舰官方公开图片7",
         "caption": "光知道万吨大驱上新可不够，这一篇建议你收藏 - 中国军网 · 图片 7",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/hj_208557/16448520.html",
@@ -663,7 +663,7 @@ window.EQUIPMENT_MEDIA = {
     "images": [
       {
         "src": "assets/equipment/type052d/images/type052d-01.jpg",
-        "alt": "type052d 中国军网公开图片 1",
+        "alt": "052D型驱逐舰中国军网公开图片1",
         "caption": "我是中国人民解放军丨052D型驱逐舰：“中华神盾”一出手，就知有没有 - 中国军网 · 图片 1",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/bq_208581/jdt_208582/9935708.html",
@@ -676,7 +676,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/type052d/images/type052d-02.jpg",
-        "alt": "type052d 中国军网公开图片 2",
+        "alt": "052D型驱逐舰中国军网公开图片2",
         "caption": "我是中国人民解放军丨052D型驱逐舰：“中华神盾”一出手，就知有没有 - 中国军网 · 图片 2",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/bq_208581/jdt_208582/9935708.html",
@@ -689,7 +689,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/type052d/images/type052d-03.jpg",
-        "alt": "type052d 中国军网公开图片 3",
+        "alt": "052D型驱逐舰中国军网公开图片3",
         "caption": "我是中国人民解放军丨052D型驱逐舰：“中华神盾”一出手，就知有没有 - 中国军网 · 图片 3",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/bq_208581/jdt_208582/9935708.html",
@@ -702,7 +702,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/type052d/images/type052d-04.jpg",
-        "alt": "type052d 中国军网公开图片 4",
+        "alt": "052D型驱逐舰中国军网公开图片4",
         "caption": "我是中国人民解放军丨052D型驱逐舰：“中华神盾”一出手，就知有没有 - 中国军网 · 图片 4",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/bq_208581/jdt_208582/9935708.html",
@@ -715,7 +715,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/type052d/images/type052d-05.jpg",
-        "alt": "type052d 中国军网公开图片 5",
+        "alt": "052D型驱逐舰中国军网公开图片5",
         "caption": "我是中国人民解放军丨052D型驱逐舰：“中华神盾”一出手，就知有没有 - 中国军网 · 图片 5",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/bq_208581/jdt_208582/9935708.html",
@@ -728,7 +728,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/type052d/images/type052d-06.jpg",
-        "alt": "type052d 中国军网公开图片 6",
+        "alt": "052D型驱逐舰中国军网公开图片6",
         "caption": "我是中国人民解放军丨052D型驱逐舰：“中华神盾”一出手，就知有没有 - 中国军网 · 图片 6",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/bq_208581/jdt_208582/9935708.html",
@@ -741,7 +741,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/type052d/images/type052d-07.jpg",
-        "alt": "type052d 中国军网公开图片 7",
+        "alt": "052D型驱逐舰中国军网公开图片7",
         "caption": "舷号176，娄底舰官宣！海军052D型导弹驱逐舰上新 - 中国军网 · 图片 7",
         "sourceName": "中国军网",
         "sourceUrl": "https://www.81.cn/ChinaMilitary/rdxw_208665/16435209.html",
@@ -773,7 +773,7 @@ window.EQUIPMENT_MEDIA = {
     "images": [
       {
         "src": "assets/equipment/type99a/images/type99a-01.jpg",
-        "alt": "type99a 官方公开图片 1",
+        "alt": "99A式主战坦克官方公开图片1",
         "caption": "随99A式主战坦克，来个加速度！ - 中国军网 · 图片 1",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/lj_208555/10191245.html",
@@ -786,7 +786,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/type99a/images/type99a-02.jpg",
-        "alt": "type99a 官方公开图片 2",
+        "alt": "99A式主战坦克官方公开图片2",
         "caption": "随99A式主战坦克，来个加速度！ - 中国军网 · 图片 2",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/lj_208555/10191245.html",
@@ -799,7 +799,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/type99a/images/type99a-03.jpg",
-        "alt": "type99a 官方公开图片 3",
+        "alt": "99A式主战坦克官方公开图片3",
         "caption": "随99A式主战坦克，来个加速度！ - 中国军网 · 图片 3",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/lj_208555/10191245.html",
@@ -812,7 +812,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/type99a/images/type99a-04.jpg",
-        "alt": "type99a 官方公开图片 4",
+        "alt": "99A式主战坦克官方公开图片4",
         "caption": "随99A式主战坦克，来个加速度！ - 中国军网 · 图片 4",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/lj_208555/10191245.html",
@@ -825,7 +825,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/type99a/images/type99a-05.jpg",
-        "alt": "type99a 官方公开图片 5",
+        "alt": "99A式主战坦克官方公开图片5",
         "caption": "随99A式主战坦克，来个加速度！ - 中国军网 · 图片 5",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/lj_208555/10191245.html",
@@ -838,7 +838,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/type99a/images/type99a-06.jpg",
-        "alt": "type99a 官方公开图片 6",
+        "alt": "99A式主战坦克官方公开图片6",
         "caption": "随99A式主战坦克，来个加速度！ - 中国军网 · 图片 6",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/lj_208555/10191245.html",
@@ -851,7 +851,7 @@ window.EQUIPMENT_MEDIA = {
       },
       {
         "src": "assets/equipment/type99a/images/type99a-07.jpg",
-        "alt": "type99a 官方公开图片 7",
+        "alt": "99A式主战坦克官方公开图片7",
         "caption": "随99A式主战坦克，来个加速度！ - 中国军网 · 图片 7",
         "sourceName": "中国军网",
         "sourceUrl": "http://www.81.cn/lj_208555/10191245.html",
@@ -864,19 +864,19 @@ window.EQUIPMENT_MEDIA = {
       }
     ],
     "video": {
-      "src": "assets/equipment/type99a/video/type99a.mp4",
+      "src": "",
       "poster": "assets/equipment/type99a/video/type99a-poster.jpg",
-      "title": "99A式主战坦克 离线视频",
-      "sourceName": "公开图片生成",
-      "sourceUrl": "",
-      "status": "generated",
-      "note": "由已下载公开图片或本地生成图片生成，保证离线可播放。"
+      "title": "央视曝光99A坦克最关键性能指标：1秒闪击1800米外目标",
+      "sourceName": "央视网",
+      "sourceUrl": "https://v.cctv.com/2021/07/17/VIDECeAEy84RK26sHVpUW46y210717.shtml",
+      "status": "web_only",
+      "note": "央视网公开视频页面可匿名访问；未下载或绕过播放器视频流，仅登记原网页并使用公开封面图。"
     },
     "completeness": {
       "imageCount": 7,
       "hasVideo": true,
       "missingImages": 0,
-      "notes": "视频为本地生成兜底，保证离线播放。"
+      "notes": "7 张图片来自中国军网公开页面；视频登记为央视网 web_only，联网跳转官方页面观看。"
     }
   }
 };

@@ -4,6 +4,14 @@
 
 // --- 页面切换 ---
 
+function goBack() {
+    if (window.history.length > 1) {
+        window.history.back();
+    } else {
+        window.location.href = '../index.html';
+    }
+}
+
 function showPage(pageId) {
     console.log('showPage called with:', pageId);
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));

@@ -15,6 +15,7 @@ const UIModule = {
     init() {
         this.initTab();
         this.initSubTabs();
+        this.initBackHome();
         this.initScienceNav();
         this.initEquipSelect();
         this.initButtons();
@@ -39,6 +40,14 @@ const UIModule = {
                 const target = document.getElementById(targetId);
                 if (target) target.classList.add('active');
             });
+        });
+    },
+
+    initBackHome() {
+        const btn = document.getElementById('btnBackHome');
+        if (!btn) return;
+        btn.addEventListener('click', () => {
+            window.location.href = '../index.html';
         });
     },
 
@@ -98,23 +107,30 @@ const UIModule = {
     },
 
     initCanvasResize() {
-        const resizeCanvas = () => {
-            const canvas = MapModule.canvas;
-            if (!canvas) return;
-            const container = canvas.parentElement;
-            if (!container) return;
-            const maxW = container.clientWidth - 40;
-            const maxH = container.clientHeight - 40;
+        const canvas = MapModule.canvas;
+        if (!canvas) return;
+        const container = canvas.parentElement;
+        if (!container) return;
+
+        const applyCanvasSize = () => {
+            const maxW = Math.max(260, container.clientWidth - 40);
+            const maxH = Math.max(180, container.clientHeight - 40);
             const ratio = 900 / 600;
             let w, h;
             if (maxW / maxH > ratio) { h = maxH; w = h * ratio; }
             else { w = maxW; h = w / ratio; }
-            canvas.style.width = w + 'px';
-            canvas.style.height = h + 'px';
+            canvas.style.width = Math.max(260, Math.floor(w)) + 'px';
+            canvas.style.height = Math.max(180, Math.floor(h)) + 'px';
             EquipModule.updateCanvasScale();
         };
-        window.addEventListener('resize', Utils.debounce(resizeCanvas, 200));
-        resizeCanvas();
+        const scheduleCanvasResize = () => requestAnimationFrame(applyCanvasSize);
+        this.resizeCanvas = scheduleCanvasResize;
+        window.addEventListener('resize', Utils.debounce(scheduleCanvasResize, 120));
+        window.addEventListener('orientationchange', scheduleCanvasResize);
+        if ('ResizeObserver' in window) {
+            new ResizeObserver(scheduleCanvasResize).observe(container);
+        }
+        scheduleCanvasResize();
     },
 
     initTab() {
@@ -126,6 +142,7 @@ const UIModule = {
                 tabContents.forEach(c => c.classList.remove('active'));
                 btn.classList.add('active');
                 document.getElementById(btn.getAttribute('data-tab')).classList.add('active');
+                requestAnimationFrame(() => UIModule.resizeCanvas && UIModule.resizeCanvas());
             });
         });
     },
@@ -150,7 +167,7 @@ const UIModule = {
     },
 
     renderScienceContent(data, container) {
-        let html = '<div class="archive-eyebrow">01 / Defense archive · mission notes</div>';
+        let html = '<div class="archive-eyebrow">01 / 防空档案 · 装备笔记</div>';
         html += '<div class="science-title">' + data.name + '</div>';
         if (data.image) {
             html += '<div class="science-image-box"><img src="assets/images/' + data.image + '" alt="' + data.name + '" onerror="this.onerror=null;this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';"><div class="image-placeholder"><span>图片资源：' + data.image + '<br>请将对应配图放入 assets/images 文件夹</span></div></div>';
@@ -532,7 +549,7 @@ const UIModule = {
         html += '</div>';
 
         // 得分明细
-        html += '<div class="report-divider"></div><div class="report-detail"><div class="detail-title">Score telemetry</div>';
+        html += '<div class="report-divider"></div><div class="report-detail"><div class="detail-title">得分明细</div>';
         html += '<div class="stat-row"><span>拦截得分</span><span>' + CONFIG.scoreDetail.kills + '</span></div>';
         html += '<div class="stat-row"><span>连击奖励</span><span>' + CONFIG.scoreDetail.comboBonus + '</span></div>';
         html += '<div class="stat-row"><span>防御率加分</span><span>+' + defenseRateBonus + '</span></div>';
@@ -657,7 +674,7 @@ const UIModule = {
             ctx.save(); ctx.globalAlpha = pulse;
             ctx.fillStyle = '#FF8A3D'; ctx.font = 'bold 14px "Microsoft Yahei", sans-serif';
             ctx.textAlign = 'left'; ctx.shadowColor = '#FF8A3D'; ctx.shadowBlur = 10;
-            ctx.fillText('🔥 连击 x' + CONFIG.comboCount, 10, 30);
+            ctx.fillText('连击 x' + CONFIG.comboCount, 10, 30);
             ctx.shadowBlur = 0; ctx.globalAlpha = 1; ctx.restore();
         }
 
@@ -667,7 +684,7 @@ const UIModule = {
             ctx.fillStyle = Utils.hexToRgba('#7BE7FF', 0.48);
             ctx.font = '11px "Microsoft Yahei", sans-serif';
             ctx.textAlign = 'left';
-            ctx.fillText('RADAR LINK +' + Math.round(CONFIG.radarBoost * 100) + '%', 10, 50);
+            ctx.fillText('雷达协同 +' + Math.round(CONFIG.radarBoost * 100) + '%', 10, 50);
             ctx.restore();
         }
 
@@ -686,7 +703,7 @@ const UIModule = {
             ctx.fillStyle = 'rgba(123, 231, 255, 0.22)';
             ctx.font = 'bold 12px "Microsoft Yahei", sans-serif';
             ctx.textAlign = 'right';
-            ctx.fillText('AUTO DEFENSE', w - 10, h - 10);
+            ctx.fillText('自动防御', w - 10, h - 10);
             ctx.restore();
         }
 
@@ -697,7 +714,7 @@ const UIModule = {
             ctx.fillStyle = 'rgba(255, 92, 92, ' + alpha + ')';
             ctx.font = 'bold 18px "Microsoft Yahei", sans-serif';
             ctx.textAlign = 'center';
-            ctx.fillText('⚠ 高危威胁', w / 2, 50);
+            ctx.fillText('高危威胁', w / 2, 50);
             ctx.restore();
         }
     }

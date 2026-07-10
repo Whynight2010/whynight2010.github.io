@@ -31,14 +31,14 @@ function moveToTarget(unit, targetX, targetY, actionType) {
         if (actionType === 'scout') {
             const detectedEnemy = checkScoutDetection(unit);
             if (detectedEnemy) {
-                addBattleLog('⚠️ ' + unit.name + ' 发现未标记敌方单位！立即后撤！');
+                addBattleLog('' + unit.name + ' 发现未标记敌方单位立即后撤');
                 abortMovement = true;
                 retreatFromEnemy(unit, detectedEnemy);
                 return;
             }
 
             if (willEnterEnemyRange(unit, targetX, targetY)) {
-                addBattleLog('⚠️ ' + unit.name + ' 检测到前方有敌方火力范围，改变路线！');
+                addBattleLog('' + unit.name + ' 检测到前方有敌方火力范围，改变路线');
                 const safePos = findSafePosition(unit);
                 if (safePos) {
                     abortMovement = true;
@@ -55,7 +55,7 @@ function moveToTarget(unit, targetX, targetY, actionType) {
         } else {
             if (actionType === 'attack' && unit.ammo > 0) {
                 unit.ammo--;
-                addBattleLog(unit.name + ' 发射弹药！');
+                addBattleLog(unit.name + ' 发射弹药');
                 attackTarget(unit);
             }
             unit.status = 'deployed';
@@ -83,7 +83,7 @@ function checkScoutDetection(unit) {
                 if (unit.type === 'scout') {
                     enemy.visible = true;
                     markEnemyDiscovered(enemy);
-                    addBattleLog('🔍 ' + unit.name + ' 发现敌方 ' + enemy.name + '！');
+                    addBattleLog('' + unit.name + ' 发现敌方 ' + enemy.name + '');
                     updateEnemyDisplay();
                     return enemy;
                 } else {
@@ -93,7 +93,7 @@ function checkScoutDetection(unit) {
                     if (!inCloud && !inMountain) {
                         enemy.visible = true;
                         markEnemyDiscovered(enemy);
-                        addBattleLog('🔍 ' + unit.name + ' 发现敌方 ' + enemy.name + '！');
+                        addBattleLog('' + unit.name + ' 发现敌方 ' + enemy.name + '');
                         updateEnemyDisplay();
                         return enemy;
                     }
@@ -273,7 +273,7 @@ function calculateDPPath(startX, startY, targetX, targetY, avoidPoint = null) {
     const waypoints = generateWaypoints(startX, startY, targetX, targetY, enemyZones);
     const optimalPath = findOptimalPath(startX, startY, targetX, targetY, waypoints, enemyZones);
 
-    path.push(...optimalPath);
+    path.push(optimalPath);
     return path;
 }
 
@@ -381,7 +381,7 @@ function findOptimalPath(startX, startY, targetX, targetY, waypoints, enemyZones
         // 找到一个最近的敌方无人机并绕行
         const nearestEnemy = enemyZones.reduce((nearest, zone) => {
             const dist = Math.sqrt(Math.pow(zone.x - startX, 2) + Math.pow(zone.y - startY, 2));
-            return dist < nearest.dist ? { ...zone, dist } : nearest;
+            return dist < nearest.dist ? { zone, dist } : nearest;
         }, { dist: Infinity });
 
         if (nearestEnemy.dist < Infinity) {
@@ -475,7 +475,7 @@ function moveToScoutTarget(unit) {
             unit.isMovingToScout = false;
             unit.x = targetX;
             unit.y = targetY;
-            addBattleLog(unit.name + ' 到达侦察目标点，开始执行侦察任务！');
+            addBattleLog(unit.name + ' 到达侦察目标点，开始执行侦察任务');
             executeScoutMission(unit);
             updateUnitDisplay(unit);
             return;
@@ -495,7 +495,7 @@ function moveToScoutTarget(unit) {
         // 侦察检测
         const detectedEnemy = checkScoutDetection(unit);
         if (detectedEnemy) {
-            addBattleLog('⚠️ ' + unit.name + ' 发现未标记敌方单位！立即后撤！');
+            addBattleLog('' + unit.name + ' 发现未标记敌方单位立即后撤');
             unit.isMovingToScout = false;
             retreatFromEnemy(unit, detectedEnemy);
             return;
@@ -517,12 +517,12 @@ function moveToScoutTarget(unit) {
         if (needsReroute) {
             const safePos = findSafePositionDP(unit);
             if (safePos) {
-                addBattleLog('⚠️ ' + unit.name + ' 检测到敌方火力范围，重新计算路径！');
+                addBattleLog('' + unit.name + ' 检测到敌方火力范围，重新计算路径');
                 unit.isMovingToScout = false;
                 const newPath = calculateOptimalPath(unit.x, unit.y, targetX, targetY);
                 if (newPath.length > 0) {
                     path.length = 0;
-                    path.push(...newPath);
+                    path.push(newPath);
                     currentPathIndex = 0;
                 }
             }
@@ -544,7 +544,7 @@ function executeScoutMission(unit) {
     // 到达侦察点后，执行侦察检测
     const detectedEnemy = checkScoutDetection(unit);
     if (detectedEnemy) {
-        addBattleLog('🔍 ' + unit.name + ' 在目标点发现敌方 ' + detectedEnemy.name + '！');
+        addBattleLog('' + unit.name + ' 在目标点发现敌方 ' + detectedEnemy.name + '');
     } else {
         addBattleLog(unit.name + ' 在目标区域未发现敌方单位');
     }
@@ -581,11 +581,11 @@ function attackTarget(unit) {
     if (targets.length > 0) {
         const target = targets[0];
         target.health -= 40;
-        addBattleLog(unit.name + ' 攻击 ' + target.name + '，造成40点伤害！');
+        addBattleLog(unit.name + ' 攻击 ' + target.name + '，造成40点伤害');
 
         if (target.health <= 0) {
             target.health = 0;
-            addBattleLog('💥 ' + target.name + ' 被摧毁！');
+            addBattleLog('' + target.name + ' 被摧毁');
             updateEnemyDisplay();
         }
     }
@@ -621,7 +621,7 @@ function moveToAttackTarget(unit) {
             requestAnimationFrame(move);
         } else {
             unit.isMovingToAttack = false;
-            addBattleLog(unit.name + ' 到达攻击目标点，开始搜索敌方目标！');
+            addBattleLog(unit.name + ' 到达攻击目标点，开始搜索敌方目标');
             autoAttackAtLocation(unit);
         }
     }
@@ -631,7 +631,7 @@ function moveToAttackTarget(unit) {
 
 function autoAttackAtLocation(unit) {
     if (unit.ammo <= 0) {
-        addBattleLog(unit.name + ' 弹药耗尽，返回待命状态！');
+        addBattleLog(unit.name + ' 弹药耗尽，返回待命状态');
         unit.status = 'deployed';
         updateUnitDisplay(unit);
         return;
@@ -652,28 +652,28 @@ function autoAttackAtLocation(unit) {
         const target = findBestAttackTarget(unit, enemiesNearTarget);
         if (target) {
             unit.ammo--;
-            addBattleLog(unit.name + ' 发现目标 ' + target.name + '，发射弹药！');
+            addBattleLog(unit.name + ' 发现目标 ' + target.name + '，发射弹药');
 
             const damage = calculatePlayerDamage(unit, target);
             target.health -= damage;
-            addBattleLog(unit.name + ' 攻击 ' + target.name + '，造成 ' + damage + ' 点伤害！');
+            addBattleLog(unit.name + ' 攻击 ' + target.name + '，造成 ' + damage + ' 点伤害');
 
             if (target.health <= 0) {
                 target.health = 0;
-                addBattleLog('💥 ' + target.name + ' 被摧毁！');
+                addBattleLog('' + target.name + ' 被摧毁');
                 updateEnemyDisplay();
             }
 
             if (unit.ammo > 0) {
                 setTimeout(() => autoAttackAtLocation(unit), 1500);
             } else {
-                addBattleLog(unit.name + ' 弹药耗尽，返回待命状态！');
+                addBattleLog(unit.name + ' 弹药耗尽，返回待命状态');
                 unit.status = 'deployed';
                 updateUnitDisplay(unit);
             }
         }
     } else {
-        addBattleLog(unit.name + ' 在目标区域未发现敌方单位，返回待命状态！');
+        addBattleLog(unit.name + ' 在目标区域未发现敌方单位，返回待命状态');
         unit.status = 'deployed';
         updateUnitDisplay(unit);
     }
@@ -1098,7 +1098,7 @@ function arriveAtBase(unit, baseX, baseY) {
         unit.ammo = unit.maxAmmo;
     }
 
-    addBattleLog(unit.name + ' 已返回基地！');
+    addBattleLog(unit.name + ' 已返回基地');
     if (healthRestored > 0 || ammoRestored > 0) {
         var ammoLabel = unit.type === 'swarm' ? ' 架蜂群' : '';
         addBattleLog('基地为 ' + unit.name + ' 补充：生命 +' + healthRestored + '，弹药 +' + ammoRestored + ammoLabel);
@@ -1110,7 +1110,7 @@ function arriveAtBase(unit, baseX, baseY) {
 
 function enterAttackTargetSelection(unit) {
     attackTargetUnits.push(unit);
-    addBattleLog('⚠️ 正在选择 ' + unit.name + ' 的攻击目标，点击地图指定位置...');
+    addBattleLog('正在选择 ' + unit.name + ' 的攻击目标，点击地图指定位置');
 
     const satelliteView = document.getElementById('satellite-view');
     satelliteView.style.cursor = 'crosshair';
@@ -1118,7 +1118,7 @@ function enterAttackTargetSelection(unit) {
 
 function enterScoutTargetSelection(unit) {
     scoutTargetUnits.push(unit);
-    addBattleLog('⚠️ 正在选择 ' + unit.name + ' 的侦察目标，点击地图指定位置...');
+    addBattleLog('正在选择 ' + unit.name + ' 的侦察目标，点击地图指定位置');
 
     const satelliteView = document.getElementById('satellite-view');
     satelliteView.style.cursor = 'crosshair';
@@ -1134,8 +1134,10 @@ function handleMapClickForAttack(e) {
 
     const satelliteView = document.getElementById('satellite-view');
     const rect = satelliteView.getBoundingClientRect();
-    const clickX = e.clientX - rect.left;
-    const clickY = e.clientY - rect.top;
+    const scaleX = 600 / rect.width;
+    const scaleY = 400 / rect.height;
+    const clickX = (e.clientX - rect.left) * scaleX;
+    const clickY = (e.clientY - rect.top) * scaleY;
 
     // 处理蜂巢发射车移动目标选择（launchDroneCount === -1 表示移动模式）
     if (launchTargetUnit && launchDroneCount === -1) {
@@ -1210,7 +1212,7 @@ function handleMapClickForAttack(e) {
             }
 
             if (clickedEnemy) {
-                addBattleLog(fg.name + ' 收到攻击指令，目标: ' + clickedEnemy.name + '！编队集火攻击！');
+                addBattleLog(fg.name + ' 收到攻击指令，目标: ' + clickedEnemy.name + '编队集火攻击');
             } else {
                 addBattleLog(fg.name + ' 收到攻击指令，前往目标点 (' + Math.round(clickX) + ', ' + Math.round(clickY) + ')');
             }
@@ -1283,7 +1285,7 @@ function setSquadRecallCommand(squad) {
 
     var launcher = mockUnits.find(function(u) { return u.id === squad.launcherId; });
     if (!launcher || launcher.health <= 0) {
-        addBattleLog('蜂群编组 ' + squad.id + ' 发射车已损毁，无法召回！');
+        addBattleLog('蜂群编组 ' + squad.id + ' 发射车已损毁，无法召回');
         squad.command = 'idle';
         squad.isRecalling = false;
         return;
@@ -1351,7 +1353,7 @@ function updateDroneSquads() {
         }
 
         if (allDead) {
-            addBattleLog('蜂群编组 ' + squad.id + ' 全部损毁！');
+            addBattleLog('蜂群编组 ' + squad.id + ' 全部损毁');
             removeSquadElements(squad);
             droneSquads.splice(si, 1);
         }
@@ -1468,7 +1470,7 @@ function checkSquadArrival(squad) {
         handleSquadRecallArrival(squad);
     } else if (squad.command === 'attack') {
         // 到达攻击位置，搜索目标
-        addBattleLog('蜂群编组 ' + squad.id + ' 到达攻击位置，搜索敌方目标...');
+        addBattleLog('蜂群编组 ' + squad.id + ' 到达攻击位置，搜索敌方目标');
         searchAndAttackTargets(squad);
     } else if (squad.command === 'move') {
         addBattleLog('蜂群编组 ' + squad.id + ' 到达转移位置');
@@ -1493,11 +1495,11 @@ function droneAutoAttack(drone, squad) {
     var damage = drone.attackPower;
     bestTarget.health -= damage;
 
-    addBattleLog('蜂群无人机 ' + drone.id + ' 攻击 ' + bestTarget.name + '，造成 ' + damage + ' 点伤害！');
+    addBattleLog('蜂群无人机 ' + drone.id + ' 攻击 ' + bestTarget.name + '，造成 ' + damage + ' 点伤害');
 
     if (bestTarget.health <= 0) {
         bestTarget.health = 0;
-        addBattleLog('💥 ' + bestTarget.name + ' 被蜂群无人机摧毁！');
+        addBattleLog('' + bestTarget.name + ' 被蜂群无人机摧毁');
         updateEnemyDisplay();
     }
 }
@@ -1561,10 +1563,10 @@ function searchAndAttackTargets(squad) {
         squad.command = 'attack';
         // 在攻击点周围散开巡逻
         assignScatterFormation(squad, cx, cy, 40);
-        addBattleLog('蜂群编组 ' + squad.id + ' 攻击位置未发现目标，散开搜索中...');
+        addBattleLog('蜂群编组 ' + squad.id + ' 攻击位置未发现目标，散开搜索中');
     } else {
         // 分配无人机攻击不同目标（最优分配）
-        addBattleLog('蜂群编组 ' + squad.id + ' 发现 ' + enemies.length + ' 个敌方目标，自动分配攻击！');
+        addBattleLog('蜂群编组 ' + squad.id + ' 发现 ' + enemies.length + ' 个敌方目标，自动分配攻击');
         assignDronesToTargets(aliveDrones, enemies);
     }
 }
@@ -1636,7 +1638,7 @@ function assignDronesToTargets(drones, enemies) {
 function handleSquadRecallArrival(squad) {
     var launcher = mockUnits.find(function(u) { return u.id === squad.launcherId; });
     if (!launcher || launcher.health <= 0) {
-        addBattleLog('蜂群编组 ' + squad.id + ' 发射车已损毁，编组原地待命！');
+        addBattleLog('蜂群编组 ' + squad.id + ' 发射车已损毁，编组原地待命');
         squad.command = 'idle';
         squad.isRecalling = false;
         return;
@@ -1680,7 +1682,7 @@ function setFormationMoveCommand(formation, targetX, targetY) {
     // 计算初始编队位置
     updateFormationPositions(formation);
 
-    addBattleLog('🔗 ' + formation.name + ' 长机 ' + formation.leadUnit.name + ' 引领编队，僚机V形跟随');
+    addBattleLog('' + formation.name + ' 长机 ' + formation.leadUnit.name + ' 引领编队，僚机V形跟随');
 }
 
 // 编组攻击指令（primaryTarget 为可选的具体敌方目标）
@@ -1705,9 +1707,9 @@ function setFormationAttackCommand(formation, targetX, targetY, primaryTarget) {
     updateFormationPositions(formation);
 
     if (primaryTarget) {
-        addBattleLog('🔗 ' + formation.name + ' 编队锁定目标 ' + primaryTarget.name + '，全编队向目标进发！');
+        addBattleLog('' + formation.name + ' 编队锁定目标 ' + primaryTarget.name + '，全编队向目标进发');
     } else {
-        addBattleLog('🔗 ' + formation.name + ' 编队向攻击位置进发，AI将在到达后自动分配目标');
+        addBattleLog('' + formation.name + ' 编队向攻击位置进发，AI将在到达后自动分配目标');
     }
 }
 
@@ -1724,7 +1726,7 @@ function setFormationRecallCommand(formation) {
     sorted.sort(function(a, b) { return getUnitTier(a) - getUnitTier(b); });
     formation._recallQueue = sorted;
 
-    addBattleLog('🔗 ' + formation.name + ' 执行逐次返航，长机 ' + formation.leadUnit.name + ' 率先返航...');
+    addBattleLog('' + formation.name + ' 执行逐次返航，长机 ' + formation.leadUnit.name + ' 率先返航');
 
     // 立即派出第一架（长机）
     dispatchNextRecallUnit(formation);
@@ -1741,7 +1743,7 @@ function dispatchNextRecallUnit(formation) {
             formation.command = 'idle';
             formation.isRecalling = false;
             formation._scatterSet = false;
-            addBattleLog('🔗 ' + formation.name + ' 全部单位已返航！');
+            addBattleLog('' + formation.name + ' 全部单位已返航');
             updateUnitsList();
         }
         return;
@@ -1751,7 +1753,7 @@ function dispatchNextRecallUnit(formation) {
 
     // 跳过已损毁的单位
     if (unit.health <= 0) {
-        addBattleLog('💀 ' + unit.name + ' 已损毁，跳过返航');
+        addBattleLog('' + unit.name + ' 已损毁，跳过返航');
         dispatchNextRecallUnit(formation);
         return;
     }
@@ -1763,7 +1765,7 @@ function dispatchNextRecallUnit(formation) {
     unit.isRecalling = true;
     formation._recallDeparted.push(unit);
 
-    addBattleLog('🏠 ' + unit.name + ' 开始返航...');
+    addBattleLog('' + unit.name + ' 开始返航');
     moveToBase(unit, baseX, baseY);
 }
 
@@ -1803,7 +1805,7 @@ function updateFormations() {
         // 检查编组是否全灭
         var allDead = fg.units.every(function(u) { return u.health <= 0; });
         if (allDead) {
-            addBattleLog('💀 ' + fg.name + ' 全部单位已损毁，编组解散！');
+            addBattleLog('' + fg.name + ' 全部单位已损毁，编组解散');
             if (selectedFormation && selectedFormation.id === fg.id) {
                 selectedFormation = null;
                 formationCmdPending = null;
@@ -1821,7 +1823,7 @@ function updateFormations() {
                 survivors.sort(function(a, b) { return getUnitTier(a) - getUnitTier(b); });
                 fg.leadUnit = survivors[0];
                 fg.wingmen = survivors.slice(1);
-                addBattleLog('⚠ ' + fg.name + ' 长机损毁！' + fg.leadUnit.name + ' 继任长机');
+                addBattleLog('' + fg.name + ' 长机损毁' + fg.leadUnit.name + ' 继任长机');
             }
         } else if (fg.leadUnit.health > 0) {
             fg._leadDead = false;
@@ -1874,7 +1876,7 @@ function updateFormationMovement(formation) {
     if (dist < 3) {
         // 到达目标
         if (formation.command === 'move') {
-            addBattleLog('🔗 ' + formation.name + ' 到达转移目标');
+            addBattleLog('' + formation.name + ' 到达转移目标');
             formation.command = 'idle';
             formation.units.forEach(function(u) {
                 if (u.health > 0 && u.status === 'move') u.status = 'deployed';
@@ -1979,11 +1981,11 @@ function wingmanProtectLead(wingman, lead) {
         var damage = calculatePlayerDamage(wingman, bestTarget);
         bestTarget.health -= damage;
 
-        addBattleLog('🛡️ 僚机 ' + getUnitShortName(wingman.name) + ' 保护长机，攻击 ' + bestTarget.name + ' 造成 ' + damage + ' 伤害！');
+        addBattleLog('僚机 ' + getUnitShortName(wingman.name) + ' 保护长机，攻击 ' + bestTarget.name + ' 造成 ' + damage + ' 伤害');
 
         if (bestTarget.health <= 0) {
             bestTarget.health = 0;
-            addBattleLog('💥 ' + bestTarget.name + ' 被编队僚机摧毁！');
+            addBattleLog('' + bestTarget.name + ' 被编队僚机摧毁');
             updateEnemyDisplay();
         }
     }
@@ -1996,7 +1998,7 @@ function formationAutoAttack(formation) {
     // 如果有优先目标，检查优先目标是否已被摧毁
     if (primaryTarget && primaryTarget.health <= 0) {
         // 优先目标已摧毁，清除标记，转为区域搜索
-        addBattleLog('🔗 ' + formation.name + ' 优先目标 ' + primaryTarget.name + ' 已摧毁，转为区域搜索！');
+        addBattleLog('' + formation.name + ' 优先目标 ' + primaryTarget.name + ' 已摧毁，转为区域搜索');
         formation._primaryTarget = null;
         primaryTarget = null;
         formation._scatterSet = false;
@@ -2059,7 +2061,7 @@ function formationAutoAttack(formation) {
         if (!formation._scatterSet) {
             formation._scatterSet = true;
             formation._lastAttackTime = Date.now();
-            addBattleLog('🔗 ' + formation.name + ' 攻击位置未发现目标，编队散开搜索...');
+            addBattleLog('' + formation.name + ' 攻击位置未发现目标，编队散开搜索');
             formation.units.filter(function(u) { return u.health > 0; }).forEach(function(u, i) {
                 var angle = (i / Math.max(1, formation.units.length)) * Math.PI * 2;
                 u._formationTargetX = cx + Math.cos(angle) * 50;
@@ -2101,11 +2103,11 @@ function formationAutoAttack(formation) {
             u.ammo--;
             var damage = calculatePlayerDamage(u, target);
             target.health -= damage;
-            addBattleLog('🔗 ' + u.name + ' 攻击 ' + target.name + '，造成 ' + damage + ' 伤害！');
+            addBattleLog('' + u.name + ' 攻击 ' + target.name + '，造成 ' + damage + ' 伤害');
 
             if (target.health <= 0) {
                 target.health = 0;
-                addBattleLog('💥 ' + target.name + ' 被编队 ' + formation.name + ' 摧毁！');
+                addBattleLog('' + target.name + ' 被编队 ' + formation.name + ' 摧毁');
                 updateEnemyDisplay();
                 u._assignedTarget = null;
             }
@@ -2238,7 +2240,7 @@ function updateFormationRecall(formation) {
             formation.command = 'idle';
             formation.isRecalling = false;
             formation._scatterSet = false;
-            addBattleLog('🔗 ' + formation.name + ' 全部单位已返航！');
+            addBattleLog('' + formation.name + ' 全部单位已返航');
             updateUnitsList();
         }
     }

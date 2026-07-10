@@ -87,8 +87,8 @@ function updateUnitsList() {
                 '<span class="unit-status ' + unit.status + '">' + getStatusText(unit.status) + '</span>' +
             '</div>' +
             '<div class="unit-stats">' +
-                '<span>❤️ ' + unit.health + '/' + unit.maxHealth + '</span>' +
-                '<span>💣 ' + unit.ammo + '/' + unit.maxAmmo + '</span>' +
+                '<span>生命 ' + unit.health + '/' + unit.maxHealth + '</span>' +
+                '<span>弹药 ' + unit.ammo + '/' + unit.maxAmmo + '</span>' +
             '</div>' +
         '</div>';
     }).join('');
@@ -105,12 +105,12 @@ function updateUnitsList() {
             var cmdText = fg.command === 'idle' ? '待命' : (fg.command === 'attack' ? '攻击中' : (fg.command === 'move' ? '转移中' : '召回中'));
             return '<div class="unit-item formation-item" data-formation-id="' + fg.id + '" onclick="openFormationModalById(\'' + fg.id + '\')">' +
                 '<div class="unit-header">' +
-                    '<span class="unit-name">🔗 ' + fg.name + '</span>' +
+                    '<span class="unit-name">编组 ' + fg.name + '</span>' +
                     '<span class="unit-status deployed">' + cmdText + '</span>' +
                 '</div>' +
                 '<div class="unit-stats">' +
-                    '<span>❤️ ' + totalHealth + '/' + maxTotalHealth + '</span>' +
-                    '<span>✈️ ' + fg.units.length + '架 | 长机:' + getUnitShortName(fg.leadUnit.name) + '</span>' +
+                    '<span>生命 ' + totalHealth + '/' + maxTotalHealth + '</span>' +
+                    '<span>单位 ' + fg.units.length + '架 | 长机:' + getUnitShortName(fg.leadUnit.name) + '</span>' +
                 '</div>' +
             '</div>';
         }).join('');
@@ -327,7 +327,7 @@ function spawnDroneSquad(launcher, count, targetX, targetY) {
     setSquadMoveCommand(squad, targetX, targetY);
 
     addBattleLog(launcher.name + ' 发射 ' + count + ' 架无人机（编组 ' + squadId + '），航向：(' + Math.round(targetX) + ', ' + Math.round(targetY) + ')');
-    addBattleLog('📡 编组 ' + squadId + ' 作战半径300单位，将自动搜索并攻击范围内敌方目标');
+    addBattleLog('编组 ' + squadId + ' 作战半径300单位，将自动搜索并攻击范围内敌方目标');
 }
 
 // --- 蜂巢无人机编组：DOM元素生成 ---
@@ -469,7 +469,7 @@ function enterSquadMoveSelection(squad) {
 // 统一的编组管理页面（常规编组 + 蜂巢编组）
 function showFormationManager() {
     var modal = document.getElementById('unit-modal');
-    document.getElementById('modal-unit-name').textContent = '🔗 编组管理';
+    document.getElementById('modal-unit-name').textContent = '编组管理';
     document.getElementById('modal-health').textContent = '';
     document.getElementById('modal-ammo').textContent = '';
     document.getElementById('modal-position').textContent = '';
@@ -481,7 +481,7 @@ function showFormationManager() {
     // ========== 区域一：常规无人机编组 ==========
     var section1 = document.createElement('div');
     section1.style.cssText = 'grid-column: 1 / -1; border-bottom: 1px solid #1e3a5f; padding-bottom: 10px; margin-bottom: 8px;';
-    section1.innerHTML = '<div style="color: #ffd93d; font-weight: bold; margin-bottom: 8px;">📋 常规无人机编组</div>';
+    section1.innerHTML = '<div style="color: #ffd93d; font-weight: bold; margin-bottom: 8px;">常规无人机编组</div>';
 
     // 可用单位选择区域
     var availableUnits = mockUnits.filter(function(u) {
@@ -489,7 +489,7 @@ function showFormationManager() {
     });
 
     if (availableUnits.length === 0) {
-        section1.innerHTML += '<div style="color: #8892b0; font-size: 11px; margin-bottom: 8px;">⚠ 暂无可编组的单位（需先部署且未加入其他编组）</div>';
+        section1.innerHTML += '<div style="color: #8892b0; font-size: 11px; margin-bottom: 8px;">暂无可编组的单位（需先部署且未加入其他编组）</div>';
     } else {
         section1.innerHTML += '<div style="color: #ccd6f6; font-size: 11px; margin-bottom: 6px;">可选单位（勾选1-3架创建编组）：</div>';
 
@@ -512,14 +512,14 @@ function showFormationManager() {
         // 创建编组按钮
         var createBtn = document.createElement('button');
         createBtn.className = 'action-btn primary';
-        createBtn.textContent = '✅ 创建编组';
+        createBtn.textContent = '创建编组';
         createBtn.style.gridColumn = '1 / -1';
         createBtn.onclick = function() {
             var checks = document.querySelectorAll('.formation-check:checked');
             var unitIds = [];
             checks.forEach(function(cb) { unitIds.push(parseInt(cb.value)); });
             if (unitIds.length < 1 || unitIds.length > 3) {
-                addBattleLog('⚠ 请选择1-3架单位创建编组');
+                addBattleLog('请选择1-3架单位创建编组');
                 return;
             }
             createFormation(unitIds);
@@ -539,12 +539,12 @@ function showFormationManager() {
             var maxHp = fg.units.reduce(function(s, u) { return s + u.maxHealth; }, 0);
             fgDiv.innerHTML = '<div style="display: flex; justify-content: space-between; align-items: center;">' +
                 '<span style="color: #ffd93d; font-weight: bold; font-size: 12px;">' + fg.name + '</span>' +
-                '<span style="color: #8892b0; font-size: 10px;">' + alive + '/' + fg.units.length + '架 | ❤️ ' + totalHp + '/' + maxHp + '</span>' +
+                '<span style="color: #8892b0; font-size: 10px;">' + alive + '/' + fg.units.length + '架 | 生命 ' + totalHp + '/' + maxHp + '</span>' +
                 '</div>' +
                 '<div style="color: #8892b0; font-size: 10px; margin-top: 2px;">长机: ' + fg.leadUnit.name + ' | 僚机: ' + fg.wingmen.map(function(w) { return getUnitShortName(w.name); }).join(', ') + '</div>' +
                 '<div style="margin-top: 6px; display: flex; gap: 6px;">' +
-                    '<button class="action-btn secondary" style="font-size: 11px; padding: 4px 10px;" onclick="event.stopPropagation(); openFormationModalById(\'' + fg.id + '\')">⚙ 操作</button>' +
-                    '<button class="action-btn secondary" style="font-size: 11px; padding: 4px 10px; color: #ff6b6b; border-color: #ff6b6b;" onclick="event.stopPropagation(); disbandFormation(\'' + fg.id + '\'); showFormationManager();">✕ 解散</button>' +
+                    '<button class="action-btn secondary" style="font-size: 11px; padding: 4px 10px;" onclick="event.stopPropagation(); openFormationModalById(\'' + fg.id + '\')">操作</button>' +
+                    '<button class="action-btn secondary" style="font-size: 11px; padding: 4px 10px; color: #ff6b6b; border-color: #ff6b6b;" onclick="event.stopPropagation(); disbandFormation(\'' + fg.id + '\'); showFormationManager();">× 解散</button>' +
                 '</div>';
             section1.appendChild(fgDiv);
         });
@@ -555,7 +555,7 @@ function showFormationManager() {
     // ========== 区域二：蜂巢无人机编组 ==========
     var section2 = document.createElement('div');
     section2.style.cssText = 'grid-column: 1 / -1; padding-top: 4px;';
-    section2.innerHTML = '<div style="color: #ff8c00; font-weight: bold; margin-bottom: 8px;">🐝 蜂巢无人机编组</div>';
+    section2.innerHTML = '<div style="color: #ff8c00; font-weight: bold; margin-bottom: 8px;">蜂巢无人机编组</div>';
 
     if (droneSquads.length === 0) {
         section2.innerHTML += '<div style="color: #8892b0; font-size: 11px; text-align: center; padding: 12px;">暂无蜂巢编组<br>使用蜂巢发射车发射无人机</div>';
@@ -568,13 +568,13 @@ function showFormationManager() {
             var sqDiv = document.createElement('div');
             sqDiv.style.cssText = 'background: rgba(255, 140, 0, 0.08); border: 1px solid rgba(255, 140, 0, 0.2); border-radius: 6px; padding: 8px; margin-bottom: 6px;';
             sqDiv.innerHTML = '<div style="display: flex; justify-content: space-between; align-items: center;">' +
-                '<span style="color: #ffa500; font-weight: bold; font-size: 12px;">🐝 蜂群 ' + squad.id + '</span>' +
+                '<span style="color: #ffa500; font-weight: bold; font-size: 12px;">蜂群 ' + squad.id + '</span>' +
                 '<span style="color: #8892b0; font-size: 10px;">' + aliveDrones.length + '/' + squad.drones.length + '架 | ' + cmdText + '</span>' +
                 '</div>' +
                 '<div style="color: #8892b0; font-size: 10px; margin-top: 2px;">发射车: ' + (launcher ? launcher.name : '已损毁') +
                 ' | 总攻击力: ' + (aliveDrones.length * 30) + '</div>' +
                 '<div style="margin-top: 6px;">' +
-                    '<button class="action-btn secondary" style="font-size: 11px; padding: 4px 10px;" onclick="event.stopPropagation(); openSquadModalById(\'' + squad.id + '\')">⚙ 操作</button>' +
+                    '<button class="action-btn secondary" style="font-size: 11px; padding: 4px 10px;" onclick="event.stopPropagation(); openSquadModalById(\'' + squad.id + '\')">操作</button>' +
                 '</div>';
             section2.appendChild(sqDiv);
         });
@@ -599,14 +599,14 @@ function limitFormationChecks() {
     var checks = document.querySelectorAll('.formation-check:checked');
     if (checks.length > 3) {
         checks[checks.length - 1].checked = false;
-        addBattleLog('⚠ 单次最多选择3架单位创建编组');
+        addBattleLog('单次最多选择3架单位创建编组');
     }
 }
 
 // 创建常规编组
 function createFormation(unitIds) {
     if (unitIds.length < 1 || unitIds.length > 3) {
-        addBattleLog('⚠ 编组需包含1-3架单位');
+        addBattleLog('编组需包含1-3架单位');
         return;
     }
 
@@ -614,19 +614,19 @@ function createFormation(unitIds) {
     for (var i = 0; i < unitIds.length; i++) {
         var unit = mockUnits.find(function(u) { return u.id === unitIds[i]; });
         if (!unit) {
-            addBattleLog('⚠ 未找到单位 ID=' + unitIds[i]);
+            addBattleLog('未找到单位 ID=' + unitIds[i]);
             return;
         }
         if (unit.status === 'ready') {
-            addBattleLog('⚠ ' + unit.name + ' 尚未部署，无法编组');
+            addBattleLog(unit.name + ' 尚未部署，无法编组');
             return;
         }
         if (unit.type === 'swarm') {
-            addBattleLog('⚠ 蜂巢发射车不能加入常规编组');
+            addBattleLog('蜂巢发射车不能加入常规编组');
             return;
         }
         if (isUnitInFormation(unit)) {
-            addBattleLog('⚠ ' + unit.name + ' 已在其他编组中');
+            addBattleLog(unit.name + ' 已在其他编组中');
             return;
         }
         selectedUnits.push(unit);
@@ -651,7 +651,7 @@ function createFormation(unitIds) {
 
     formations.push(fg);
     updateUnitsList();
-    addBattleLog('🔗 ' + fg.name + ' 创建成功！长机: ' + fg.leadUnit.name + '，僚机: ' + (fg.wingmen.length > 0 ? fg.wingmen.map(function(w) { return w.name; }).join('、') : '无') + '（共' + fg.units.length + '架）');
+    addBattleLog(fg.name + ' 创建成功，长机: ' + fg.leadUnit.name + '，僚机: ' + (fg.wingmen.length > 0 ? fg.wingmen.map(function(w) { return w.name; }).join('、') : '无') + '（共' + fg.units.length + '架）');
 }
 
 // 解散常规编组
@@ -661,7 +661,7 @@ function disbandFormation(formationId) {
         if (formations[i].id === formationId) { idx = i; break; }
     }
     if (idx < 0) {
-        addBattleLog('⚠ 未找到该编组');
+        addBattleLog('未找到该编组');
         return;
     }
 
@@ -677,7 +677,7 @@ function disbandFormation(formationId) {
         }
     });
 
-    addBattleLog('🔓 ' + fg.name + ' 已解散，' + fg.units.length + ' 架单位恢复独立操作');
+    addBattleLog(fg.name + ' 已解散，' + fg.units.length + ' 架单位恢复独立操作');
     if (selectedFormation && selectedFormation.id === formationId) {
         selectedFormation = null;
         formationCmdPending = null;
@@ -714,7 +714,7 @@ function openFormationModal(formation) {
     selectedUnit = null;
     selectedSquad = null;
 
-    document.getElementById('modal-unit-name').textContent = '🔗 ' + formation.name;
+    document.getElementById('modal-unit-name').textContent = formation.name;
     var totalHp = formation.units.reduce(function(s, u) { return s + u.health; }, 0);
     var maxHp = formation.units.reduce(function(s, u) { return s + u.maxHealth; }, 0);
     var totalAmmo = formation.units.reduce(function(s, u) { return s + u.ammo; }, 0);
@@ -737,28 +737,28 @@ function openFormationModal(formation) {
     // 攻击指令
     var attackBtn = document.createElement('button');
     attackBtn.className = 'action-btn secondary';
-    attackBtn.textContent = '🎯 攻击任务';
+    attackBtn.textContent = '攻击任务';
     attackBtn.onclick = function() { executeFormationAction('attack'); };
     actionsContainer.appendChild(attackBtn);
 
     // 机动指令
     var moveBtn = document.createElement('button');
     moveBtn.className = 'action-btn secondary';
-    moveBtn.textContent = '🚁 转移机动';
+    moveBtn.textContent = '转移机动';
     moveBtn.onclick = function() { executeFormationAction('move'); };
     actionsContainer.appendChild(moveBtn);
 
     // 召回指令
     var recallBtn = document.createElement('button');
     recallBtn.className = 'action-btn secondary';
-    recallBtn.textContent = '🏠 召回待命';
+    recallBtn.textContent = '召回待命';
     recallBtn.onclick = function() { executeFormationAction('recall'); };
     actionsContainer.appendChild(recallBtn);
 
     // 解散指令
     var disbandBtn = document.createElement('button');
     disbandBtn.className = 'action-btn secondary';
-    disbandBtn.textContent = '✕ 解散编组';
+    disbandBtn.textContent = '× 解散编组';
     disbandBtn.style.color = '#ff6b6b';
     disbandBtn.style.borderColor = '#ff6b6b';
     disbandBtn.onclick = function() {
@@ -781,7 +781,7 @@ function executeFormationAction(action) {
         case 'attack':
             // 仿照单个单位攻击的校验逻辑
             if (fg.units.every(function(u) { return u.health <= 0; })) {
-                addBattleLog('⚠ ' + fg.name + ' 所有单位已损毁，无法执行攻击任务');
+                addBattleLog(fg.name + ' 所有单位已损毁，无法执行攻击任务');
                 return;
             }
             // 检查是否有单位已部署（非ready状态）
@@ -789,7 +789,7 @@ function executeFormationAction(action) {
                 return u.status === 'ready';
             });
             if (allReady) {
-                addBattleLog('⚠ ' + fg.name + ' 所有单位均在基地待命，请先部署！');
+                addBattleLog(fg.name + ' 所有单位均在基地待命，请先部署');
                 return;
             }
             // 检查是否所有可攻击单位都没有弹药
@@ -797,7 +797,7 @@ function executeFormationAction(action) {
                 return u.health > 0 && u.status !== 'ready' && u.type !== 'scout';
             });
             if (attackers.length > 0 && attackers.every(function(u) { return u.ammo <= 0; })) {
-                addBattleLog('⚠ ' + fg.name + ' 所有攻击单位弹药均已耗尽！');
+                addBattleLog(fg.name + ' 所有攻击单位弹药均已耗尽');
                 return;
             }
             // 检查是否只有侦察机
@@ -805,7 +805,7 @@ function executeFormationAction(action) {
                 return u.health > 0 && u.status !== 'ready' && u.type !== 'scout';
             });
             if (nonScouts.length === 0) {
-                addBattleLog('⚠ ' + fg.name + ' 侦察机无法执行攻击任务！');
+                addBattleLog(fg.name + ' 侦察机无法执行攻击任务');
                 return;
             }
             closeUnitModal();
@@ -816,14 +816,14 @@ function executeFormationAction(action) {
 
         case 'move':
             if (fg.units.every(function(u) { return u.health <= 0; })) {
-                addBattleLog('⚠ ' + fg.name + ' 所有单位已损毁，无法执行转移');
+                addBattleLog(fg.name + ' 所有单位已损毁，无法执行转移');
                 return;
             }
             var allAtBase = fg.units.filter(function(u) { return u.health > 0; }).every(function(u) {
                 return u.status === 'ready';
             });
             if (allAtBase) {
-                addBattleLog('⚠ ' + fg.name + ' 所有单位均在基地待命，请先部署！');
+                addBattleLog(fg.name + ' 所有单位均在基地待命，请先部署');
                 return;
             }
             closeUnitModal();
@@ -838,7 +838,7 @@ function executeFormationAction(action) {
             break;
 
         default:
-            addBattleLog('⚠ 未知编组指令: ' + action);
+            addBattleLog('未知编组指令: ' + action);
     }
 }
 

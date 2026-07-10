@@ -8,7 +8,8 @@
 </head>
 <body>
     <div class="navbar">
-        <div class="logo">✈️ 飞控战略</div>
+        <button class="back-page-btn" onclick="goBack()" aria-label="返回上一网页">← 返回</button>
+        <div class="logo">飞控战略</div>
         <div class="nav-links">
             <a href="#" id="nav-home" class="active">首页</a>
             <a href="#" id="nav-rules">规则说明</a>
@@ -20,20 +21,20 @@
     <!-- 门户首页 -->
     <div id="page-home" class="page active home-page">
         <h1>飞控战略模拟</h1>
-        <p class="subtitle">指挥无人机集群，制定战术策略，完成侦察、打击、防守等作战任务。体验现代无人机作战的完整闭环，成为顶尖战场指挥官！</p>
+        <p class="subtitle">指挥无人机集群，制定战术策略，通过侦察、编组、打击与撤收流程完成战术推演。</p>
         <button class="btn" onclick="startQuickBattle()">快速开战</button>
         
         <div class="features">
             <div class="feature-card">
-                <h3>🎯 多类型无人机</h3>
+                <h3>多类型无人机</h3>
                 <p>侦察无人机、察打一体无人机、攻击无人机、无人蜂群，组成强大作战编队</p>
             </div>
             <div class="feature-card">
-                <h3>⚔️ 实时战场态势</h3>
+                <h3>实时战场态势</h3>
                 <p>卫星视图、侦察机分视图，全方位掌握战场动态，做出精准决策</p>
             </div>
             <div class="feature-card">
-                <h3>🧠 AI智能对手</h3>
+                <h3>智能对手</h3>
                 <p>动态难度适配，贪心算法+动态规划，体验真实战术对抗</p>
             </div>
         </div>
@@ -173,7 +174,7 @@
                 <!-- 战前准备覆盖层 -->
                 <div class="preparation-overlay" id="preparation-overlay">
                     <div class="mission-card">
-                        <h2>🎯 任务简报</h2>
+                        <h2>任务简报</h2>
                         <p>本次任务：摧毁敌方指挥中心。敌方部署有近程防空系统和预警雷达站，需先进行侦察探明敌方部署，再制定打击方案。</p>
                         <div class="mission-stats">
                             <div class="stat"><div class="stat-value">5</div><div class="stat-label">我方单位</div></div>
@@ -193,7 +194,7 @@
                 </div>
                 <div class="units-list" id="units-list"></div>
                 <div class="info-header" style="border-top: 2px solid #1e3a5f;">
-                    <h3 style="color: #ff6b6b;">🛑 已发现敌军</h3>
+                    <h3 style="color: #ff6b6b;">已发现敌军</h3>
                     <span class="filter-btn" style="font-size: 11px; cursor: default;" id="enemy-count-label">0 单位</span>
                 </div>
                 <div class="units-list enemy-list" id="enemy-list"></div>
@@ -204,11 +205,11 @@
             <div class="control-panel">
                 <h4>宏观操作</h4>
                 <div class="btn-group">
-                    <button class="action-btn" id="btn-pause" onclick="togglePause()">⏸️ 暂停</button>
+                    <button class="action-btn" id="btn-pause" onclick="togglePause()">暂停</button>
                     <button class="speed-btn" onclick="setSpeed(1)" id="speed-1">1x</button>
                     <button class="speed-btn active" onclick="setSpeed(2)" id="speed-2">2x</button>
                     <button class="speed-btn" onclick="setSpeed(4)" id="speed-4">4x</button>
-                    <button class="action-btn" onclick="retreatAll()">🏃 全局撤退</button>
+                    <button class="action-btn" onclick="retreatAll()">全局撤退</button>
                 </div>
             </div>
             <div class="control-panel">
@@ -248,7 +249,7 @@
     <!-- 操作帮助弹窗 -->
     <div class="help-btn" onclick="toggleHelp()">?</div>
     <div class="help-modal" id="help-modal">
-        <div class="close-btn" onclick="toggleHelp()">✕</div>
+        <div class="close-btn" onclick="toggleHelp()">×</div>
         <h3>操作帮助</h3>
         <table>
             <tr><td>点击单位</td><td>打开操作弹窗</td></tr>
@@ -264,7 +265,7 @@
     <div class="unit-modal" id="unit-modal">
         <div class="modal-header">
             <h3 id="modal-unit-name">单位信息</h3>
-            <div class="close-btn" onclick="closeUnitModal()">✕</div>
+            <div class="close-btn" onclick="closeUnitModal()">×</div>
         </div>
         <div class="unit-info">
             <div class="info-row"><span class="info-label">生命值</span><span class="info-value" id="modal-health">100/100</span></div>

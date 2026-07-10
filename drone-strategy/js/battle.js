@@ -36,17 +36,17 @@ function updateGame() {
 
 function togglePause() {
     if (!gameRunning && gameTime === 0) {
-        addBattleLog('⚠️ 请先点击"开始作战"按钮启动战斗');
+        addBattleLog('请先点击"开始作战"按钮启动战斗');
         return;
     }
 
     gameRunning = !gameRunning;
     const btn = document.getElementById('btn-pause');
     if (gameRunning) {
-        btn.textContent = '⏸️ 暂停';
+        btn.textContent = '暂停';
         startGameLoop();
     } else {
-        btn.textContent = '▶️ 继续';
+        btn.textContent = '继续';
         clearInterval(gameInterval);
     }
 }
@@ -62,7 +62,7 @@ function setSpeed(speed) {
 }
 
 function retreatAll() {
-    addBattleLog('🏃 执行全局撤退指令');
+    addBattleLog('执行全局撤退指令');
 }
 
 function toggleGroupView() {
@@ -196,9 +196,9 @@ function startBattle() {
     updateElectronicJamming();
 
     mockEnemyUnits.filter(e => !e.hidden).forEach(enemy => {
-        addBattleLog('🔍 发现敌方 ' + enemy.name + '（未隐蔽）');
+        addBattleLog('发现敌方 ' + enemy.name + '（未隐蔽）');
     });
 
-    addBattleLog('⚔️ 战斗开始！');
+    addBattleLog('战斗开始');
     startGameLoop();
 }

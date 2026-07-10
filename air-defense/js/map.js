@@ -98,7 +98,7 @@ const MapModule = {
 
             if (a % 60 === 0) {
                 ctx.fillStyle = 'rgba(168, 199, 216, 0.20)';
-                ctx.font = '9px Consolas, monospace';
+                ctx.font = '9px "Microsoft YaHei", "PingFang SC", Consolas, monospace';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 ctx.fillText(a + '°', cx + Math.cos(rad) * 305, cy + Math.sin(rad) * 305);
@@ -107,11 +107,11 @@ const MapModule = {
 
         // 城市要地与防空阵位标注
         const markers = [
-            { label: 'COMMAND CENTER', x: cx, y: cy, color: '#7BE7FF' },
-            { label: 'AIR BASE', x: 350, y: 200, color: '#7BE7FF' },
-            { label: 'PORT FACILITY', x: 560, y: 380, color: '#7BE7FF' },
-            { label: 'POWER PLANT', x: 320, y: 400, color: '#7BE7FF' },
-            { label: 'COMMS TOWER', x: 580, y: 200, color: '#7BE7FF' },
+            { label: '指挥中心', x: cx, y: cy, color: '#7BE7FF' },
+            { label: '空军基地', x: 350, y: 200, color: '#7BE7FF' },
+            { label: '港口设施', x: 560, y: 380, color: '#7BE7FF' },
+            { label: '电力设施', x: 320, y: 400, color: '#7BE7FF' },
+            { label: '通信塔', x: 580, y: 200, color: '#7BE7FF' },
         ];
         markers.forEach(m => {
             const pulse = Math.sin(this.time * 0.035 + m.x * 0.01) * 0.35 + 0.65;
@@ -124,7 +124,7 @@ const MapModule = {
             ctx.strokeStyle = `rgba(123, 231, 255, ${0.10 * pulse})`;
             ctx.stroke();
             ctx.fillStyle = 'rgba(244, 251, 255, 0.18)';
-            ctx.font = '8px Consolas, monospace';
+            ctx.font = '8px "Microsoft YaHei", "PingFang SC", Consolas, monospace';
             ctx.textAlign = 'center';
             ctx.fillText(m.label, m.x, m.y - 12);
         });
@@ -161,11 +161,11 @@ const MapModule = {
 
         // 中心要地
         ctx.fillStyle = `rgba(244, 251, 255, ${0.70 * breathe})`;
-        ctx.font = 'bold 18px Consolas, monospace';
+        ctx.font = 'bold 18px "Microsoft YaHei", "PingFang SC", Consolas, monospace';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText('◉', cx, cy - 8);
-        ctx.font = 'bold 10px Consolas, monospace';
+        ctx.font = 'bold 10px "Microsoft YaHei", "PingFang SC", Consolas, monospace';
         ctx.fillStyle = `rgba(123, 231, 255, ${0.58 * breathe})`;
         ctx.fillText('要地', cx, cy + 13);
 
@@ -180,11 +180,11 @@ const MapModule = {
             ctx.strokeStyle = '#7BE7FF';
             ctx.lineWidth = 1.5;
             ctx.stroke();
-            ctx.font = '10px Consolas, monospace';
+            ctx.font = '10px "Microsoft YaHei", "PingFang SC", Consolas, monospace';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillStyle = '#7BE7FF';
-            ctx.fillText('RELAY', c2.x, c2.y);
+            ctx.fillText('协防点', c2.x, c2.y);
             ctx.restore();
         }
 

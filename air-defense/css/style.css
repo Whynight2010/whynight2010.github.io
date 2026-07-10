@@ -70,6 +70,8 @@ body::after {
     display: flex;
     flex-direction: column;
     height: 100vh;
+    height: 100dvh;
+    min-height: 100dvh;
     padding: 12px;
     gap: 12px;
 }
@@ -122,6 +124,7 @@ body::after {
     align-items: center;
     justify-content: center;
     gap: 8px;
+    flex-wrap: wrap;
 }
 .tab-btn {
     display: inline-flex;
@@ -166,6 +169,7 @@ body::after {
     justify-content: flex-end;
     align-items: center;
     gap: 8px;
+    flex-wrap: wrap;
 }
 .top-action {
     width: auto;
@@ -986,9 +990,20 @@ button:focus-visible,
     .ocean-hero-copy strong { font-size: 36px; }
 }
 
+@media (max-height: 720px) and (min-width: 861px) {
+    .app { padding: 8px; gap: 8px; }
+    .topbar { min-height: 52px; padding: 8px 12px; gap: 10px; }
+    .side-panel { padding: 12px; }
+    .panel-section { gap: 8px; }
+    .section-title { margin-bottom: 8px; }
+    .equip-item, button { min-height: 34px; }
+    .ocean-hero-copy strong { font-size: 30px; }
+    .ocean-hero-copy span, .voyage-meta { font-size: 9px; }
+}
+
 @media (max-width: 860px) {
     html, body { overflow: auto; }
-    .app { min-height: 100vh; height: auto; }
+    .app { min-height: 100vh; min-height: 100dvh; height: auto; }
     .combat-layout,
     .science-layout { grid-template-columns: 1fr; height: auto; }
     .tab-content.active { min-height: auto; }
@@ -996,12 +1011,20 @@ button:focus-visible,
     .science-side,
     .science-main,
     .canvas-box { min-height: auto; }
-    .canvas-box { min-height: 520px; }
+    .canvas-box { min-height: clamp(320px, 68vw, 520px); }
     #gameCanvas { max-width: calc(100% - 20px); }
     .canvas-hint { white-space: normal; width: calc(100% - 40px); text-align: center; }
     .ocean-hero-copy { left: 20px; top: 18px; }
+    .ocean-hero-copy strong { font-size: clamp(24px, 7vw, 34px); }
     .voyage-meta { display: none; }
     .science-params { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 560px) {
+    .ocean-hero-copy { display: none; }
+    .canvas-tools { left: 14px; top: 14px; right: 14px; flex-wrap: wrap; }
+    .canvas-hint { bottom: 12px; }
+    .top-action { height: 32px; padding: 0 10px; letter-spacing: 0.06em; }
 }
 
 @media (prefers-reduced-motion: reduce) {

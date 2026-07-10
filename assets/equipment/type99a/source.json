@@ -83,15 +83,15 @@
     }
   ],
   "video": {
-    "file": "video/type99a.mp4",
+    "file": "",
     "poster": "video/type99a-poster.jpg",
     "currentFallbackPoster": "",
-    "pageUrl": "",
-    "sourceName": "公开图片生成",
-    "downloadedAt": "2026-07-09",
-    "licenseNote": "未找到可稳定合规下载的对应视频时，由本地图片生成离线 MP4。",
-    "reviewStatus": "generated",
-    "notes": "由已下载公开图片或本地生成图片生成，保证离线可播放。"
+    "pageUrl": "https://v.cctv.com/2021/07/17/VIDECeAEy84RK26sHVpUW46y210717.shtml",
+    "sourceName": "央视网",
+    "downloadedAt": "2026-07-10",
+    "licenseNote": "央视网公开视频页面可匿名访问；未下载或绕过播放器视频流，仅登记官方网页并使用公开封面图。",
+    "reviewStatus": "web_only",
+    "notes": "央视曝光99A坦克最关键性能指标：1秒闪击1800米外目标。"
   },
   "completeness": {
     "images": 7,
