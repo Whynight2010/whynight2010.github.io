@@ -12,6 +12,9 @@ const EnemyModule = {
     // 【新增】波次间标记
     waveComplete: false,
     waveEnemyRemaining: 0,
+    pendingSpawns: 0,
+    spawnTimers: [],
+    spawnRunId: 0,
     // 【新增】薄弱点学习数据
     lastClosestSector: null,
     breachedSectors: [],
@@ -25,9 +28,12 @@ const EnemyModule = {
         this.gameStartTime = 0;
         this.waveComplete = false;
         this.waveEnemyRemaining = 0;
+        this.pendingSpawns = 0;
         this.lastClosestSector = null;
         this.breachedSectors = [];
         this._justSpawnedNextWave = false;
+        this.spawnRunId++;
+        this._clearSpawnTimers();
     },
 
     // 生成单个敌人（增强：支持蜂群分散生成、自适应路径策略）
@@ -147,6 +153,9 @@ const EnemyModule = {
         this.gameStartTime = Date.now();
         this.lastClosestSector = null;
         this.breachedSectors = [];
+        this.pendingSpawns = 0;
+        this.spawnRunId++;
+        this._clearSpawnTimers();
         CONFIG.difficulty = 1;
         CONFIG.interWavePhase = false;
     },
@@ -181,7 +190,7 @@ const EnemyModule = {
                 this.waveIndex++;
                 this.waveTimer = 0;
             }
-        } else if (this.waveActive && this.waveIndex >= WAVES.length && this.list.length === 0 && !this.waveComplete) {
+        } else if (this.waveActive && this.waveIndex >= WAVES.length && this.list.length === 0 && this.pendingSpawns === 0 && !this.waveComplete) {
             // 最终波次完成
             this.waveComplete = true;
             this.waveActive = false;
@@ -195,7 +204,7 @@ const EnemyModule = {
         if (this._justSpawnedNextWave && this.list.length > 0) {
             this._justSpawnedNextWave = false;
         }
-        if (this.waveActive && this.waveIndex > 0 && this.waveIndex < WAVES.length && this.list.length === 0 && !CONFIG.interWavePhase && !this.waveComplete && !this._justSpawnedNextWave) {
+        if (this.waveActive && this.waveIndex > 0 && this.waveIndex < WAVES.length && this.list.length === 0 && this.pendingSpawns === 0 && !CONFIG.interWavePhase && !this.waveComplete && !this._justSpawnedNextWave) {
             this._triggerInterWave();
         }
 
@@ -313,11 +322,14 @@ const EnemyModule = {
         wave.enemies.forEach(e => totalEnemies += e.count);
 
         let globalIdx = 0;
+        const runId = this.spawnRunId;
+        const spawnInterval = Math.max(80, Math.floor(600 / (CONFIG.simulationSpeed || 1)));
+        this.pendingSpawns += totalEnemies;
         wave.enemies.forEach(e => {
             for (let i = 0; i < e.count; i++) {
                 const idx = globalIdx++;
-                setTimeout(() => {
-                    if (Game.isRunning || CONFIG.interWavePhase) {
+                const timerId = setTimeout(() => {
+                    if (runId === this.spawnRunId && (Game.isRunning || CONFIG.interWavePhase)) {
                         // 自适应：部分敌人从薄弱方向进攻
                         const opts = {};
                         if (idx < Math.ceil(totalEnemies * 0.4) && this.breachedSectors.length > 0) {
@@ -326,7 +338,9 @@ const EnemyModule = {
                         this.spawnEnemy(e.type, undefined, undefined, opts);
                         this.totalSpawned++;
                     }
-                }, idx * 600);
+                    this.pendingSpawns = Math.max(0, this.pendingSpawns - 1);
+                }, idx * spawnInterval);
+                this.spawnTimers.push(timerId);
             }
         });
     },
@@ -602,12 +616,22 @@ const EnemyModule = {
         this.totalSpawned = 0;
         this.waveActive = false;
         this.waveComplete = false;
+        this.pendingSpawns = 0;
+        this.spawnRunId++;
+        this._clearSpawnTimers();
         this.breachedSectors = [];
         this.lastClosestSector = null;
         this._justSpawnedNextWave = false;
         CONFIG.lastBreakthroughPos = null;
         CONFIG.interWavePhase = false;
         CONFIG.interWaveTimer = 0;
+    },
+
+    _clearSpawnTimers() {
+        for (const timerId of this.spawnTimers) {
+            clearTimeout(timerId);
+        }
+        this.spawnTimers = [];
     },
 
     getNearestInRange(x, y, range) {

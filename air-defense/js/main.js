@@ -24,10 +24,14 @@ const Game = {
         // 绘制装备（含预览）
         EquipModule.draw(ctx);
 
+        const simSteps = Math.max(1, Math.floor(CONFIG.simulationSpeed || 1));
+
         // 波次间暂停也需要更新倒计时
         if (Game.isRunning || CONFIG.interWavePhase) {
-            EnemyModule.update();
-            if (Game.isRunning) CombatModule.tick();
+            for (let i = 0; i < simSteps; i++) {
+                EnemyModule.update();
+                if (Game.isRunning) CombatModule.tick();
+            }
         }
 
         // 绘制敌人

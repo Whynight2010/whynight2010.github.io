@@ -71,6 +71,7 @@ window.addEventListener('error', function(e) {
                        <div class="panel-section">
                            <div class="section-title">指挥控制</div>
                             <button id="btnStart" class="btn-primary">▶ 开始推演</button>
+                            <button id="btnSpeed" class="speed-toggle" type="button" aria-pressed="false">⏩ 倍速：1x</button>
                             <button id="btnReset">↻ 重置航图</button>
                         </div>
 
@@ -101,7 +102,7 @@ window.addEventListener('error', function(e) {
                             <label class="switch-item"><input type="checkbox" id="toggleRange" checked> 显示射程范围</label>
                         </div>
                         <div class="canvas-hint">
-                            左键部署装备 · 右键删除 · 拖动调整 · 1/2/3 切换装备 · 空格开始
+                            左键部署装备 · 右键删除 · 拖动调整 · 1/2/3 切换装备 · 空格开始 · V 切换倍速
                         </div>
                     </div>
 
@@ -164,7 +165,6 @@ window.addEventListener('error', function(e) {
     <script src="js/main.js"></script>
 </body>
 </html>
-
 
 
 

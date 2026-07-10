@@ -7,6 +7,7 @@ const CONFIG = {
     showRange: true,
     radarAngle: 0,
     radarSpeed: 0.008,
+    simulationSpeed: 1,
     particleCount: 30,
     demoMode: false,
     simmering: false,
@@ -150,6 +151,10 @@ const WAVES = [
     { enemies: [{ type: 'swarm', count: 12 }, { type: 'fighter', count: 3 }, { type: 'drone', count: 4 }], delay: 220, label: '全面饱和攻击', difficulty: 5 },
     { enemies: [{ type: 'ballistic', count: 2 }, { type: 'stealth', count: 2 }, { type: 'swarm', count: 6 }], delay: 240, label: '终极联合打击', difficulty: 5 }
 ];
+
+function getWaves() {
+    return WAVES;
+}
 
 
 // 评分星级标准

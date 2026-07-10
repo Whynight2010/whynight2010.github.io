@@ -100,6 +100,7 @@ const UIModule = {
                 case 'escape': EquipModule.cancelSelect(); break;
                 case 'r': if (e.ctrlKey) { e.preventDefault(); document.getElementById('btnReset').click(); } break;
                 case ' ': e.preventDefault(); document.getElementById('btnStart').click(); break;
+                case 'v': this.toggleSimulationSpeed(); break;
                 case 'f': if (e.ctrlKey) { e.preventDefault(); document.getElementById('btnAuto2').click(); } break;
                 case 'g': document.getElementById('toggleRange').click(); break;
             }
@@ -249,6 +250,12 @@ const UIModule = {
     initButtons() {
         document.getElementById('btnSelectMode').addEventListener('click', () => { EquipModule.cancelSelect(); });
 
+        const speedBtn = document.getElementById('btnSpeed');
+        if (speedBtn) {
+            speedBtn.addEventListener('click', () => this.toggleSimulationSpeed());
+            this.updateSpeedButton();
+        }
+
         document.getElementById('btnReset').addEventListener('click', () => {
             if (Game.isRunning) return;
             EquipModule.clearAll();
@@ -382,6 +389,22 @@ const UIModule = {
             }
         });
 
+    },
+
+    toggleSimulationSpeed() {
+        CONFIG.simulationSpeed = (CONFIG.simulationSpeed || 1) === 1 ? 5 : 1;
+        this.updateSpeedButton();
+        const label = CONFIG.simulationSpeed === 5 ? '5倍速推演' : '正常速度';
+        EffectModule.addFloatingText(CONFIG.centerX, CONFIG.centerY - 90, label, '#FF8A3D');
+    },
+
+    updateSpeedButton() {
+        const speedBtn = document.getElementById('btnSpeed');
+        if (!speedBtn) return;
+        const isFast = (CONFIG.simulationSpeed || 1) === 5;
+        speedBtn.textContent = isFast ? '⏩ 倍速：5x' : '⏩ 倍速：1x';
+        speedBtn.classList.toggle('active', isFast);
+        speedBtn.setAttribute('aria-pressed', isFast ? 'true' : 'false');
     },
 
     initRangeToggle() {

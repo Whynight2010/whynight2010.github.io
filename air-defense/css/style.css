@@ -356,6 +356,17 @@ button:focus-visible,
     color: var(--abyss-950);
 }
 .btn-plan { font-size: 12px; }
+.speed-toggle {
+    font-weight: 700;
+    text-align: center;
+    color: rgba(244,251,255,0.82);
+}
+.speed-toggle.active {
+    border-color: rgba(255,138,61,0.55);
+    background: rgba(255,138,61,0.16);
+    color: var(--signal-orange);
+    box-shadow: 0 0 18px rgba(255,138,61,0.12);
+}
 
 /* 按钮震动（JS 交互） */
 .btn-shake {
