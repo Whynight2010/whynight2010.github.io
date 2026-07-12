@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>飞控战略模拟游戏</title>
+    <title>飞控战略模拟</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div class="navbar">
-        <button class="back-page-btn" onclick="goBack()" aria-label="返回上一网页">← 返回</button>
+        <a class="back-page-btn" href="../index.html" aria-label="返回主页">← 返回主页</a>
         <div class="logo">飞控战略</div>
         <div class="nav-links">
             <a href="#" id="nav-home" class="active">首页</a>
             <a href="#" id="nav-rules">规则说明</a>
             <a href="#" id="nav-battle">对战模式</a>
+            <a href="#" id="nav-science">装备百科</a>
             <a href="#" id="nav-report">战报分析</a>
         </div>
     </div>
@@ -22,8 +23,11 @@
     <div id="page-home" class="page active home-page">
         <h1>飞控战略模拟</h1>
         <p class="subtitle">指挥无人机集群，制定战术策略，通过侦察、编组、打击与撤收流程完成战术推演。</p>
-        <button class="btn" onclick="startQuickBattle()">快速开战</button>
-        
+        <div class="home-actions">
+          <button class="btn" onclick="startQuickBattle()">快速开战</button>
+          <button class="btn btn-secondary" onclick="showPage('page-rules')">规则说明</button>
+        </div>
+
         <div class="features">
             <div class="feature-card">
                 <h3>多类型无人机</h3>
@@ -31,7 +35,7 @@
             </div>
             <div class="feature-card">
                 <h3>实时战场态势</h3>
-                <p>卫星视图、侦察机分视图，全方位掌握战场动态，做出精准决策</p>
+                <p>卫星视图配合侦察机探测，全方位掌握战场动态，做出精准决策</p>
             </div>
             <div class="feature-card">
                 <h3>智能对手</h3>
@@ -45,93 +49,118 @@
         <div class="rules-sidebar">
             <h3>目录</h3>
             <ul>
-                <li id="rule-0" class="active" onclick="showRule(0)">游戏核心目标</li>
-                <li id="rule-1" onclick="showRule(1)">作战单位</li>
-                <li id="rule-2" onclick="showRule(2)">单位操作</li>
-                <li id="rule-3" onclick="showRule(3)">战场地形</li>
+                <li id="rule-0" class="active" onclick="showRule(0)">核心目标与胜负</li>
+                <li id="rule-1" onclick="showRule(1)">战场地形与环境</li>
+                <li id="rule-2" onclick="showRule(2)">作战单位</li>
+                <li id="rule-3" onclick="showRule(3)">单位操作与编组</li>
                 <li id="rule-4" onclick="showRule(4)">交战规则</li>
-                <li id="rule-5" onclick="showRule(5)">评分标准</li>
+                <li id="rule-5" onclick="showRule(5)">系统自动机制</li>
+                <li id="rule-6" onclick="showRule(6)">任务与评分</li>
             </ul>
         </div>
         <div class="rules-content" id="rules-content">
             <div id="rule-content-0">
-                <h2>游戏核心目标与胜负判定规则</h2>
-                <p>本游戏是一款以无人机协同作战为核心的战术模拟类游戏。玩家扮演战场指挥官，通过调度多类型无人机单位、规划作战路径、编组协同打击，完成侦察、精确打击、阵地防守等既定作战任务。</p>
+                <h2>核心目标与胜负判定</h2>
+                <p>本游戏是一款以无人机协同作战为核心的战术模拟类游戏。玩家扮演战场指挥官，通过调度多类型无人机单位、规划作战路径、编组协同打击，摧毁敌方指挥中心完成战术推演。</p>
                 <h3>胜利条件</h3>
-                <p>达成任务目标（如摧毁敌方指挥中心、完成区域侦察、保护我方基地等）即判定胜利。</p>
+                <p>摧毁敌方指挥中心即判定胜利。</p>
                 <h3>失败条件</h3>
                 <ul style="margin-left: 20px; color: #8892b0;">
                     <li>我方基地被摧毁（生命值归零）</li>
                     <li>我方单位全灭</li>
-                    <li>超出任务时限</li>
+                    <li>超出任务时限（10分钟）</li>
                 </ul>
             </div>
             <div id="rule-content-1" style="display: none;">
-                <h2>作战单位属性与功能说明</h2>
+                <h2>战场地形与环境</h2>
+                <h3>地形要素</h3>
+                <ul style="margin-left: 20px; color: #8892b0;">
+                    <li><strong>我方基地：</strong>地图左下角绿色区域，单位返回可补充弹药和生命值，自带基础防空</li>
+                    <li><strong>山地：</strong>棕色填充，飞行高度低于山体无法穿越，可遮挡雷达与卫星视野</li>
+                    <li><strong>丘陵：</strong>浅灰色纹理，敌方单位可伪装隐蔽，仅能通过近距离侦察探明</li>
+                    <li><strong>开阔平原：</strong>浅黄绿色填充，无视野遮挡，双方侦察距离达到最大值</li>
+                </ul>
+                <h3>环境干扰（系统自动生成并运行）</h3>
+                <ul style="margin-left: 20px; color: #8892b0;">
+                    <li><strong>云层：</strong>每局随机生成3-5片动态云层，每15秒自动移动并在边界反弹；云层覆盖区域卫星探测完全失效，但侦察机不受云层影响</li>
+                    <li><strong>电子干扰：</strong>每局在敌方雷达站周围自动生成电子干扰区，持续作用于干扰区内我方单位；干扰效果为侦察精度下降30%、攻击命中概率降低20%</li>
+                    <li><strong>地形刷新：</strong>每局开始时山地与丘陵位置随机生成，敌方部署随之动态调整</li>
+                </ul>
+            </div>
+            <div id="rule-content-2" style="display: none;">
+                <h2>作战单位属性与功能</h2>
                 <h3>我方作战单位</h3>
                 <table>
                     <tr><th>单位名称</th><th>类型</th><th>生命值</th><th>单发战力</th><th>作战半径</th><th>侦察半径</th><th>载弹量</th></tr>
                     <tr><td>侦察无人机</td><td>空中/侦察型</td><td>80</td><td>0</td><td>200km</td><td>50km</td><td>0</td></tr>
                     <tr><td>察打一体无人机</td><td>空中/多用途</td><td>150</td><td>40</td><td>150km</td><td>30km</td><td>4枚</td></tr>
                     <tr><td>攻击无人机</td><td>空中/精确打击型</td><td>120</td><td>80</td><td>120km</td><td>10km</td><td>2枚</td></tr>
-                    <tr><td>攻击无人机（僚机）</td><td>空中/协同打击型</td><td>100</td><td>35</td><td>100km</td><td>8km</td><td>2枚</td></tr>
-                    <tr><td>无人蜂群发射车</td><td>地面/投送型</td><td>200</td><td>-</td><td>80km</td><td>-</td><td>24架</td></tr>
+                    <tr><td>无人蜂群发射车</td><td>地面/投送型</td><td>200</td><td>-</td><td>80km</td><td>-</td><td>12架</td></tr>
                 </table>
+                <h4>蜂群无人机（发射车搭载）</h4>
+                <p>蜂巢发射车自身不具备攻击能力，但可搭载12架小型蜂群无人机。发射后蜂群编组自动飞向目标方向，展开分散战斗队形，自动搜索并攻击射程内的敌方单位。每架蜂群无人机个体脆弱但数量优势可形成饱和攻击。发射车弹药耗尽后须召回基地补充。</p>
                 <h3>敌方作战单位</h3>
                 <table>
                     <tr><th>单位名称</th><th>类型</th><th>生命值</th><th>单发战力</th><th>攻击射程</th><th>侦察半径</th></tr>
-                    <tr><td>近程防空系统</td><td>地面/防空型</td><td>180</td><td>25</td><td>15km</td><td>20km</td></tr>
-                    <tr><td>中远程防空导弹</td><td>地面/防空型</td><td>250</td><td>70</td><td>40km</td><td>50km</td></tr>
-                    <tr><td>预警雷达站</td><td>地面/侦察型</td><td>120</td><td>0</td><td>0</td><td>80km</td></tr>
-                    <tr><td>敌方察打一体无人机</td><td>空中/多用途</td><td>130</td><td>35</td><td>20km</td><td>35km</td></tr>
-                    <tr><td>装甲作战单位</td><td>地面/打击型</td><td>300</td><td>45</td><td>10km</td><td>15km</td></tr>
+                    <tr><td>近程防空系统</td><td>地面/防空型</td><td>180</td><td>25</td><td>30km</td><td>30km</td></tr>
+                    <tr><td>中远程防空导弹</td><td>地面/防空型</td><td>250</td><td>70</td><td>70km</td><td>60km</td></tr>
+                    <tr><td>预警雷达站</td><td>地面/侦察型</td><td>120</td><td>0</td><td>0</td><td>100km</td></tr>
+                    <tr><td>敌方察打一体无人机</td><td>空中/多用途</td><td>130</td><td>35</td><td>25km</td><td>35km</td></tr>
                     <tr><td>敌方指挥中心</td><td>地面/核心目标</td><td>500</td><td>0</td><td>0</td><td>0</td></tr>
                 </table>
             </div>
-            <div id="rule-content-2" style="display: none;">
-                <h2>单位操作与编组系统说明</h2>
-                <h3>单位操作</h3>
+            <div id="rule-content-3" style="display: none;">
+                <h2>单位操作与编组</h2>
+                <h3>通用操作</h3>
                 <table>
-                    <tr><th>操作</th><th>触发效果</th><th>状态切换</th><th>适用单位</th></tr>
-                    <tr><td>部署/出动</td><td>将单位从基地派出，进入可操控状态</td><td>待命→部署</td><td>所有单位</td></tr>
-                    <tr><td>侦察任务</td><td>玩家框选侦察区域后，单位前往执行巡逻索敌</td><td>部署/任务→侦察</td><td>侦察无人机、察打一体无人机</td></tr>
-                    <tr><td>攻击任务</td><td>玩家指定敌方目标后，单位前往目标区域并发起打击</td><td>部署/任务→攻击</td><td>察打一体无人机、攻击无人机</td></tr>
-                    <tr><td>陪护护航</td><td>单位跟随目标同步移动，自动攻击进入范围的敌方目标</td><td>部署/任务→陪护子状态</td><td>攻击无人机（僚机）</td></tr>
-                    <tr><td>防守部署</td><td>单位在点位周边巡逻，敌方进入后自动拦截</td><td>部署/任务→防守子状态</td><td>所有可攻击单位</td></tr>
-                    <tr><td>转移机动</td><td>单位以最高速度移动至指定坐标</td><td>部署/任务→转移</td><td>所有空中单位</td></tr>
-                    <tr><td>编组管理</td><td>将单位加入指定编组或创建新编组</td><td>不改变状态</td><td>所有可部署单位</td></tr>
-                    <tr><td>召回待命</td><td>单位返回基地，补充弹药与生命值</td><td>任意→待命</td><td>所有可部署单位</td></tr>
+                    <tr><th>操作</th><th>触发效果</th><th>适用单位</th></tr>
+                    <tr><td>部署/出动</td><td>将单位从基地派出，进入可操控状态</td><td>所有单位</td></tr>
+                    <tr><td>侦察任务</td><td>在地图上点击侦察目标点，单位前往该区域巡逻索敌</td><td>侦察无人机、察打一体无人机</td></tr>
+                    <tr><td>攻击任务</td><td>在地图上点击敌方目标，单位前往该区域发起打击</td><td>察打一体无人机、攻击无人机</td></tr>
+                    <tr><td>陪护护航</td><td>僚机跟随被护航单位同步移动，自动攻击进入范围的敌方目标</td><td>攻击无人机</td></tr>
+                    <tr><td>防守部署</td><td>单位在指定点位周边巡逻，敌方进入攻击范围后自动拦截</td><td>所有可攻击单位</td></tr>
+                    <tr><td>转移机动</td><td>单位以最高速度移动至地图指定坐标</td><td>所有空中单位及蜂巢发射车</td></tr>
+                    <tr><td>召回待命</td><td>单位返回基地，自动补充弹药并恢复生命值</td><td>所有单位</td></tr>
                 </table>
                 <h3>编组系统</h3>
-                <p>编组创建方式：按住Ctrl框选多个单位后点击「创建编组」，或在单位操作弹窗中选择编组。单编组上限为8架，同类型单位协同效率最高。</p>
-            </div>
-            <div id="rule-content-3" style="display: none;">
-                <h2>战场地形与环境干扰机制</h2>
-                <h3>地形要素</h3>
+                <p>在单位操作弹窗中选择「编组管理」进入编组界面，勾选要编组的单位后创建编组。单编组上限3架，同类型单位协同效率最高。编组可统一执行侦察、攻击、转移、召回等指令。</p>
+                <h4>常规编组操作</h4>
+                <table>
+                    <tr><th>操作</th><th>触发效果</th><th>适用条件</th></tr>
+                    <tr><td>创建编组</td><td>在编组界面勾选单位后创建编组，自动指定长机并保持战术间距</td><td>至少2架未编组单位</td></tr>
+                    <tr><td>编组指令</td><td>对编组统一下达侦察/攻击/转移等命令，编组内各单位自动保持队形执行</td><td>编组已创建</td></tr>
+                    <tr><td>解散编组</td><td>取消编组，成员恢复独立操控</td><td>编组已创建</td></tr>
+                </table>
+                <h3>蜂群系统</h3>
+                <p>蜂巢发射车是地面移动单位，搭载12架小型蜂群无人机。自身不具备攻击能力，通过发射蜂群编组参与战斗。</p>
+                <h4>蜂群操作</h4>
+                <table>
+                    <tr><th>操作</th><th>触发效果</th><th>适用条件</th></tr>
+                    <tr><td>发射蜂群</td><td>选择数量（1-6架）与方向，在地图点击目标点，生成蜂群无人机编组自动飞向目标</td><td>蜂巢发射车弹药≥1</td></tr>
+                    <tr><td>转移机动</td><td>蜂巢发射车移动至指定坐标，扩大蜂群投放范围</td><td>蜂巢发射车已部署</td></tr>
+                    <tr><td>召回待命</td><td>蜂巢发射车返回基地，自动补充蜂群无人机至12架</td><td>弹药未满</td></tr>
+                </table>
+                <h4>蜂群战术要点</h4>
                 <ul style="margin-left: 20px; color: #8892b0;">
-                    <li><strong>我方基地：</strong>绿色实线勾勒，单位返回可补充弹药和生命值，自带基础防空</li>
-                    <li><strong>山地地形：</strong>棕色填充，飞行高度低于山体海拔无法穿越，可遮挡雷达与卫星视野</li>
-                    <li><strong>丘陵片区：</strong>浅灰色纹理，敌方单位可伪装，仅能通过近距离侦察探明</li>
-                    <li><strong>开阔平原：</strong>浅黄绿色填充，无视野遮挡，双方侦察距离达到最大值</li>
+                    <li><strong>先侦察后发射：</strong>使用侦察无人机探明敌方防空位置，将蜂巢发射车部署至防空薄弱方向再发射</li>
+                    <li><strong>饱和攻击：</strong>多批次蜂群编组从不同方向进入，分散敌方防空火力，为攻击无人机创造突破窗口</li>
+                    <li><strong>弹药循环：</strong>蜂巢发射车弹药耗尽后须召回至基地补充，补满后再出发投放</li>
                 </ul>
-                <h3>环境干扰机制</h3>
-                <p><strong>云层遮挡：</strong>随机生成3-5片动态云层，每15秒移动一次。云层覆盖区域内卫星视图无法探测敌方单位，但侦察机不受影响。</p>
-                <p><strong>电子干扰（高级难度）：</strong>敌方雷达站释放局部电子干扰区，我方侦察精度下降30%、攻击命中概率降低20%。</p>
             </div>
             <div id="rule-content-4" style="display: none;">
-                <h2>交战规则与伤害计算逻辑</h2>
+                <h2>交战规则</h2>
                 <h3>侦察与发现机制</h3>
-                <p>战场采用"分层视野"规则，不同探测手段的视野权限不同：</p>
+                <p>战场采用分层视野规则，不同探测手段的视野权限不同：</p>
                 <ul style="margin-left: 20px; color: #8892b0;">
                     <li><strong>卫星探测：</strong>仅可探测无云层遮挡、非伪装、飞行高度高于山体的敌方单位</li>
-                    <li><strong>侦察机探测：</strong>不受云层、伪装影响，可识别丘陵伪装单位与山体低空单位</li>
+                    <li><strong>侦察机探测：</strong>不受云层和伪装影响，可识别丘陵伪装单位与山体低空单位</li>
                     <li><strong>敌方探测：</strong>以雷达站为核心探测节点，低空飞行、山体遮挡可缩短敌方探测距离</li>
                 </ul>
                 <h3>攻击交战流程</h3>
                 <ol style="margin-left: 20px; color: #8892b0;">
-                    <li>目标锁定：单位探测到目标后自动锁定（玩家指定目标优先级最高）</li>
+                    <li>目标锁定：单位探测到目标后自动锁定，玩家指定的目标优先级最高</li>
                     <li>开火判定：目标处于攻击射程内且锁定完成后自动开火</li>
-                    <li>命中判定：命中概率受目标速度、距离、体积、电子干扰等因素影响</li>
+                    <li>命中判定：命中概率受目标速度、距离、电子干扰等因素影响</li>
                     <li>伤害结算：命中后扣除目标生命值，生命值归零则单位损毁</li>
                     <li>目标切换：当前目标损毁后自动切换至下一威胁目标</li>
                 </ol>
@@ -142,18 +171,31 @@
                 <p>命中系数基础值为1，浮动范围0.3-1.5。地面单位自带10-20点护甲，空中单位无护甲。</p>
             </div>
             <div id="rule-content-5" style="display: none;">
-                <h2>任务类型与评分标准说明</h2>
-                <h3>任务类型</h3>
+                <h2>系统自动机制</h2>
+                <p>以下机制由系统在推演过程中自动运行，无需玩家手动操作：</p>
+                <h3>我方单位自动行为</h3>
                 <ul style="margin-left: 20px; color: #8892b0;">
-                    <li><strong>侦察任务：</strong>在指定区域完成全面侦察，发现所有敌方单位</li>
-                    <li><strong>打击任务：</strong>摧毁指定敌方目标（如指挥中心、防空系统等）</li>
-                    <li><strong>防守任务：</strong>保护我方基地或关键点位，阻止敌方入侵</li>
-                    <li><strong>综合任务：</strong>包含侦察、打击、防守等多个子目标</li>
+                    <li><strong>到点巡航：</strong>侦察机/攻击机到达任务目标点后，自动围绕目标点巡航而非静止</li>
+                    <li><strong>自动索敌交战：</strong>处于部署/侦察/巡逻状态的单位，在攻击射程内发现敌方目标后自动锁定并开火（侦察机仅侦察不攻击）</li>
+                    <li><strong>弹药耗尽停火：</strong>弹药耗尽后单位自动停止攻击，需手动召回至基地补充</li>
+                    <li><strong>蜂群自动战斗：</strong>蜂群无人机到达目标区域后自动搜索、分配并攻击射程内的敌方单位</li>
                 </ul>
+                <h3>任务进度追踪</h3>
+                <ul style="margin-left: 20px; color: #8892b0;">
+                    <li><strong>发现敌军：</strong>每发现一个隐藏敌方单位，进度增加（占30%权重）</li>
+                    <li><strong>摧毁敌军：</strong>每摧毁一个敌方单位，进度增加（占60%权重）</li>
+                    <li><strong>摧毁指挥中心：</strong>进度立即到达100%，判定胜利</li>
+                    <li><strong>作战日志：</strong>每30秒自动生成战场态势摘要，关键事件实时记录</li>
+                </ul>
+            </div>
+            <div id="rule-content-6" style="display: none;">
+                <h2>任务与评分</h2>
+                <h3>任务目标</h3>
+                <p>摧毁敌方指挥中心。敌方部署有近程防空系统、中远程防空导弹和预警雷达站构筑纵深防御，需先侦察探明部署再制定打击方案。</p>
                 <h3>评分标准</h3>
                 <table>
                     <tr><th>评分项目</th><th>权重</th><th>说明</th></tr>
-                    <tr><td>任务完成度</td><td>40%</td><td>目标达成情况</td></tr>
+                    <tr><td>任务完成度</td><td>40%</td><td>摧毁指挥中心为100%完成</td></tr>
                     <tr><td>战损比</td><td>30%</td><td>我方损失与敌方损失的比值</td></tr>
                     <tr><td>作战效率</td><td>20%</td><td>完成任务的时间效率</td></tr>
                     <tr><td>战术运用</td><td>10%</td><td>编组协同、侦察运用等战术表现</td></tr>
@@ -202,17 +244,7 @@
         </div>
         
         <div class="battle-controls">
-            <div class="control-panel">
-                <h4>宏观操作</h4>
-                <div class="btn-group">
-                    <button class="action-btn" id="btn-pause" onclick="togglePause()">暂停</button>
-                    <button class="speed-btn" onclick="setSpeed(1)" id="speed-1">1x</button>
-                    <button class="speed-btn active" onclick="setSpeed(2)" id="speed-2">2x</button>
-                    <button class="speed-btn" onclick="setSpeed(4)" id="speed-4">4x</button>
-                    <button class="action-btn" onclick="retreatAll()">全局撤退</button>
-                </div>
-            </div>
-            <div class="control-panel">
+            <div class="control-panel status-panel">
                 <h4>态势监控</h4>
                 <div class="status-display">
                     <div>我方战损: <span class="value" id="friendly-loss">0/5</span></div>
@@ -227,9 +259,22 @@
                     <div class="progress-bar"><div class="progress-fill" id="mission-progress" style="width: 0%"></div></div>
                 </div>
             </div>
-            <div class="control-panel">
+            <div class="control-panel log-panel">
                 <h4>作战日志</h4>
                 <div class="battle-log" id="battle-log"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 装备百科页 -->
+    <div id="page-science" class="page science-page">
+        <div class="science-layout">
+            <div class="science-side">
+                <div class="science-side-title">装备章节</div>
+                <div class="science-nav-list" id="scienceNavList"></div>
+            </div>
+            <div class="science-main">
+                <div class="science-content" id="scienceContent"></div>
             </div>
         </div>
     </div>
@@ -246,19 +291,16 @@
         </div>
     </div>
 
-    <!-- 操作帮助弹窗 -->
-    <div class="help-btn" onclick="toggleHelp()">?</div>
-    <div class="help-modal" id="help-modal">
-        <div class="close-btn" onclick="toggleHelp()">×</div>
-        <h3>操作帮助</h3>
-        <table>
-            <tr><td>点击单位</td><td>打开操作弹窗</td></tr>
-            <tr><td>拖拽地图</td><td>平移战场视图</td></tr>
-            <tr><td>滚轮</td><td>缩放战场视图</td></tr>
-            <tr><td>Ctrl+框选</td><td>创建编组</td></tr>
-            <tr><td>空格键</td><td>暂停/继续</td></tr>
-            <tr><td>1/2/4</td><td>切换游戏速度</td></tr>
-        </table>
+    <!-- 对局结束遮罩 -->
+    <div class="game-over-overlay" id="gameOverOverlay">
+        <div class="game-over-card">
+            <h2 id="gameOverTitle"></h2>
+            <p id="gameOverSub"></p>
+            <div class="game-over-actions">
+                <button class="btn" onclick="restartBattle()">重新开始</button>
+                <button class="btn btn-secondary" onclick="goToHomeFromBattle()">回到主页</button>
+            </div>
+        </div>
     </div>
 
     <!-- 单位操作弹窗 -->
@@ -277,6 +319,7 @@
     </div>
 
     <script src="js/data.js"></script>
+    <script src="js/droneScienceData.js"></script>
     <script src="js/terrain.js"></script>
     <script src="js/units.js"></script>
     <script src="js/enemy.js"></script>

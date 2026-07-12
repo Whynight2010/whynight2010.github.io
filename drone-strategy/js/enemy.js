@@ -2,6 +2,15 @@
 // enemy.js — 敌方AI、敌方移动/攻击/显示（第4个加载）
 // ============================================================
 
+// 我方基地 (60,330) 60×60，安全缓冲区 50
+var BASE_SAFE_X1 = 10, BASE_SAFE_Y1 = 280;
+var BASE_SAFE_X2 = 170, BASE_SAFE_Y2 = 440;
+
+function isInsideBaseSafeZone(x, y) {
+    return x >= BASE_SAFE_X1 && x <= BASE_SAFE_X2 &&
+           y >= BASE_SAFE_Y1 && y <= BASE_SAFE_Y2;
+}
+
 function simulateEnemyAI() {
     mockEnemyUnits.forEach(enemy => {
         if (enemy.health <= 0) return;
@@ -200,7 +209,7 @@ function isUnitDetectedByEnemy(player, enemy) {
 }
 
 function moveEnemyUnit(enemy) {
-    if (!enemy.targetX || !enemy.targetY) {
+    if (enemy.targetX == null || enemy.targetY == null) {
         setRandomTarget(enemy);
     }
 
@@ -223,7 +232,7 @@ function continueEnemyMove(enemy) {
     const elapsed = (now - enemy.lastEnemyMove) / 1000;
     enemy.lastEnemyMove = now;
 
-    if (!enemy.targetX || !enemy.targetY) {
+    if (enemy.targetX == null || enemy.targetY == null) {
         setRandomTarget(enemy);
         requestAnimationFrame(() => continueEnemyMove(enemy));
         return;
@@ -237,9 +246,17 @@ function continueEnemyMove(enemy) {
         setRandomTarget(enemy);
     } else {
         // 基于时间的移动：speed 是像素/秒
-        const moveDistance = enemy.speed * elapsed * gameSpeed;
-        enemy.x += (dx / distance) * moveDistance;
-        enemy.y += (dy / distance) * moveDistance;
+        const moveDistance = enemy.speed * elapsed;
+        var nextX = enemy.x + (dx / distance) * moveDistance;
+        var nextY = enemy.y + (dy / distance) * moveDistance;
+
+        // 我方未下达指令前，敌方无人机不得进入基地安全区
+        if (!friendlyCommandIssued && isInsideBaseSafeZone(nextX, nextY)) {
+            setRandomTarget(enemy);
+        } else {
+            enemy.x = nextX;
+            enemy.y = nextY;
+        }
     }
 
     if (!enemy.hidden) {
@@ -403,8 +420,8 @@ function calculateDamage(attacker, target) {
     const distanceFactor = Math.max(0.3, 1 - distance / effectiveRange);
     const randomFactor = 0.8 + Math.random() * 0.4;
 
-    // 对小型无人机伤害减半（体积小难命中）
-    if (target.type === 'mini_drone' || (target.squadId && !target.name)) {
+    // 对蜂群小型无人机伤害减半（体积小难命中）
+    if (target.squadId && !target.name) {
         return Math.floor(baseDamage * distanceFactor * randomFactor * 0.5);
     }
 
@@ -454,8 +471,8 @@ function updateEnemyList() {
         return;
     }
 
-    // 我方基地坐标
-    var ourBaseX = 90, ourBaseY = 390;
+    // 我方基地中心坐标（60+30, 330+30）
+    var ourBaseX = 90, ourBaseY = 360;
 
     // 按类型排序：指挥中心 > 雷达 > 远程防空 > 近程防空 > 无人机
     var typeOrder = { 'command': 0, 'radar': 1, 'aa_long': 2, 'aa_short': 3, 'enemy_uav': 4 };

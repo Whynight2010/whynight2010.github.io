@@ -30,6 +30,19 @@ function isPositionSafe(x, y, width, height, existingTerrains = []) {
     return true;
 }
 
+// 仅检查与其他云层重叠，不排斥禁区（云层可覆盖基地）
+function isPositionSafeForCloud(x, y, width, height, existingClouds = []) {
+    for (const cloud of existingClouds) {
+        if (x < cloud.x + cloud.width &&
+            x + width > cloud.x &&
+            y < cloud.y + cloud.height &&
+            y + height > cloud.y) {
+            return false;
+        }
+    }
+    return true;
+}
+
 function generateTerrain() {
     const view = document.getElementById('satellite-view');
 
@@ -112,21 +125,6 @@ function generateTerrain() {
         view.appendChild(el);
     });
 
-    addTerrainLegend(view);
-}
-
-function addTerrainLegend(view) {
-    const legend = document.createElement('div');
-    legend.className = 'terrain-legend';
-    legend.innerHTML = `
-        <h4>地形图例</h4>
-        <div class="legend-item"><div class="legend-color mountain"></div><span>山地</span></div>
-        <div class="legend-item"><div class="legend-color hill"></div><span>丘陵</span></div>
-        <div class="legend-item"><div class="legend-color cloud"></div><span>云层</span></div>
-        <div class="legend-item"><div class="legend-color jamming"></div><span>电子干扰</span></div>
-        <div class="legend-item"><div class="legend-color base"></div><span>我方基地</span></div>
-    `;
-    view.appendChild(legend);
 }
 
 function generateClouds() {
@@ -144,7 +142,7 @@ function generateClouds() {
             const width = 50 + Math.random() * 50;
             const height = 50 + Math.random() * 50;
 
-            if (isPositionSafe(x, y, width, height, clouds)) {
+            if (isPositionSafeForCloud(x, y, width, height, clouds)) {
                 cloud = {
                     x, y, width, height,
                     speedX: (Math.random() - 0.5) * 0.5,

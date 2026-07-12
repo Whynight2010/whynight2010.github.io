@@ -1,5 +1,5 @@
 // ============================================================
-// ui.js — 页面导航、规则说明、帮助弹窗、战报分析（第7个加载）
+// ui.js — 页面导航、规则说明、战报分析（第7个加载）
 // ============================================================
 
 // --- 页面切换 ---
@@ -51,6 +51,10 @@ function setupNavigation() {
             gameInterval = null;
         }, 100);
     });
+    document.getElementById('nav-science').addEventListener('click', (e) => {
+        e.preventDefault();
+        showPage('page-science');
+    });
     document.getElementById('nav-report').addEventListener('click', (e) => {
         e.preventDefault();
         showPage('page-report');
@@ -78,12 +82,6 @@ function showRule(index) {
     document.querySelectorAll('[id^="rule-content-"]').forEach((div, i) => {
         div.style.display = i === index ? 'block' : 'none';
     });
-}
-
-// --- 帮助弹窗 ---
-
-function toggleHelp() {
-    document.getElementById('help-modal').classList.toggle('active');
 }
 
 // --- 战报分析 ---
@@ -144,4 +142,82 @@ function showReport(id) {
             ${battle.analysis.suggestions.map(p => `<div class="point">${p}</div>`).join('')}
         </div>
     `;
+}
+
+// ============================================================
+// 装备百科 — 无人机专题
+// ============================================================
+
+function initDroneScienceNav() {
+    const navBox = document.getElementById('scienceNavList');
+    const contentBox = document.getElementById('scienceContent');
+    if (!navBox || !contentBox) return;
+
+    if (typeof DRONE_SCIENCE_DATA === 'undefined') {
+        navBox.innerHTML = '<div style="color:#8892b0;font-size:12px;padding:12px;">数据加载中…</div>';
+        return;
+    }
+
+    DRONE_SCIENCE_DATA.forEach((item, index) => {
+        const navItem = document.createElement('div');
+        navItem.className = 'science-nav-item' + (index === 0 ? ' active' : '');
+        navItem.textContent = item.name;
+        navItem.dataset.id = item.id;
+        navItem.addEventListener('click', () => {
+            document.querySelectorAll('.science-nav-item').forEach(el => el.classList.remove('active'));
+            navItem.classList.add('active');
+            renderDroneScienceContent(item, contentBox);
+        });
+        navBox.appendChild(navItem);
+    });
+
+    renderDroneScienceContent(DRONE_SCIENCE_DATA[0], contentBox);
+}
+
+function renderDroneScienceContent(data, container) {
+    var html = '<div class="archive-eyebrow">无人机档案 · 装备笔记</div>';
+    html += '<div class="science-title">' + escapeHtmlSci(data.name) + '</div>';
+
+    if (data.image) {
+        html += '<div class="science-image-box"><img src="assets/images/' + escapeHtmlSci(data.image) + '" alt="' + escapeHtmlSci(data.name) + '" onerror="this.onerror=null;this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';"><div class="image-placeholder"><span>图片资源：' + escapeHtmlSci(data.image) + '<br>请将对应配图放入 assets/images 文件夹</span></div></div>';
+    }
+
+    html += '<div class="science-summary">' + data.summary + '</div>';
+
+    if (data.models && data.models.length) {
+        html += '<div class="science-section"><h4>代表型号</h4>';
+        data.models.forEach(function(model) {
+            html += '<div class="model-card"><div class="model-name">' + escapeHtmlSci(model.name) + '</div><div class="model-desc">' + escapeHtmlSci(model.desc) + '</div></div>';
+        });
+        html += '</div>';
+    }
+
+    if (data.sections) {
+        data.sections.forEach(function(section) {
+            html += '<div class="science-section"><h4>' + escapeHtmlSci(section.title) + '</h4><p>' + escapeHtmlSci(section.content) + '</p></div>';
+        });
+    }
+
+    if (data.params && data.params.length) {
+        html += '<div class="science-section"><h4>技术参数</h4><div class="science-params">';
+        data.params.forEach(function(param) {
+            html += '<div class="param-card"><div class="label">' + escapeHtmlSci(param.label) + '</div><div class="value">' + escapeHtmlSci(param.value) + '</div></div>';
+        });
+        html += '</div></div>';
+    }
+
+    container.innerHTML = html;
+}
+
+function escapeHtmlSci(value) {
+    return String(value == null ? '' : value).replace(/[&<>"']/g, function(ch) {
+        return {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[ch];
+    });
+}
+
+// Initialize science nav on load
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initDroneScienceNav);
+} else {
+    setTimeout(initDroneScienceNav, 100);
 }

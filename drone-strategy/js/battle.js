@@ -2,13 +2,7 @@
 // battle.js — 战斗循环、日志、进度、启停控制（第6个加载）
 // ============================================================
 
-// 第一个 startBattle（会被第二个覆盖，保留以维持原行为一致）
-function startBattle() {
-    gameInterval = setInterval(() => {
-        gameTime += 1;
-        updateGame();
-    }, 1000 / gameSpeed);
-}
+const GAME_TICK_MS = 500;  // 原 gameSpeed=2 等效频率
 
 // 游戏循环启动函数
 function startGameLoop() {
@@ -18,7 +12,7 @@ function startGameLoop() {
     gameInterval = setInterval(() => {
         gameTime += 1;
         updateGame();
-    }, 1000 / gameSpeed);
+    }, GAME_TICK_MS);
 }
 
 function updateGame() {
@@ -32,37 +26,73 @@ function updateGame() {
     updateFormations();
     updateClouds();
     updateEnemyDisplay();
+    checkGameEnd();
 }
 
-function togglePause() {
-    if (!gameRunning && gameTime === 0) {
-        addBattleLog('请先点击"开始作战"按钮启动战斗');
+// --- 对局结束判定 ---
+function checkGameEnd() {
+    if (!gameRunning) return;
+
+    // 胜利条件：指挥中心被摧毁
+    var cmd = mockEnemyUnits.find(function(e) { return e.type === 'command'; });
+    if (cmd && cmd.health <= 0) {
+        showGameOver(true);
         return;
     }
 
-    gameRunning = !gameRunning;
-    const btn = document.getElementById('btn-pause');
-    if (gameRunning) {
-        btn.textContent = '暂停';
-        startGameLoop();
+    // 失败条件1：我方单位全灭
+    var allDead = mockUnits.every(function(u) { return u.health <= 0; });
+    if (allDead) {
+        showGameOver(false);
+        return;
+    }
+
+    // 失败条件2：超时（10分钟 = 600秒，每tick 0.5秒 = 1200 ticks）
+    if (gameTime >= 1200) {
+        showGameOver(false);
+        return;
+    }
+}
+
+function showGameOver(win) {
+    gameRunning = false;
+    if (gameInterval) {
+        clearInterval(gameInterval);
+        gameInterval = null;
+    }
+
+    var overlay = document.getElementById('gameOverOverlay');
+    var title = document.getElementById('gameOverTitle');
+    var sub = document.getElementById('gameOverSub');
+
+    if (win) {
+        title.textContent = '任务完成';
+        title.className = 'win';
+        sub.textContent = '敌方指挥中心已被摧毁';
     } else {
-        btn.textContent = '继续';
-        clearInterval(gameInterval);
+        title.textContent = '任务失败，再接再厉';
+        title.className = 'lose';
+        sub.textContent = '总结教训，调整战术再次挑战';
     }
+
+    overlay.classList.add('show');
 }
 
-function setSpeed(speed) {
-    gameSpeed = speed;
-    document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(`speed-${speed}`).classList.add('active');
-    if (gameRunning) {
-        clearInterval(gameInterval);
-        startGameLoop();
-    }
+function restartBattle() {
+    var overlay = document.getElementById('gameOverOverlay');
+    overlay.classList.remove('show');
+    startBattle();
 }
 
-function retreatAll() {
-    addBattleLog('执行全局撤退指令');
+function goToHomeFromBattle() {
+    var overlay = document.getElementById('gameOverOverlay');
+    overlay.classList.remove('show');
+    gameRunning = false;
+    if (gameInterval) {
+        clearInterval(gameInterval);
+        gameInterval = null;
+    }
+    showPage('page-home');
 }
 
 function toggleGroupView() {
@@ -117,6 +147,7 @@ function startBattle() {
     document.getElementById('preparation-overlay').style.display = 'none';
     gameRunning = true;
     gameTime = 0;
+    friendlyCommandIssued = false;
 
     if (gameInterval) {
         clearInterval(gameInterval);
@@ -126,11 +157,11 @@ function startBattle() {
     mockUnits.forEach(unit => {
         unit.health = unit.maxHealth;
         unit.ammo = unit.maxAmmo;
-        // 开局自动部署到基地前端，无需手动逐架部署
+        // 开局自动部署，位置在基地内（基地中心 90,360）
         unit.status = 'deployed';
-        var baseX = 90, baseY = 390;
-        unit.x = baseX + 35 + (unit.id * 8) + Math.random() * 15;
-        unit.y = baseY - 20 - Math.random() * 20;
+        var baseX = 80, baseY = 350;
+        unit.x = baseX + (unit.id * 7) + Math.random() * 8;
+        unit.y = baseY + Math.random() * 30;
         unit.patrolTargetX = unit.x;
         unit.patrolTargetY = unit.y;
         unit.lastPatrolUpdate = 0;
@@ -143,6 +174,10 @@ function startBattle() {
         unit.isRecalling = false;
         unit.recallTargetX = null;
         unit.recallTargetY = null;
+        unit._attackLoopCancelled = false;
+        unit._attackLoopTimer = null;
+        unit._patrolMissionType = null;
+        unit._patrolLoopActive = false;
         if (unit.type === 'swarm') {
             unit.ammo = 12;
             unit.maxAmmo = 12;

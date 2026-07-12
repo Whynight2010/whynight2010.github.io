@@ -4,7 +4,6 @@
 
 // --- 游戏状态变量 ---
 let gameRunning = false;
-let gameSpeed = 2;
 let gameTime = 0;
 let gameInterval = null;
 
@@ -12,10 +11,13 @@ let gameInterval = null;
 const MAP_WIDTH = 600;
 const MAP_HEIGHT = 400;
 
-// 禁区定义
+// 地形禁区：禁止在此区域生成地形（云层不受限制）
 const FORBIDDEN_ZONES = [
-    { x: 60, y: 360, width: 60, height: 60 }      // 我方基地
+    { x: 60, y: 330, width: 60, height: 60 }      // 我方基地
 ];
+
+// --- 指挥状态 ---
+let friendlyCommandIssued = false;  // 我方是否已下达过指令（部署不算）
 
 // --- 单位操作弹窗状态 ---
 let selectedUnit = null;
@@ -107,20 +109,20 @@ function formatTime(seconds) {
 
 // --- 玩家单位数据 ---
 const mockUnits = [
-    { id: 1, name: '侦察无人机-1', type: 'scout', health: 80, maxHealth: 80, ammo: 0, maxAmmo: 0, x: 60, y: 360, status: 'ready', scoutRadius: 50, speed: 3, maxSpeed: 5, patrolTargetX: 100, patrolTargetY: 360, lastPatrolUpdate: 0 },
-    { id: 2, name: '察打一体-1', type: 'attack', health: 150, maxHealth: 150, ammo: 4, maxAmmo: 4, x: 70, y: 370, status: 'ready', scoutRadius: 30, speed: 2, maxSpeed: 4, patrolTargetX: 100, patrolTargetY: 370, lastPatrolUpdate: 0, attackRange: 30 },
-    { id: 3, name: '攻击无人机-1', type: 'strike', health: 120, maxHealth: 120, ammo: 2, maxAmmo: 2, x: 80, y: 360, status: 'ready', scoutRadius: 10, speed: 3, maxSpeed: 6, patrolTargetX: 100, patrolTargetY: 360, lastPatrolUpdate: 0, attackRange: 30 },
-    { id: 4, name: '攻击无人机-2', type: 'strike', health: 120, maxHealth: 120, ammo: 2, maxAmmo: 2, x: 70, y: 380, status: 'ready', scoutRadius: 10, speed: 3, maxSpeed: 6, patrolTargetX: 100, patrolTargetY: 380, lastPatrolUpdate: 0, attackRange: 30 },
-    { id: 5, name: '蜂巢发射车-1', type: 'swarm', health: 200, maxHealth: 200, ammo: 12, maxAmmo: 12, x: 60, y: 370, status: 'ready', scoutRadius: 0, speed: 3, maxSpeed: 3, patrolTargetX: 60, patrolTargetY: 370, lastPatrolUpdate: 0, attackRange: 0, maxRange: 150, launchedSquads: [] }
+    { id: 1, name: '侦察无人机-1', type: 'scout', health: 80, maxHealth: 80, ammo: 0, maxAmmo: 0, x: 60, y: 330, status: 'ready', scoutRadius: 50, speed: 5, maxSpeed: 8, patrolTargetX: 100, patrolTargetY: 330, lastPatrolUpdate: 0 },
+    { id: 2, name: '察打一体-1', type: 'attack', health: 150, maxHealth: 150, ammo: 4, maxAmmo: 4, x: 70, y: 340, status: 'ready', scoutRadius: 30, speed: 4, maxSpeed: 7, patrolTargetX: 100, patrolTargetY: 340, lastPatrolUpdate: 0, attackRange: 30 },
+    { id: 3, name: '攻击无人机-1', type: 'strike', health: 120, maxHealth: 120, ammo: 2, maxAmmo: 2, x: 80, y: 330, status: 'ready', scoutRadius: 10, speed: 5.5, maxSpeed: 10, patrolTargetX: 100, patrolTargetY: 330, lastPatrolUpdate: 0, attackRange: 30 },
+    { id: 4, name: '攻击无人机-2', type: 'strike', health: 120, maxHealth: 120, ammo: 2, maxAmmo: 2, x: 70, y: 350, status: 'ready', scoutRadius: 10, speed: 5.5, maxSpeed: 10, patrolTargetX: 100, patrolTargetY: 350, lastPatrolUpdate: 0, attackRange: 30 },
+    { id: 5, name: '蜂巢发射车-1', type: 'swarm', health: 200, maxHealth: 200, ammo: 12, maxAmmo: 12, x: 60, y: 340, status: 'ready', scoutRadius: 0, speed: 3, maxSpeed: 3, patrolTargetX: 60, patrolTargetY: 340, lastPatrolUpdate: 0, attackRange: 0, maxRange: 150, launchedSquads: [] }
 ];
 
 // --- 敌军单位属性模板（位置由generateEnemyUnits动态计算）---
 const enemyUnitStats = {
-    'command':  { health: 500, attackRange: 20,  scoutRange: 0,   speed: 0, attackCooldown: 0,    hidden: true },
-    'aa_short': { health: 180, attackRange: 20,  scoutRange: 50,  speed: 0, attackCooldown: 2000, hidden: false },
-    'aa_long':  { health: 250, attackRange: 150, scoutRange: 100, speed: 0, attackCooldown: 4000, hidden: false },
-    'radar':    { health: 120, attackRange: 0,   scoutRange: 150, speed: 0, attackCooldown: 0,    hidden: false },
-    'enemy_uav':{ health: 130, attackRange: 30,  scoutRange: 40,  speed: 5, attackCooldown: 3000, hidden: false }
+    'command':  { health: 500, attackRange: 0,   scoutRange: 0,   speed: 0, attackCooldown: 0,    hidden: true },
+    'aa_short': { health: 180, attackRange: 30,  scoutRange: 30,  speed: 0, attackCooldown: 2000, hidden: false },
+    'aa_long':  { health: 250, attackRange: 70,  scoutRange: 60,  speed: 0, attackCooldown: 4000, hidden: false },
+    'radar':    { health: 120, attackRange: 0,   scoutRange: 100, speed: 0, attackCooldown: 0,    hidden: false },
+    'enemy_uav':{ health: 130, attackRange: 25,  scoutRange: 35,  speed: 5.5, attackCooldown: 3000, hidden: false }
 };
 
 // 根据指挥中心位置智能部署所有敌军（纵深防御体系）
@@ -129,8 +131,8 @@ function generateEnemyUnits() {
     const cmdX = 300 + Math.random() * 300;
     const cmdY = Math.random() * 300;
 
-    // 防御系统向左下方展开（正对我方基地(90,390)，即西南方向）
-    const ourBaseX = 90, ourBaseY = 390;
+    // 防御系统向左下方展开（正对我方基地(90,360)，即西南方向）
+    const ourBaseX = 90, ourBaseY = 360;
     const threatAngle = Math.atan2(ourBaseY - cmdY, ourBaseX - cmdX);
 
     // 辅助函数
@@ -212,7 +214,5 @@ const mockBattles = [
         { time: '4:30', event: '攻击无人机编队发起打击' },
         { time: '6:20', event: '摧毁敌方防空网络' },
         { time: '8:45', event: '成功摧毁敌方指挥中心' }
-    ], analysis: { strengths: ['侦察前置探明防空部署', '编组协同打击效果良好', '战术运用灵活'], weaknesses: ['初期侦察范围不足', '部分单位走位过于激进'], suggestions: ['建议扩大初始侦察范围', '注意保护侦察无人机安全'] }},
-    { id: 2, mission: '区域侦察任务', result: 'win', completion: 100, lossRate: 0, score: 88, time: '2024-01-14 10:20', duration: '5:30', timeline: [], analysis: { strengths: [], weaknesses: [], suggestions: [] }},
-    { id: 3, mission: '保护我方基地', result: 'lose', completion: 60, lossRate: 60, score: 45, time: '2024-01-13 16:45', duration: '10:00', timeline: [], analysis: { strengths: [], weaknesses: [], suggestions: [] }}
+    ], analysis: { strengths: ['侦察前置探明防空部署', '编组协同打击效果良好', '战术运用灵活'], weaknesses: ['初期侦察范围不足', '部分单位走位过于激进'], suggestions: ['建议扩大初始侦察范围', '注意保护侦察无人机安全'] }}
 ];

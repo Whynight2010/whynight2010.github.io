@@ -244,7 +244,9 @@ function showLaunchCountSelector(unit) {
                 closeUnitModal();
                 launchDroneCount = count;
                 launchTargetUnit = unit;
-                addBattleLog(unit.name + ' 准备发射 ' + count + ' 架无人机，请点击地图选择发射方向...');
+                addBattleLog(unit.name + ' 准备发射 ' + count + ' 架无人机');
+                showMapPrompt('点击地图选择发射方向', '发射 ' + count + ' 架蜂群无人机');
+                setupRangePreview();
                 var satelliteView = document.getElementById('satellite-view');
                 satelliteView.style.cursor = 'crosshair';
             };
@@ -267,32 +269,36 @@ function showLaunchCountSelector(unit) {
 function enterSwarmMoveSelection(unit) {
     launchTargetUnit = unit;  // 复用 launchTargetUnit 标记移动选择
     launchDroneCount = -1;    // -1 表示移动模式
+    addBattleLog(unit.name + ' 进入转移模式（基地向外' + unit.maxRange + '范围）');
+    showMapPrompt('点击地图选择转移目标', '基地向外' + unit.maxRange + '范围');
+    setupRangePreview();
     var satelliteView = document.getElementById('satellite-view');
     satelliteView.style.cursor = 'crosshair';
 }
 
 // --- 蜂巢无人机编组：生成 ---
 function spawnDroneSquad(launcher, count, targetX, targetY) {
+    friendlyCommandIssued = true;
     droneSquadIdCounter++;
     var squadId = 'squad_' + droneSquadIdCounter;
     var drones = [];
 
     var baseAngle = Math.atan2(targetY - launcher.y, targetX - launcher.x);
-    var spawnDist = 15;
+    var spawnDist = 9;
 
     for (var i = 0; i < count; i++) {
-        var angleOffset = (i - (count - 1) / 2) * (Math.PI / 14);
+        var angleOffset = (i - (count - 1) / 2) * (Math.PI / 18);
         var angle = baseAngle + angleOffset;
         var drone = {
             id: 'drone_' + droneSquadIdCounter + '_' + (i + 1),
             squadId: squadId,
             x: launcher.x + Math.cos(angle) * spawnDist,
             y: launcher.y + Math.sin(angle) * spawnDist,
-            health: 15,
-            maxHealth: 15,
-            attackPower: 30,
-            attackRange: 25,
-            speed: 5,
+            health: 12,
+            maxHealth: 12,
+            attackPower: 22,
+            attackRange: 20,
+            speed: 6.5,
             targetX: null,
             targetY: null,
             status: 'idle',
@@ -448,6 +454,9 @@ function enterSquadAttackSelection(squad) {
     launchTargetUnit = null;
     launchDroneCount = 0;
     squad._pendingCommand = 'attack';
+    addBattleLog('蜂群编组 ' + squad.id + ' 选择攻击目标');
+    showMapPrompt('点击地图选择攻击目标', '蜂群编组 ' + squad.id);
+    setupRangePreview();
     var satelliteView = document.getElementById('satellite-view');
     satelliteView.style.cursor = 'crosshair';
 }
@@ -458,6 +467,9 @@ function enterSquadMoveSelection(squad) {
     launchTargetUnit = null;
     launchDroneCount = 0;
     squad._pendingCommand = 'move';
+    addBattleLog('蜂群编组 ' + squad.id + ' 选择转移目标');
+    showMapPrompt('点击地图选择转移目标', '蜂群编组 ' + squad.id);
+    setupRangePreview();
     var satelliteView = document.getElementById('satellite-view');
     satelliteView.style.cursor = 'crosshair';
 }
@@ -646,7 +658,7 @@ function createFormation(unitIds) {
         targetX: null,
         targetY: null,
         isRecalling: false,
-        formationSpacing: 25
+        formationSpacing: 16
     };
 
     formations.push(fg);
@@ -810,7 +822,9 @@ function executeFormationAction(action) {
             }
             closeUnitModal();
             formationCmdPending = { formation: fg, command: 'attack' };
-            addBattleLog(fg.name + ' 进入目标选择模式，请点击地图选择攻击目标...');
+            addBattleLog(fg.name + ' 选择攻击目标');
+            showMapPrompt('点击地图选择攻击目标', '编组 ' + fg.name);
+            setupRangePreview();
             document.getElementById('satellite-view').style.cursor = 'crosshair';
             break;
 
@@ -828,7 +842,9 @@ function executeFormationAction(action) {
             }
             closeUnitModal();
             formationCmdPending = { formation: fg, command: 'move' };
-            addBattleLog(fg.name + ' 进入目标选择模式，请点击地图选择转移目标...');
+            addBattleLog(fg.name + ' 选择转移目标');
+            showMapPrompt('点击地图选择转移目标', '编组 ' + fg.name);
+            setupRangePreview();
             document.getElementById('satellite-view').style.cursor = 'crosshair';
             break;
 
@@ -851,7 +867,7 @@ function executeUnitAction(action) {
                 selectedUnit.status = 'deployed';
                 // 部署至基地前端位置（朝向战场方向，而非基地方位内）
                 const baseX = 90;
-                const baseY = 390;
+                const baseY = 360;
                 selectedUnit.x = baseX + 40 + Math.random() * 40;
                 selectedUnit.y = baseY - 30 - Math.random() * 30;
                 selectedUnit.patrolTargetX = selectedUnit.x;
@@ -920,7 +936,7 @@ function executeUnitAction(action) {
             } else {
                 // 使用最优路径机制直线返回基地，不再瞬移
                 const baseReturnX = 70 + selectedUnit.id * 6;
-                const baseReturnY = 370;
+                const baseReturnY = 340;
                 selectedUnit.status = 'recall';
                 selectedUnit.isRecalling = true;
                 addBattleLog(selectedUnit.name + ' 收到召回指令，按最优路径返回基地...');

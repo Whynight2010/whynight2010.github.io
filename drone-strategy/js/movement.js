@@ -5,54 +5,17 @@
 // --- 通用移动 ---
 
 function moveToTarget(unit, targetX, targetY, actionType) {
-    const startX = unit.x;
-    const startY = unit.y;
-    const dx = targetX - startX;
-    const dy = targetY - startY;
-    const distance = Math.sqrt(dx * dx + dy * dy);
-    const duration = 2000;
-    const startTime = Date.now();
-
-    let abortMovement = false;
+    friendlyCommandIssued = true;
+    const moveSpeed = unit.maxSpeed || unit.speed || 3;
 
     function move() {
-        if (abortMovement) {
-            unit.status = 'deployed';
-            updateUnitDisplay(unit);
-            return;
-        }
+        const dx = targetX - unit.x;
+        const dy = targetY - unit.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
 
-        const elapsed = Date.now() - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-
-        unit.x = startX + dx * progress;
-        unit.y = startY + dy * progress;
-
-        if (actionType === 'scout') {
-            const detectedEnemy = checkScoutDetection(unit);
-            if (detectedEnemy) {
-                addBattleLog('' + unit.name + ' 发现未标记敌方单位立即后撤');
-                abortMovement = true;
-                retreatFromEnemy(unit, detectedEnemy);
-                return;
-            }
-
-            if (willEnterEnemyRange(unit, targetX, targetY)) {
-                addBattleLog('' + unit.name + ' 检测到前方有敌方火力范围，改变路线');
-                const safePos = findSafePosition(unit);
-                if (safePos) {
-                    abortMovement = true;
-                    moveToTarget(unit, safePos.x, safePos.y, 'scout');
-                    return;
-                }
-            }
-        }
-
-        updateUnitDisplay(unit);
-
-        if (progress < 1) {
-            requestAnimationFrame(move);
-        } else {
+        if (distance < 2) {
+            unit.x = targetX;
+            unit.y = targetY;
             if (actionType === 'attack' && unit.ammo > 0) {
                 unit.ammo--;
                 addBattleLog(unit.name + ' 发射弹药');
@@ -60,7 +23,24 @@ function moveToTarget(unit, targetX, targetY, actionType) {
             }
             unit.status = 'deployed';
             updateUnitDisplay(unit);
+            return;
         }
+
+        const stepDistance = Math.min(moveSpeed, distance);
+        unit.x += (dx / distance) * stepDistance;
+        unit.y += (dy / distance) * stepDistance;
+
+        if (actionType === 'scout' && willEnterEnemyRange(unit, targetX, targetY)) {
+            addBattleLog('' + unit.name + ' 检测到前方有敌方火力范围，改变路线');
+            const safePos = findSafePosition(unit);
+            if (safePos) {
+                moveToTarget(unit, safePos.x, safePos.y, 'scout');
+                return;
+            }
+        }
+
+        updateUnitDisplay(unit);
+        requestAnimationFrame(move);
     }
 
     requestAnimationFrame(move);
@@ -239,43 +219,6 @@ function retreatFromEnemy(unit, enemy) {
     moveToTarget(unit, safeX, safeY, 'move');
 }
 
-// --- DP寻路算法 ---
-
-function calculateDPPath(startX, startY, targetX, targetY, avoidPoint = null) {
-    const path = [];
-    path.push({ x: startX, y: startY });
-
-    const visibleEnemies = mockEnemyUnits.filter(e => e.visible && e.health > 0 && e.attackRange > 0);
-
-    // 获取已知敌方无人机的位置和攻击范围
-    const enemyZones = visibleEnemies
-        .filter(e => e.type === 'enemy_uav')
-        .map(e => ({
-            x: e.x,
-            y: e.y,
-            radius: e.attackRange + 30  // 安全缓冲区
-        }));
-
-    if (enemyZones.length === 0) {
-        // 没有敌方无人机，直接前往目标
-        path.push({ x: targetX, y: targetY });
-        return path;
-    }
-
-    // 检查直线是否穿过敌方攻击范围
-    const directPathSafe = isPathSafe(startX, startY, targetX, targetY, enemyZones);
-    if (directPathSafe) {
-        path.push({ x: targetX, y: targetY });
-        return path;
-    }
-
-    // 需要绕路，使用DP算法计算最优路径
-    const waypoints = generateWaypoints(startX, startY, targetX, targetY, enemyZones);
-    const optimalPath = findOptimalPath(startX, startY, targetX, targetY, waypoints, enemyZones);
-
-    path.push(optimalPath);
-    return path;
-}
 
 function isPathSafe(x1, y1, x2, y2, enemyZones) {
     const steps = 20;
@@ -294,139 +237,6 @@ function isPathSafe(x1, y1, x2, y2, enemyZones) {
         }
     }
     return true;
-}
-
-function generateWaypoints(startX, startY, targetX, targetY, enemyZones) {
-    const waypoints = [];
-
-    // 在起点和终点之间生成中间点
-    const midX = (startX + targetX) / 2;
-    const midY = (startY + targetY) / 2;
-
-    // 生成上下两个绕行点
-    const offsetDist = 100;
-
-    // 计算主要方向
-    const dx = targetX - startX;
-    const dy = targetY - startY;
-    const angle = Math.atan2(dy, dx);
-
-    // 上绕行点
-    const upAngle = angle - Math.PI / 2;
-    waypoints.push({
-        x: midX + Math.cos(upAngle) * offsetDist,
-        y: midY + Math.sin(upAngle) * offsetDist
-    });
-
-    // 下绕行点
-    const downAngle = angle + Math.PI / 2;
-    waypoints.push({
-        x: midX + Math.cos(downAngle) * offsetDist,
-        y: midY + Math.sin(downAngle) * offsetDist
-    });
-
-    // 边界点
-    waypoints.push({ x: startX + 50, y: startY });
-    waypoints.push({ x: startX, y: startY + 50 });
-    waypoints.push({ x: targetX - 50, y: targetY });
-    waypoints.push({ x: targetX, y: targetY - 50 });
-
-    // 过滤掉不安全的点
-    return waypoints.filter(wp => {
-        return wp.x >= 50 && wp.x <= 550 && wp.y >= 30 && wp.y <= 350;
-    });
-}
-
-function findOptimalPath(startX, startY, targetX, targetY, waypoints, enemyZones) {
-    let bestPath = [];
-    let minCost = Infinity;
-
-    // 选项1：直接前往目标（优先尝试，以到达为第一目标）
-    const directPathSafe = isPathSafe(startX, startY, targetX, targetY, enemyZones);
-    if (directPathSafe) {
-        // 直接路径安全，优先选择
-        return [{ x: targetX, y: targetY }];
-    }
-
-    // 直接路径不安全，计算代价并尝试其他路径
-    const directCost = calculatePathCost(startX, startY, targetX, targetY, enemyZones);
-    if (directCost < minCost) {
-        minCost = directCost;
-        bestPath = [{ x: targetX, y: targetY }];
-    }
-
-    // 选项2：通过每个中间点绕行
-    for (const wp of waypoints) {
-        const path1Safe = isPathSafe(startX, startY, wp.x, wp.y, enemyZones);
-        const path2Safe = isPathSafe(wp.x, wp.y, targetX, targetY, enemyZones);
-
-        if (path1Safe && path2Safe) {
-            const cost = calculatePathCost(startX, startY, wp.x, wp.y, enemyZones) +
-                         calculatePathCost(wp.x, wp.y, targetX, targetY, enemyZones);
-
-            if (cost < minCost * 0.8) {  // 绕行路径需要明显更优才选择
-                minCost = cost;
-                bestPath = [{ x: wp.x, y: wp.y }, { x: targetX, targetY }];
-            }
-        }
-    }
-
-    // 如果找到安全绕行路径，优先使用
-    if (bestPath.length > 1) {
-        return bestPath;
-    }
-
-    // 如果没有找到安全路径但必须到达目标，尝试只绕过最危险的区域
-    if (bestPath.length === 1) {
-        // 找到一个最近的敌方无人机并绕行
-        const nearestEnemy = enemyZones.reduce((nearest, zone) => {
-            const dist = Math.sqrt(Math.pow(zone.x - startX, 2) + Math.pow(zone.y - startY, 2));
-            return dist < nearest.dist ? { zone, dist } : nearest;
-        }, { dist: Infinity });
-
-        if (nearestEnemy.dist < Infinity) {
-            const escapeAngle = Math.atan2(startY - nearestEnemy.y, startX - nearestEnemy.x);
-            const escapeDist = nearestEnemy.radius + 50;
-            const escapeX = nearestEnemy.x + Math.cos(escapeAngle) * escapeDist;
-            const escapeY = nearestEnemy.y + Math.sin(escapeAngle) * escapeDist;
-
-            if (escapeX >= 50 && escapeX <= 550 && escapeY >= 30 && escapeY <= 350) {
-                bestPath = [
-                    { x: Math.max(50, Math.min(550, escapeX)), y: Math.max(30, Math.min(350, escapeY)) },
-                    { x: targetX, y: targetY }
-                ];
-            }
-        }
-    }
-
-    return bestPath;
-}
-
-function calculatePathCost(x1, y1, x2, y2, enemyZones) {
-    // 基础代价：路径长度
-    const dx = x2 - x1;
-    const dy = y2 - y1;
-    let baseCost = Math.sqrt(dx * dx + dy * dy);
-
-    // 风险代价：路径经过敌方区域的次数和深度
-    let riskCost = 0;
-    const steps = 10;
-    for (let i = 0; i <= steps; i++) {
-        const t = i / steps;
-        const px = x1 + dx * t;
-        const py = y1 + dy * t;
-
-        for (const zone of enemyZones) {
-            const ex = px - zone.x;
-            const ey = py - zone.y;
-            const dist = Math.sqrt(ex * ex + ey * ey);
-            if (dist < zone.radius) {
-                riskCost += (zone.radius - dist) * 2;
-            }
-        }
-    }
-
-    return baseCost + riskCost;
 }
 
 // --- 侦察任务 ---
@@ -453,29 +263,55 @@ function getRandomScoutPosition(unit) {
     };
 }
 
+function startTargetCruise(unit, targetX, targetY, missionType) {
+    unit._attackLoopCancelled = true;
+    if (unit._attackLoopTimer) {
+        clearTimeout(unit._attackLoopTimer);
+        unit._attackLoopTimer = null;
+    }
+    unit.status = 'deployed';
+    unit.patrolTargetX = targetX;
+    unit.patrolTargetY = targetY;
+    unit.currentPatrolTargetX = null;
+    unit.currentPatrolTargetY = null;
+    unit.movingToPatrol = false;
+    unit._patrolMissionType = missionType || 'patrol';
+    unit._patrolAnchorX = targetX;
+    unit._patrolAnchorY = targetY;
+    unit.lastPatrolMove = Date.now();
+    updateUnitDisplay(unit);
+}
+
 function moveToScoutTarget(unit) {
-    const startX = unit.x;
-    const startY = unit.y;
+    friendlyCommandIssued = true;
+    cancelUnitMission(unit);
     const targetX = unit.scoutTargetX;
     const targetY = unit.scoutTargetY;
 
     unit.status = 'scout';
     unit.isMovingToScout = true;
+    unit._attackLoopCancelled = false;
+    unit.movingToPatrol = false;
+    unit._patrolMissionType = null;
+    unit._patrolLoopActive = false;
     updateUnitDisplay(unit);
 
-    // 使用最优路径算法计算最优路径
     const path = calculateOptimalPath(unit.x, unit.y, targetX, targetY);
+    if (path.length < 2) {
+        path.push({ x: targetX, y: targetY });
+    }
     addBattleLog(unit.name + ' 计算最优侦察路径，共 ' + path.length + ' 个路径点');
 
     let currentPathIndex = 0;
 
     function moveAlongPath() {
+        if (!unit.isMovingToScout || unit.health <= 0) return;
+
         if (currentPathIndex >= path.length - 1) {
-            // 到达最终目标
             unit.isMovingToScout = false;
             unit.x = targetX;
             unit.y = targetY;
-            addBattleLog(unit.name + ' 到达侦察目标点，开始执行侦察任务');
+            addBattleLog(unit.name + ' 到达侦察目标点，开始巡航侦察');
             executeScoutMission(unit);
             updateUnitDisplay(unit);
             return;
@@ -486,22 +322,17 @@ function moveToScoutTarget(unit) {
         const dy = nextPoint.y - unit.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
 
-        const moveSpeed = unit.speed || 2;
-        const stepDistance = Math.min(moveSpeed, distance);
-
-        unit.x += (dx / distance) * stepDistance;
-        unit.y += (dy / distance) * stepDistance;
-
-        // 侦察检测
-        const detectedEnemy = checkScoutDetection(unit);
-        if (detectedEnemy) {
-            addBattleLog('' + unit.name + ' 发现未标记敌方单位立即后撤');
-            unit.isMovingToScout = false;
-            retreatFromEnemy(unit, detectedEnemy);
+        if (distance < 2) {
+            currentPathIndex++;
+            requestAnimationFrame(moveAlongPath);
             return;
         }
 
-        // 检查是否需要绕路
+        const moveSpeed = unit.maxSpeed || unit.speed || 3;
+        const stepDistance = Math.min(moveSpeed, distance);
+        unit.x += (dx / distance) * stepDistance;
+        unit.y += (dy / distance) * stepDistance;
+
         const visibleEnemies = mockEnemyUnits.filter(e => e.visible && e.health > 0 && e.attackRange > 0);
         let needsReroute = false;
         for (const enemy of visibleEnemies) {
@@ -515,25 +346,17 @@ function moveToScoutTarget(unit) {
         }
 
         if (needsReroute) {
-            const safePos = findSafePositionDP(unit);
-            if (safePos) {
-                addBattleLog('' + unit.name + ' 检测到敌方火力范围，重新计算路径');
-                unit.isMovingToScout = false;
-                const newPath = calculateOptimalPath(unit.x, unit.y, targetX, targetY);
-                if (newPath.length > 0) {
-                    path.length = 0;
-                    path.push(newPath);
-                    currentPathIndex = 0;
-                }
+            addBattleLog('' + unit.name + ' 检测到敌方火力范围，重新计算侦察路径');
+            const newPath = calculateOptimalPath(unit.x, unit.y, targetX, targetY);
+            if (newPath.length > 0) {
+                path.length = 0;
+                path.push(...newPath);
+                currentPathIndex = 0;
             }
         }
 
+        checkScoutDetection(unit);
         updateUnitDisplay(unit);
-
-        if (Math.abs(unit.x - nextPoint.x) < 2 && Math.abs(unit.y - nextPoint.y) < 2) {
-            currentPathIndex++;
-        }
-
         requestAnimationFrame(moveAlongPath);
     }
 
@@ -541,15 +364,13 @@ function moveToScoutTarget(unit) {
 }
 
 function executeScoutMission(unit) {
-    // 到达侦察点后，执行侦察检测
     const detectedEnemy = checkScoutDetection(unit);
     if (detectedEnemy) {
         addBattleLog('' + unit.name + ' 在目标点发现敌方 ' + detectedEnemy.name + '');
     } else {
-        addBattleLog(unit.name + ' 在目标区域未发现敌方单位');
+        addBattleLog(unit.name + ' 已进入目标区域，开始持续巡航侦察');
     }
-    unit.status = 'deployed';
-    updateUnitDisplay(unit);
+    startTargetCruise(unit, unit.scoutTargetX, unit.scoutTargetY, 'scout');
 }
 
 // --- 攻击任务 ---
@@ -580,8 +401,9 @@ function attackTarget(unit) {
     const targets = mockEnemyUnits.filter(e => e.visible && e.health > 0);
     if (targets.length > 0) {
         const target = targets[0];
-        target.health -= 40;
-        addBattleLog(unit.name + ' 攻击 ' + target.name + '，造成40点伤害');
+        const damage = calculatePlayerDamage(unit, target);
+        target.health -= damage;
+        addBattleLog(unit.name + ' 攻击 ' + target.name + '，造成' + damage + '点伤害');
 
         if (target.health <= 0) {
             target.health = 0;
@@ -592,60 +414,104 @@ function attackTarget(unit) {
 }
 
 function moveToAttackTarget(unit) {
-    const startX = unit.x;
-    const startY = unit.y;
+    friendlyCommandIssued = true;
+    cancelUnitMission(unit);
     const targetX = unit.attackTargetX;
     const targetY = unit.attackTargetY;
-
-    const dx = targetX - startX;
-    const dy = targetY - startY;
-    const distance = Math.sqrt(dx * dx + dy * dy);
-
-    const duration = (distance / unit.maxSpeed) * 200;
-    const startTime = Date.now();
+    const path = calculateOptimalPath(unit.x, unit.y, targetX, targetY);
 
     unit.status = 'attack';
     unit.isMovingToAttack = true;
+    unit._attackLoopCancelled = false;
+    unit.movingToPatrol = false;
+    unit._patrolMissionType = null;
+    unit._patrolLoopActive = false;
     updateUnitDisplay(unit);
+    if (path.length < 2) {
+        path.push({ x: targetX, y: targetY });
+    }
+    addBattleLog(unit.name + ' 计算最优攻击路径，共 ' + path.length + ' 个路径点');
 
-    function move() {
-        const elapsed = Date.now() - startTime;
-        const progress = Math.min(elapsed / duration, 1);
+    let currentPathIndex = 0;
 
-        unit.x = startX + dx * progress;
-        unit.y = startY + dy * progress;
+    function moveAlongPath() {
+        if (!unit.isMovingToAttack || unit.health <= 0) return;
 
-        updateUnitDisplay(unit);
-
-        if (progress < 1) {
-            requestAnimationFrame(move);
-        } else {
+        if (currentPathIndex >= path.length - 1) {
             unit.isMovingToAttack = false;
+            unit.x = targetX;
+            unit.y = targetY;
             addBattleLog(unit.name + ' 到达攻击目标点，开始搜索敌方目标');
             autoAttackAtLocation(unit);
+            updateUnitDisplay(unit);
+            return;
         }
+
+        const nextPoint = path[currentPathIndex + 1];
+        const dx = nextPoint.x - unit.x;
+        const dy = nextPoint.y - unit.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance < 2) {
+            currentPathIndex++;
+            requestAnimationFrame(moveAlongPath);
+            return;
+        }
+
+        const moveSpeed = unit.maxSpeed || unit.speed || 3;
+        const stepDistance = Math.min(moveSpeed, distance);
+        unit.x += (dx / distance) * stepDistance;
+        unit.y += (dy / distance) * stepDistance;
+
+        const visibleEnemies = mockEnemyUnits.filter(e => e.visible && e.health > 0 && e.attackRange > 0);
+        let needsReroute = false;
+        for (const enemy of visibleEnemies) {
+            const ex = enemy.x - unit.x;
+            const ey = enemy.y - unit.y;
+            const dist = Math.sqrt(ex * ex + ey * ey);
+            if (dist < enemy.attackRange + 15) {
+                needsReroute = true;
+                break;
+            }
+        }
+
+        if (needsReroute) {
+            addBattleLog(unit.name + ' 遭遇威胁区，重新规划攻击航路');
+            const newPath = calculateOptimalPath(unit.x, unit.y, targetX, targetY);
+            if (newPath.length > 0) {
+                path.length = 0;
+                path.push(...newPath);
+                currentPathIndex = 0;
+            }
+        }
+
+        updateUnitDisplay(unit);
+        requestAnimationFrame(moveAlongPath);
     }
 
-    requestAnimationFrame(move);
+    requestAnimationFrame(moveAlongPath);
 }
 
 function autoAttackAtLocation(unit) {
+    if (unit._attackLoopCancelled || unit.isMovingToScout || unit.health <= 0 || isUnitInFormation(unit)) {
+        unit._attackLoopCancelled = false;
+        if (unit._attackLoopTimer) { clearTimeout(unit._attackLoopTimer); unit._attackLoopTimer = null; }
+        return;
+    }
     if (unit.ammo <= 0) {
-        addBattleLog(unit.name + ' 弹药耗尽，返回待命状态');
-        unit.status = 'deployed';
-        updateUnitDisplay(unit);
+        addBattleLog(unit.name + ' 弹药耗尽，转入目标点巡航');
+        startTargetCruise(unit, unit.attackTargetX, unit.attackTargetY, 'attack');
         return;
     }
 
     const enemiesNearTarget = mockEnemyUnits.filter(e => {
         if (!e.visible || e.health <= 0) return false;
-        if (!e.attackRange && e.attackRange !== 0) return false;
 
         const dx = e.x - unit.attackTargetX;
         const dy = e.y - unit.attackTargetY;
         const distance = Math.sqrt(dx * dx + dy * dy);
 
-        return distance <= e.attackRange + 50;
+        return distance <= Math.max(60, unit.attackRange || 30, e.attackRange + 20);
     });
 
     if (enemiesNearTarget.length > 0) {
@@ -664,19 +530,31 @@ function autoAttackAtLocation(unit) {
                 updateEnemyDisplay();
             }
 
-            if (unit.ammo > 0) {
-                setTimeout(() => autoAttackAtLocation(unit), 1500);
-            } else {
-                addBattleLog(unit.name + ' 弹药耗尽，返回待命状态');
-                unit.status = 'deployed';
-                updateUnitDisplay(unit);
+            if (unit.ammo > 0 && !unit._attackLoopCancelled) {
+                unit._attackLoopTimer = setTimeout(() => autoAttackAtLocation(unit), 1500);
+            } else if (unit.ammo <= 0) {
+                addBattleLog(unit.name + ' 弹药耗尽，转入目标点巡航');
+                startTargetCruise(unit, unit.attackTargetX, unit.attackTargetY, 'attack');
             }
+            return;
         }
-    } else {
-        addBattleLog(unit.name + ' 在目标区域未发现敌方单位，返回待命状态');
-        unit.status = 'deployed';
-        updateUnitDisplay(unit);
     }
+
+    addBattleLog(unit.name + ' 在目标区域未发现敌方单位，转入巡航搜索');
+    startTargetCruise(unit, unit.attackTargetX, unit.attackTargetY, 'attack');
+}
+
+function cancelUnitMission(unit) {
+    unit._attackLoopCancelled = true;
+    if (unit._attackLoopTimer) {
+        clearTimeout(unit._attackLoopTimer);
+        unit._attackLoopTimer = null;
+    }
+    unit.isMovingToScout = false;
+    unit.isMovingToAttack = false;
+    unit.movingToPatrol = false;
+    unit._patrolMissionType = null;
+    unit._patrolLoopActive = false;
 }
 
 function findBestAttackTarget(unit, enemies) {
@@ -726,64 +604,81 @@ function calculatePlayerDamage(attacker, target) {
 // --- 巡逻系统 ---
 
 function updateUnitPatrol() {
-    // 部署后的单位保持阵位，不再自动游荡巡逻
-    // 巡逻行为仅由显式指令触发（侦察、攻击、防守、转移等）
+    mockUnits.forEach(function(unit) {
+        if (unit.health <= 0 || unit.isRecalling || unit.isMovingToAttack || unit.isMovingToScout) return;
+        if (unit.type === 'swarm') return; // 蜂巢发射车不参与巡航
+        if (unit.patrolTargetX == null || unit.patrolTargetY == null) return;
+        if (isUnitInFormation(unit)) return;
+        if (unit._patrolMissionType === 'scout' || unit._patrolMissionType === 'attack') {
+            continueUnitPatrol(unit);
+        }
+    });
 }
 
 function continueUnitPatrol(unit) {
-    // 正在召回的单元不执行巡逻
-    if (unit.isRecalling) return;
+    if (unit.isRecalling) {
+        unit._patrolLoopActive = false;
+        return;
+    }
 
-    if (!unit.movingToPatrol) {
-        if (unit.status === 'deployed' && unit.speed > 0) {
-            unit.movingToPatrol = true;
-            unit.lastPatrolMove = Date.now();
-            setNewPatrolTarget(unit);
-        } else {
+    if (unit._patrolLoopActive) return;
+    unit._patrolLoopActive = true;
+
+    function step() {
+        if (unit.isRecalling ||
+            unit.health <= 0 ||
+            unit._patrolMissionType == null ||
+            unit.isMovingToAttack ||
+            unit.isMovingToScout ||
+            unit.status !== 'deployed' ||
+            isUnitInFormation(unit)) {
+            unit._patrolLoopActive = false;
             return;
         }
-    }
 
-    const now = Date.now();
-    const elapsed = (now - unit.lastPatrolMove) / 1000;
-    unit.lastPatrolMove = now;
-
-    const dx = unit.currentPatrolTargetX - unit.x;
-    const dy = unit.currentPatrolTargetY - unit.y;
-    const distance = Math.sqrt(dx * dx + dy * dy);
-
-    if (distance > 3) {
-        const moveDistance = unit.speed * elapsed * gameSpeed;
-
-        // 检测前方是否有敌方无人机攻击范围威胁
-        const threatInfo = getThreatInfo(unit, dx, dy, distance, moveDistance);
-
-        if (threatInfo.hasThreat) {
-            // 检测到威胁，朝安全方向移动
-            const safeAngle = threatInfo.safeAngle;
-            const newTargetX = unit.x + Math.cos(safeAngle) * moveDistance * 2;
-            const newTargetY = unit.y + Math.sin(safeAngle) * moveDistance * 2;
-
-            unit.x = Math.max(50, Math.min(550, newTargetX));
-            unit.y = Math.max(30, Math.min(350, newTargetY));
-            updateUnitDisplay(unit);
-
-            requestAnimationFrame(() => continueUnitPatrol(unit));
-        } else {
-            // 无威胁，正常向目标移动
-            let moveX = unit.x + (dx / distance) * moveDistance;
-            let moveY = unit.y + (dy / distance) * moveDistance;
-
-            unit.x = moveX;
-            unit.y = moveY;
-            updateUnitDisplay(unit);
-
-            requestAnimationFrame(() => continueUnitPatrol(unit));
+        if (!unit.movingToPatrol) {
+            if (unit.status === 'deployed' && unit.speed > 0) {
+                unit.movingToPatrol = true;
+                unit.lastPatrolMove = Date.now();
+                setNewPatrolTarget(unit);
+            } else {
+                unit._patrolLoopActive = false;
+                return;
+            }
         }
-    } else {
-        setNewPatrolTarget(unit);
-        requestAnimationFrame(() => continueUnitPatrol(unit));
+
+        const now = Date.now();
+        const elapsed = (now - unit.lastPatrolMove) / 1000;
+        unit.lastPatrolMove = now;
+
+        const dx = unit.currentPatrolTargetX - unit.x;
+        const dy = unit.currentPatrolTargetY - unit.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance > 3) {
+            const moveDistance = unit.speed * elapsed;
+            const threatInfo = getThreatInfo(unit, dx, dy, distance, moveDistance);
+
+            if (threatInfo.hasThreat) {
+                const safeAngle = threatInfo.safeAngle;
+                const newTargetX = unit.x + Math.cos(safeAngle) * moveDistance * 2;
+                const newTargetY = unit.y + Math.sin(safeAngle) * moveDistance * 2;
+
+                unit.x = Math.max(50, Math.min(550, newTargetX));
+                unit.y = Math.max(30, Math.min(350, newTargetY));
+            } else {
+                unit.x = unit.x + (dx / distance) * moveDistance;
+                unit.y = unit.y + (dy / distance) * moveDistance;
+            }
+        } else {
+            setNewPatrolTarget(unit);
+        }
+
+        updateUnitDisplay(unit);
+        requestAnimationFrame(step);
     }
+
+    requestAnimationFrame(step);
 }
 
 function getThreatInfo(unit, dx, dy, distance, moveDistance) {
@@ -839,10 +734,11 @@ function setNewPatrolTarget(unit) {
     const candidates = [];
     const baseX = unit.patrolTargetX;
     const baseY = unit.patrolTargetY;
+    const patrolRadius = unit._patrolMissionType === 'attack' ? 28 : 22;
 
     for (let i = 0; i < 12; i++) {
         const angle = (i * Math.PI * 2) / 12;
-        const dist = 30 + Math.random() * 40;
+        const dist = patrolRadius + Math.random() * 18;
         const candidateX = baseX + Math.cos(angle) * dist;
         const candidateY = baseY + Math.sin(angle) * dist;
 
@@ -929,29 +825,32 @@ function moveUnitPatrol(unit, targetX, targetY) {
 function calculateOptimalPath(startX, startY, targetX, targetY) {
     const path = [{ x: startX, y: startY }];
 
-    // 收集所有可见敌方威胁区域
     const threats = mockEnemyUnits
-        .filter(function(e) { return e.visible && e.health > 0 && e.attackRange > 0; })
-        .map(function(e) { return { x: e.x, y: e.y, radius: e.attackRange + 25 }; });
+        .filter(function(e) { return e.visible && e.health > 0 && (e.attackRange > 0 || e.type === 'enemy_uav'); })
+        .map(function(e) {
+            var isEnemyUav = e.type === 'enemy_uav';
+            return {
+                x: e.x,
+                y: e.y,
+                radius: isEnemyUav ? e.attackRange + 55 : e.attackRange + 25,
+                weight: isEnemyUav ? 1.6 : 1
+            };
+        });
 
-    // 无威胁时直接直线前往目标（最快路径）
     if (threats.length === 0) {
         path.push({ x: targetX, y: targetY });
         return path;
     }
 
-    // 检查直线路径是否安全
     if (isPathSafe(startX, startY, targetX, targetY, threats)) {
         path.push({ x: targetX, y: targetY });
         return path;
     }
 
-    // 直线不安全，寻找绕行路径——以到达目标为核心目标
     var directAngle = Math.atan2(targetY - startY, targetX - startX);
     var directDist = Math.sqrt(Math.pow(targetX - startX, 2) + Math.pow(targetY - startY, 2));
 
     var candidates = [];
-    // 多角度、多距离生成候选绕行点
     var angles = [-Math.PI / 2, -Math.PI / 3, -Math.PI / 4, -Math.PI / 6, Math.PI / 6, Math.PI / 4, Math.PI / 3, Math.PI / 2];
     var detourDists = [50, 80, 120];
 
@@ -960,40 +859,33 @@ function calculateOptimalPath(startX, startY, targetX, targetY) {
             var angleOffset = angles[ai];
             var detourDist = detourDists[di];
             var midAngle = directAngle + angleOffset;
-            // 绕行点沿目标方向前进一段距离，再偏移——确保始终朝目标推进
             var midX = startX + Math.cos(midAngle) * (directDist * 0.4 + detourDist * 0.3);
             var midY = startY + Math.sin(midAngle) * (directDist * 0.4 + detourDist * 0.3);
 
-            // 边界裁剪
             var clampedX = Math.max(50, Math.min(550, midX));
             var clampedY = Math.max(30, Math.min(350, midY));
 
-            // 禁止回头：绕行点必须比起点更接近目标
             var distToTarget = Math.sqrt(Math.pow(clampedX - targetX, 2) + Math.pow(clampedY - targetY, 2));
             if (distToTarget >= directDist) continue;
 
-            // 检查两段路径安全性
             if (isPathSafe(startX, startY, clampedX, clampedY, threats) &&
                 isPathSafe(clampedX, clampedY, targetX, targetY, threats)) {
 
                 var seg1Dist = Math.sqrt(Math.pow(clampedX - startX, 2) + Math.pow(clampedY - startY, 2));
                 var totalDist = seg1Dist + distToTarget;
-                // 风险代价
                 var risk = calculatePathRisk(startX, startY, clampedX, clampedY, threats) +
                            calculatePathRisk(clampedX, clampedY, targetX, targetY, threats);
 
-                // 综合评分：速度（距离） + 风险（权重2倍，平衡风险与速度）
                 candidates.push({
                     waypoint: { x: clampedX, y: clampedY },
                     totalDist: totalDist,
                     risk: risk,
-                    score: totalDist + risk * 2
+                    score: totalDist + risk * 2.2
                 });
             }
         }
     }
 
-    // 按评分排序（分数越低越优）
     candidates.sort(function(a, b) { return a.score - b.score; });
 
     if (candidates.length > 0) {
@@ -1001,7 +893,6 @@ function calculateOptimalPath(startX, startY, targetX, targetY) {
         path.push(best.waypoint);
         path.push({ x: targetX, y: targetY });
     } else {
-        // 无完全安全路径，选择风险最小的准直线路径
         path.push({ x: targetX, y: targetY });
     }
 
@@ -1021,7 +912,7 @@ function calculatePathRisk(x1, y1, x2, y2, threats) {
             var dy = py - threat.y;
             var dist = Math.sqrt(dx * dx + dy * dy);
             if (dist < threat.radius) {
-                risk += (threat.radius - dist);
+                risk += (threat.radius - dist) * (threat.weight || 1);
             }
         }
     }
@@ -1106,11 +997,122 @@ function arriveAtBase(unit, baseX, baseY) {
     updateUnitDisplay(unit);
 }
 
+// --- 地图提示覆盖层 ---
+
+function ensureMapPrompt() {
+    var el = document.getElementById('map-prompt');
+    if (!el) {
+        el = document.createElement('div');
+        el.id = 'map-prompt';
+        el.className = 'map-prompt';
+        var map = document.querySelector('.battle-map');
+        if (map) map.appendChild(el);
+    }
+    return el;
+}
+
+function showMapPrompt(text, subText) {
+    var el = ensureMapPrompt();
+    if (!el) return;
+    el.innerHTML = text + (subText ? '<div class="prompt-sub">' + subText + '</div>' : '');
+    el.classList.add('active');
+}
+
+function hideMapPrompt() {
+    var el = document.getElementById('map-prompt');
+    if (el) el.classList.remove('active');
+}
+
+function showTargetMarker(x, y) {
+    var el = document.getElementById('target-marker');
+    if (!el) {
+        el = document.createElement('div');
+        el.id = 'target-marker';
+        el.className = 'target-marker';
+        document.getElementById('satellite-view').appendChild(el);
+    }
+    el.style.left = x + 'px';
+    el.style.top = y + 'px';
+    el.classList.add('active');
+    setTimeout(function() { el.classList.remove('active'); }, 1200);
+}
+
+// --- 范围预览 ---
+var _rangePreviewUnit = null;
+
+function ensureRangePreview() {
+    var el = document.getElementById('range-preview');
+    if (!el) {
+        el = document.createElement('div');
+        el.id = 'range-preview';
+        el.className = 'range-preview';
+        document.getElementById('satellite-view').appendChild(el);
+    }
+    return el;
+}
+
+function showRangePreview(unit, x, y) {
+    var el = ensureRangePreview();
+    var range = unit.attackRange || unit.scoutRadius || 30;
+    var diameter = range * 2;
+    el.style.left = x + 'px';
+    el.style.top = y + 'px';
+    el.style.width = diameter + 'px';
+    el.style.height = diameter + 'px';
+    el.className = 'range-preview ' + (unit.attackRange > 0 ? 'attack' : 'scout') + ' active';
+}
+
+function hideRangePreview() {
+    var el = document.getElementById('range-preview');
+    if (el) el.classList.remove('active');
+}
+
+function getTargetSelectionUnit() {
+    if (attackTargetUnits.length > 0) return attackTargetUnits[0];
+    if (scoutTargetUnits.length > 0) return scoutTargetUnits[0];
+    if (formationCmdPending && formationCmdPending.formation) return formationCmdPending.formation.leadUnit;
+    if (selectedSquad && selectedSquad._pendingCommand && selectedSquad.drones) {
+        var alive = selectedSquad.drones.filter(function(d) { return d.health > 0; });
+        if (alive.length > 0) return alive[0];
+    }
+    return null;
+}
+
+function onMapMouseMove(e) {
+    var unit = getTargetSelectionUnit();
+    if (!unit) { hideRangePreview(); return; }
+
+    var satelliteView = document.getElementById('satellite-view');
+    var rect = satelliteView.getBoundingClientRect();
+    var displayWidth = satelliteView.offsetWidth || 600;
+    var displayHeight = satelliteView.offsetHeight || 400;
+    var scaleX = displayWidth / rect.width;
+    var scaleY = displayHeight / rect.height;
+    var mx = (e.clientX - rect.left) * scaleX;
+    var my = (e.clientY - rect.top) * scaleY;
+
+    showRangePreview(unit, mx, my);
+}
+
+function setupRangePreview() {
+    var view = document.getElementById('satellite-view');
+    if (!view || view._rangePreviewSetup) return;
+    view._rangePreviewSetup = true;
+    view.addEventListener('mousemove', onMapMouseMove);
+}
+
+function teardownRangePreview() {
+    hideRangePreview();
+    _rangePreviewUnit = null;
+}
+
 // --- 目标选择（地图点击处理）---
 
 function enterAttackTargetSelection(unit) {
     attackTargetUnits.push(unit);
-    addBattleLog('正在选择 ' + unit.name + ' 的攻击目标，点击地图指定位置');
+    addBattleLog('正在为 ' + unit.name + ' 选择攻击目标');
+    showMapPrompt('点击地图选择攻击目标');
+    setupRangePreview();
 
     const satelliteView = document.getElementById('satellite-view');
     satelliteView.style.cursor = 'crosshair';
@@ -1118,14 +1120,15 @@ function enterAttackTargetSelection(unit) {
 
 function enterScoutTargetSelection(unit) {
     scoutTargetUnits.push(unit);
-    addBattleLog('正在选择 ' + unit.name + ' 的侦察目标，点击地图指定位置');
+    addBattleLog('正在为 ' + unit.name + ' 选择侦察目标');
+    showMapPrompt('点击地图选择侦察目标');
+    setupRangePreview();
 
     const satelliteView = document.getElementById('satellite-view');
     satelliteView.style.cursor = 'crosshair';
 }
 
 function handleMapClickForAttack(e) {
-    // 如果点击的是单位元素或侧栏区域，不处理地图点击
     if (e.target.classList.contains('unit') ||
         e.target.closest('.unit') ||
         e.target.closest('.battle-info')) {
@@ -1134,16 +1137,24 @@ function handleMapClickForAttack(e) {
 
     const satelliteView = document.getElementById('satellite-view');
     const rect = satelliteView.getBoundingClientRect();
-    const scaleX = 600 / rect.width;
-    const scaleY = 400 / rect.height;
-    const clickX = (e.clientX - rect.left) * scaleX;
-    const clickY = (e.clientY - rect.top) * scaleY;
+    const displayWidth = satelliteView.offsetWidth || 600;
+    const displayHeight = satelliteView.offsetHeight || 400;
+    const scaleX = displayWidth / rect.width;
+    const scaleY = displayHeight / rect.height;
+    const clickX = Math.max(0, Math.min(displayWidth, (e.clientX - rect.left) * scaleX));
+    const clickY = Math.max(0, Math.min(displayHeight, (e.clientY - rect.top) * scaleY));
 
-    // 处理蜂巢发射车移动目标选择（launchDroneCount === -1 表示移动模式）
-    if (launchTargetUnit && launchDroneCount === -1) {
+    function finishClick() {
         satelliteView.style.cursor = 'default';
+        hideMapPrompt();
+        teardownRangePreview();
+        showTargetMarker(clickX, clickY);
+    }
+
+    if (launchTargetUnit && launchDroneCount === -1) {
+        finishClick();
         var swarmUnit = launchTargetUnit;
-        var baseX = 90, baseY = 390;
+        var baseX = 90, baseY = 360;
         var distFromBase = Math.sqrt(Math.pow(clickX - baseX, 2) + Math.pow(clickY - baseY, 2));
         if (distFromBase > swarmUnit.maxRange) {
             addBattleLog(swarmUnit.name + ' 目标超出活动范围（基地' + swarmUnit.maxRange + '单位），已自动裁剪至边界');
@@ -1163,9 +1174,8 @@ function handleMapClickForAttack(e) {
         return;
     }
 
-    // 处理蜂巢发射车：发射目标选择
     if (launchTargetUnit && launchDroneCount > 0) {
-        satelliteView.style.cursor = 'default';
+        finishClick();
         spawnDroneSquad(launchTargetUnit, launchDroneCount, clickX, clickY);
         launchTargetUnit = null;
         launchDroneCount = 0;
@@ -1173,9 +1183,8 @@ function handleMapClickForAttack(e) {
         return;
     }
 
-    // 处理蜂群编组指令选择
     if (selectedSquad && selectedSquad._pendingCommand) {
-        satelliteView.style.cursor = 'default';
+        finishClick();
         var cmd = selectedSquad._pendingCommand;
         delete selectedSquad._pendingCommand;
 
@@ -1190,15 +1199,13 @@ function handleMapClickForAttack(e) {
         return;
     }
 
-    // 处理常规编组指令选择（攻击/机动）
     if (formationCmdPending) {
-        satelliteView.style.cursor = 'default';
+        finishClick();
         var fg = formationCmdPending.formation;
         var fgCmd = formationCmdPending.command;
         formationCmdPending = null;
 
         if (fgCmd === 'attack') {
-            // 检测点击位置附近是否有可见敌方单位
             var clickedEnemy = null;
             for (var ei = 0; ei < mockEnemyUnits.length; ei++) {
                 var enemy = mockEnemyUnits[ei];
@@ -1212,7 +1219,7 @@ function handleMapClickForAttack(e) {
             }
 
             if (clickedEnemy) {
-                addBattleLog(fg.name + ' 收到攻击指令，目标: ' + clickedEnemy.name + '编队集火攻击');
+                addBattleLog(fg.name + ' 收到攻击指令，目标: ' + clickedEnemy.name + '，编队集火攻击');
             } else {
                 addBattleLog(fg.name + ' 收到攻击指令，前往目标点 (' + Math.round(clickX) + ', ' + Math.round(clickY) + ')');
             }
@@ -1224,10 +1231,8 @@ function handleMapClickForAttack(e) {
         return;
     }
 
-    // 处理侦察目标选择（支持多个单位并行）
     if (scoutTargetUnits.length > 0) {
-        satelliteView.style.cursor = 'default';
-
+        finishClick();
         scoutTargetUnits.forEach(unit => {
             addBattleLog(unit.name + ' 收到侦察指令，前往目标点 (' + Math.round(clickX) + ', ' + Math.round(clickY) + ')');
             unit.scoutTargetX = clickX;
@@ -1238,10 +1243,8 @@ function handleMapClickForAttack(e) {
         return;
     }
 
-    // 处理攻击目标选择（支持多个单位并行）
     if (attackTargetUnits.length > 0) {
-        satelliteView.style.cursor = 'default';
-
+        finishClick();
         attackTargetUnits.forEach(unit => {
             addBattleLog(unit.name + ' 收到攻击指令，前往目标点 (' + Math.round(clickX) + ', ' + Math.round(clickY) + ')');
             unit.attackTargetX = clickX;
@@ -1249,9 +1252,53 @@ function handleMapClickForAttack(e) {
             moveToAttackTarget(unit);
         });
         attackTargetUnits = [];
-        return;
     }
 }
+
+// ESC 取消目标选择
+function cancelAllTargetSelection() {
+    var satelliteView = document.getElementById('satellite-view');
+    if (satelliteView) satelliteView.style.cursor = 'default';
+    hideMapPrompt();
+    teardownRangePreview();
+
+    if (scoutTargetUnits.length > 0) {
+        scoutTargetUnits.forEach(function(u) { addBattleLog(u.name + ' 已取消侦察指令'); });
+        scoutTargetUnits = [];
+    }
+    if (attackTargetUnits.length > 0) {
+        attackTargetUnits.forEach(function(u) { addBattleLog(u.name + ' 已取消攻击指令'); });
+        attackTargetUnits = [];
+    }
+    if (formationCmdPending) {
+        addBattleLog(formationCmdPending.formation.name + ' 已取消指令');
+        formationCmdPending = null;
+    }
+    if (selectedSquad && selectedSquad._pendingCommand) {
+        addBattleLog('蜂群编组 ' + selectedSquad.id + ' 已取消指令');
+        delete selectedSquad._pendingCommand;
+        selectedSquad = null;
+    }
+    if (launchTargetUnit) {
+        addBattleLog(launchTargetUnit.name + ' 已取消发射/转移');
+        launchTargetUnit = null;
+        launchDroneCount = 0;
+    }
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' || e.keyCode === 27) {
+        var hasSelection = scoutTargetUnits.length > 0 ||
+            attackTargetUnits.length > 0 ||
+            formationCmdPending ||
+            (selectedSquad && selectedSquad._pendingCommand) ||
+            launchTargetUnit;
+        if (hasSelection) {
+            e.preventDefault();
+            cancelAllTargetSelection();
+        }
+    }
+});
 
 // ============================================================
 // 蜂巢无人机编组：移动 & 自动攻击系统
@@ -1259,6 +1306,7 @@ function handleMapClickForAttack(e) {
 
 // 编组移动指令
 function setSquadMoveCommand(squad, targetX, targetY) {
+    friendlyCommandIssued = true;
     squad.command = 'move';
     squad.targetX = targetX;
     squad.targetY = targetY;
@@ -1270,6 +1318,7 @@ function setSquadMoveCommand(squad, targetX, targetY) {
 
 // 编组攻击指令（移动到目标区域并自动搜索攻击）
 function setSquadAttackCommand(squad, targetX, targetY) {
+    friendlyCommandIssued = true;
     squad.command = 'attack';
     squad.targetX = targetX;
     squad.targetY = targetY;
@@ -1305,7 +1354,7 @@ function assignSquadFormation(squad, centerX, centerY) {
     var baseAngle = 0;
     if (count > 1) {
         // 多人编队：扇形展开
-        var spreadAngle = Math.min(Math.PI / 2, (count - 1) * (Math.PI / 10));
+        var spreadAngle = Math.min(Math.PI / 2, (count - 1) * (Math.PI / 12));
         baseAngle = Math.atan2(centerY - aliveDrones[0].y, centerX - aliveDrones[0].x);
         if (Math.abs(centerX - aliveDrones[0].x) < 1 && Math.abs(centerY - aliveDrones[0].y) < 1) {
             baseAngle = Math.PI / 4; // 默认方向
@@ -1318,17 +1367,18 @@ function assignSquadFormation(squad, centerX, centerY) {
         if (count === 1) {
             dist = 0;
         } else {
-            angleOffset = (i - (count - 1) / 2) * (Math.PI / 10);
-            dist = 8 + Math.random() * 5;
+            angleOffset = (i - (count - 1) / 2) * (Math.PI / 12);
+            dist = 5 + Math.random() * 3;
         }
         var angle = baseAngle + angleOffset;
         aliveDrones[i].targetX = centerX + Math.cos(angle) * dist;
         aliveDrones[i].targetY = centerY + Math.sin(angle) * dist;
         aliveDrones[i].status = 'moving';
+        startDroneMovement(aliveDrones[i], squad);
     }
 }
 
-// 每帧更新所有无人机编组（由battle.js的updateGame调用）
+// 每帧更新所有无人机编组（由battle.js的updateGame调用，只做攻击/范围检查，移动由rAF自主驱动）
 function updateDroneSquads() {
     for (var si = droneSquads.length - 1; si >= 0; si--) {
         var squad = droneSquads[si];
@@ -1348,8 +1398,11 @@ function updateDroneSquads() {
             // 自动攻击：搜索范围内敌方目标
             droneAutoAttack(drone, squad);
 
-            // 移动无人机
-            updateDroneMovement(drone, squad);
+            // 确保移动循环在运行
+            if (drone.status === 'moving' && !drone._moveLoopActive) {
+                drone._moveLoopActive = true;
+                requestAnimationFrame(function() { droneMoveLoop(drone, squad); });
+            }
         }
 
         if (allDead) {
@@ -1378,26 +1431,43 @@ function checkDroneRangeLimit(drone, squad) {
     }
 }
 
-// 无人机移动逻辑
-function updateDroneMovement(drone, squad) {
-    if (drone.status !== 'moving' || !drone.targetX || !drone.targetY) return;
+// 查找无人机所属编组
+function findDroneSquad(drone) {
+    for (var i = 0; i < droneSquads.length; i++) {
+        for (var j = 0; j < droneSquads[i].drones.length; j++) {
+            if (droneSquads[i].drones[j].id === drone.id) return droneSquads[i];
+        }
+    }
+    return null;
+}
+
+// 无人机持续移动循环（rAF驱动，与侦察/攻击机一致）
+function droneMoveLoop(drone, squad) {
+    if (drone.health <= 0) {
+        drone._moveLoopActive = false;
+        return;
+    }
+    if (drone.status !== 'moving' || drone.targetX == null || drone.targetY == null) {
+        drone._moveLoopActive = false;
+        return;
+    }
+
+    var sq = squad || findDroneSquad(drone);
 
     var dx = drone.targetX - drone.x;
     var dy = drone.targetY - drone.y;
     var dist = Math.sqrt(dx * dx + dy * dy);
 
-    if (dist < 2) {
+    if (dist < 1.5) {
         drone.status = 'idle';
         drone.x = drone.targetX;
         drone.y = drone.targetY;
+        drone._moveLoopActive = false;
         updateDroneDisplay(drone);
-
-        // 检查整个编队是否到达目标
-        checkSquadArrival(squad);
+        if (sq) checkSquadArrival(sq);
         return;
     }
 
-    // 使用最优路径计算（简化版：检测直接路径安全性）
     var threats = mockEnemyUnits.filter(function(e) {
         return e.visible && e.health > 0 && e.attackRange > 0;
     }).map(function(e) {
@@ -1405,23 +1475,33 @@ function updateDroneMovement(drone, squad) {
     });
 
     var moveSpeed = drone.speed;
-    var step = Math.min(moveSpeed, dist);
+    var step = Math.min(moveSpeed * 0.25, dist);
 
     if (threats.length > 0 && !isPathSafe(drone.x, drone.y, drone.targetX, drone.targetY, threats)) {
-        // 路径有威胁，尝试绕行
+        // 单方向全速绕行，角度搜索已通过强化惩罚确保偏向目标
         var safeAngle = findSafeDroneAngle(drone, drone.targetX, drone.targetY, threats);
-        drone.x += Math.cos(safeAngle) * step * 0.7;
-        drone.y += Math.sin(safeAngle) * step * 0.7;
+        drone.x += Math.cos(safeAngle) * step;
+        drone.y += Math.sin(safeAngle) * step;
     } else {
         drone.x += (dx / dist) * step;
         drone.y += (dy / dist) * step;
     }
 
-    // 边界裁剪
     drone.x = Math.max(10, Math.min(590, drone.x));
     drone.y = Math.max(10, Math.min(390, drone.y));
 
     updateDroneDisplay(drone);
+    requestAnimationFrame(function() { droneMoveLoop(drone, sq); });
+}
+
+// 启动/重启无人机移动（供 assignSquadFormation 等调用）
+function startDroneMovement(drone, squad) {
+    drone._moveLoopActive = false;
+    if (drone.status === 'moving' && drone.health > 0) {
+        drone._moveLoopActive = true;
+        var sq = squad || findDroneSquad(drone);
+        requestAnimationFrame(function() { droneMoveLoop(drone, sq); });
+    }
 }
 
 // 无人机安全绕行角度搜索
@@ -1445,8 +1525,8 @@ function findSafeDroneAngle(drone, targetX, targetY, threats) {
             }
         }
 
-        // 偏向指向目标的角度
-        var anglePenalty = Math.abs(a) * 5;
+        // 增大偏离目标的角度惩罚，避免蜂群绕行过远而徘徊
+        var anglePenalty = Math.abs(a) * 20;
 
         if (risk + anglePenalty < minRisk) {
             minRisk = risk + anglePenalty;
@@ -1562,7 +1642,7 @@ function searchAndAttackTargets(squad) {
         // 搜索范围内无目标，保持攻击状态并扩大搜索
         squad.command = 'attack';
         // 在攻击点周围散开巡逻
-        assignScatterFormation(squad, cx, cy, 40);
+        assignScatterFormation(squad, cx, cy, 24);
         addBattleLog('蜂群编组 ' + squad.id + ' 攻击位置未发现目标，散开搜索中');
     } else {
         // 分配无人机攻击不同目标（最优分配）
@@ -1582,6 +1662,7 @@ function assignScatterFormation(squad, cx, cy, radius) {
         aliveDrones[i].targetX = cx + Math.cos(angle) * radius;
         aliveDrones[i].targetY = cy + Math.sin(angle) * radius;
         aliveDrones[i].status = 'moving';
+        startDroneMovement(aliveDrones[i], squad);
     }
 }
 
@@ -1625,11 +1706,12 @@ function assignDronesToTargets(drones, enemies) {
         for (var gd = 0; gd < group.drones.length; gd++) {
             var drone = group.drones[gd];
             // 围绕目标展开
-            var angleOffset = (gd - (group.drones.length - 1) / 2) * (Math.PI / 6);
-            var surroundDist = drone.attackRange * 0.7;
+            var angleOffset = (gd - (group.drones.length - 1) / 2) * (Math.PI / 8);
+            var surroundDist = drone.attackRange * 0.5;
             drone.targetX = enemy.x + Math.cos(angleOffset) * surroundDist;
             drone.targetY = enemy.y + Math.sin(angleOffset) * surroundDist;
             drone.status = 'moving';
+            startDroneMovement(drone, null);
         }
     }
 }
@@ -1663,6 +1745,7 @@ function handleSquadRecallArrival(squad) {
 
 // 编组机动指令：长机引领，僚机V形跟随并保护长机
 function setFormationMoveCommand(formation, targetX, targetY) {
+    friendlyCommandIssued = true;
     formation.command = 'move';
     formation.targetX = targetX;
     formation.targetY = targetY;
@@ -1687,6 +1770,7 @@ function setFormationMoveCommand(formation, targetX, targetY) {
 
 // 编组攻击指令（primaryTarget 为可选的具体敌方目标）
 function setFormationAttackCommand(formation, targetX, targetY, primaryTarget) {
+    friendlyCommandIssued = true;
     formation.command = 'attack';
     formation.targetX = targetX;
     formation.targetY = targetY;
@@ -1759,7 +1843,7 @@ function dispatchNextRecallUnit(formation) {
     }
 
     var baseX = 70 + unit.id * 6;
-    var baseY = 370;
+    var baseY = 340;
 
     unit.status = 'recall';
     unit.isRecalling = true;
@@ -1774,15 +1858,15 @@ function updateFormationPositions(formation) {
     var lead = formation.leadUnit;
     if (!lead || lead.health <= 0) return;
 
-    var targetX = formation.targetX || lead.x;
-    var targetY = formation.targetY || lead.y;
+    var targetX = formation.targetX != null ? formation.targetX : lead.x;
+    var targetY = formation.targetY != null ? formation.targetY : lead.y;
 
     // 计算行进方向
     var dx = targetX - lead.x;
     var dy = targetY - lead.y;
     var angle = Math.atan2(dy, dx);
 
-    var spacing = formation.formationSpacing || 25;
+    var spacing = formation.formationSpacing || 16;
 
     formation.wingmen.forEach(function(w, index) {
         if (w.health <= 0) return;
@@ -1865,7 +1949,7 @@ function updateFormationMovement(formation) {
         targetX = formation.targetX;
         targetY = formation.targetY;
     }
-    if (!targetX || !targetY) return;
+    if (targetX == null || targetY == null) return;
 
     // 长机向目标移动
     var dx = targetX - lead.x;
@@ -1918,7 +2002,7 @@ function updateFormationMovement(formation) {
     // 僚机移向编队位置 + 自动保护长机
     formation.wingmen.forEach(function(w) {
         if (w.health <= 0) return;
-        if (!w._formationTargetX || !w._formationTargetY) return;
+        if (w._formationTargetX == null || w._formationTargetY == null) return;
 
         var wdx = w._formationTargetX - w.x;
         var wdy = w._formationTargetY - w.y;
