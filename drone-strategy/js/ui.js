@@ -1,15 +1,11 @@
 // ============================================================
-// ui.js — 页面导航、规则说明、战报分析（第7个加载）
+// ui.js — 页面导航、规则说明、帮助弹窗、战报分析（第7个加载）
 // ============================================================
 
 // --- 页面切换 ---
 
 function goBack() {
-    if (window.history.length > 1) {
-        window.history.back();
-    } else {
-        window.location.href = '../index.html';
-    }
+    window.location.href = '../index.html#grow';
 }
 
 function showPage(pageId) {
@@ -51,10 +47,6 @@ function setupNavigation() {
             gameInterval = null;
         }, 100);
     });
-    document.getElementById('nav-science').addEventListener('click', (e) => {
-        e.preventDefault();
-        showPage('page-science');
-    });
     document.getElementById('nav-report').addEventListener('click', (e) => {
         e.preventDefault();
         showPage('page-report');
@@ -84,6 +76,12 @@ function showRule(index) {
     });
 }
 
+// --- 帮助弹窗 ---
+
+function toggleHelp() {
+    document.getElementById('help-modal').classList.toggle('active');
+}
+
 // --- 战报分析 ---
 
 function loadReports() {
@@ -111,6 +109,27 @@ function showReport(id) {
     const battle = mockBattles.find(b => b.id === id);
     if (!battle) return;
 
+    const timelineHtml = battle.timeline && battle.timeline.length
+        ? battle.timeline.map(item => `
+                <div class="timeline-item">
+                    <div class="time">${item.time}</div>
+                    <div class="event">${item.event}</div>
+                </div>
+            `).join('')
+        : '<div class="timeline-item"><div class="time">--</div><div class="event">暂无时间线数据，建议在完整对局后查看动态生成战报。</div></div>';
+
+    const strengths = battle.analysis && battle.analysis.strengths && battle.analysis.strengths.length
+        ? battle.analysis.strengths.map(p => `<div class="point">${p}</div>`).join('')
+        : '<div class="point">已完成基础作战流程，可继续优化节奏控制与目标选择。</div>';
+
+    const weaknesses = battle.analysis && battle.analysis.weaknesses && battle.analysis.weaknesses.length
+        ? battle.analysis.weaknesses.map(p => `<div class="point">${p}</div>`).join('')
+        : '<div class="point">当前对局未记录明显短板，可结合时间线继续复盘。</div>';
+
+    const suggestions = battle.analysis && battle.analysis.suggestions && battle.analysis.suggestions.length
+        ? battle.analysis.suggestions.map(p => `<div class="point">${p}</div>`).join('')
+        : '<div class="point">建议继续强化侦察优先、编组协同与返航补给节奏。</div>';
+
     const detail = document.getElementById('report-detail');
     detail.innerHTML = `
         <h2>${battle.mission}</h2>
@@ -120,104 +139,26 @@ function showReport(id) {
             <div class="summary-card"><div class="summary-value">${battle.lossRate}%</div><div class="summary-label">我方战损率</div></div>
             <div class="summary-card"><div class="summary-value">${battle.score}</div><div class="summary-label">综合评分</div></div>
         </div>
+        <div class="analysis-section">
+            <h4>战报结论</h4>
+            <div class="point">${battle.summary || '本局对战已形成基础复盘结论。'}</div>
+            <div class="point">对局时间：${battle.time} ｜ 持续时长：${battle.duration}</div>
+        </div>
         <h3>作战时间线</h3>
         <div class="timeline">
-            ${battle.timeline.map(item => `
-                <div class="timeline-item">
-                    <div class="time">${item.time}</div>
-                    <div class="event">${item.event}</div>
-                </div>
-            `).join('')}
+            ${timelineHtml}
         </div>
         <div class="analysis-section">
             <h4>优势总结</h4>
-            ${battle.analysis.strengths.map(p => `<div class="point">${p}</div>`).join('')}
+            ${strengths}
         </div>
         <div class="analysis-section">
             <h4>问题指出</h4>
-            ${battle.analysis.weaknesses.map(p => `<div class="point">${p}</div>`).join('')}
+            ${weaknesses}
         </div>
         <div class="analysis-section">
             <h4>优化建议</h4>
-            ${battle.analysis.suggestions.map(p => `<div class="point">${p}</div>`).join('')}
+            ${suggestions}
         </div>
     `;
-}
-
-// ============================================================
-// 装备百科 — 无人机专题
-// ============================================================
-
-function initDroneScienceNav() {
-    const navBox = document.getElementById('scienceNavList');
-    const contentBox = document.getElementById('scienceContent');
-    if (!navBox || !contentBox) return;
-
-    if (typeof DRONE_SCIENCE_DATA === 'undefined') {
-        navBox.innerHTML = '<div style="color:#8892b0;font-size:12px;padding:12px;">数据加载中…</div>';
-        return;
-    }
-
-    DRONE_SCIENCE_DATA.forEach((item, index) => {
-        const navItem = document.createElement('div');
-        navItem.className = 'science-nav-item' + (index === 0 ? ' active' : '');
-        navItem.textContent = item.name;
-        navItem.dataset.id = item.id;
-        navItem.addEventListener('click', () => {
-            document.querySelectorAll('.science-nav-item').forEach(el => el.classList.remove('active'));
-            navItem.classList.add('active');
-            renderDroneScienceContent(item, contentBox);
-        });
-        navBox.appendChild(navItem);
-    });
-
-    renderDroneScienceContent(DRONE_SCIENCE_DATA[0], contentBox);
-}
-
-function renderDroneScienceContent(data, container) {
-    var html = '<div class="archive-eyebrow">无人机档案 · 装备笔记</div>';
-    html += '<div class="science-title">' + escapeHtmlSci(data.name) + '</div>';
-
-    if (data.image) {
-        html += '<div class="science-image-box"><img src="assets/images/' + escapeHtmlSci(data.image) + '" alt="' + escapeHtmlSci(data.name) + '" onerror="this.onerror=null;this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';"><div class="image-placeholder"><span>图片资源：' + escapeHtmlSci(data.image) + '<br>请将对应配图放入 assets/images 文件夹</span></div></div>';
-    }
-
-    html += '<div class="science-summary">' + data.summary + '</div>';
-
-    if (data.models && data.models.length) {
-        html += '<div class="science-section"><h4>代表型号</h4>';
-        data.models.forEach(function(model) {
-            html += '<div class="model-card"><div class="model-name">' + escapeHtmlSci(model.name) + '</div><div class="model-desc">' + escapeHtmlSci(model.desc) + '</div></div>';
-        });
-        html += '</div>';
-    }
-
-    if (data.sections) {
-        data.sections.forEach(function(section) {
-            html += '<div class="science-section"><h4>' + escapeHtmlSci(section.title) + '</h4><p>' + escapeHtmlSci(section.content) + '</p></div>';
-        });
-    }
-
-    if (data.params && data.params.length) {
-        html += '<div class="science-section"><h4>技术参数</h4><div class="science-params">';
-        data.params.forEach(function(param) {
-            html += '<div class="param-card"><div class="label">' + escapeHtmlSci(param.label) + '</div><div class="value">' + escapeHtmlSci(param.value) + '</div></div>';
-        });
-        html += '</div></div>';
-    }
-
-    container.innerHTML = html;
-}
-
-function escapeHtmlSci(value) {
-    return String(value == null ? '' : value).replace(/[&<>"']/g, function(ch) {
-        return {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[ch];
-    });
-}
-
-// Initialize science nav on load
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initDroneScienceNav);
-} else {
-    setTimeout(initDroneScienceNav, 100);
 }

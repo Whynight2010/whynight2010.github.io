@@ -19,7 +19,7 @@ window.addEventListener('error', function(e) {
     <div class="app">
         <!-- 顶部导航栏 56px -->
         <div class="topbar">
-            <a class="back-home-btn" href="../index.html" aria-label="返回主页">← 返回主页</a>
+            <button type="button" class="top-action home-action" id="btnBackHome" aria-label="返回上一级">← 返回上一级</button>
             <div class="brand-mark">
                 <span class="brand-dot"></span>
                 <div>
@@ -29,7 +29,7 @@ window.addEventListener('error', function(e) {
             </div>
             <div class="tab-nav">
                 <div class="tab-btn active" data-tab="combat"><span>防空推演</span><em>城市要地</em></div>
-                <div class="tab-btn" data-tab="science"><span>装备百科</span><em>公开资料</em></div>
+                <div class="tab-btn" data-tab="archive"><span>战报档案</span><em>历史复盘</em></div>
             </div>
             <div class="top-actions">
                 <button type="button" class="top-action audio-toggle" aria-label="静音"><span></span> 静音</button>
@@ -52,6 +52,7 @@ window.addEventListener('error', function(e) {
                                 <div class="equip-item" data-type="gun">⊙ 近防炮 <span>近程末端拦截</span></div>
                                 <div class="equip-item" data-type="missile">△ 防空导弹 <span>区域防空拦截</span></div>
                                 <div class="equip-item" data-type="radar">◈ 预警雷达 <span>空情预警探测</span></div>
+                                <div class="equip-item" data-type="ew">◇ 电子对抗 <span>压制诱偏支援</span></div>
                             </div>
                             <div class="cancel-section">
                                 <button id="btnSelectMode">✕ 取消部署</button>
@@ -78,12 +79,14 @@ window.addEventListener('error', function(e) {
                         <div class="panel-divider"></div>
 
                         <div class="panel-section">
-                            <div class="section-title">防御阵型</div>
-                            <button id="btnAuto1" class="btn-plan">◎ 基础防御</button>
-                            <button id="btnAuto2" class="btn-plan">◈ 均衡防御</button>
-                            <button id="btnAuto3" class="btn-plan">◇ 反隐身防御</button>
-                            <button id="btnAuto4" class="btn-plan">◉ 密集火力</button>
+                            <div class="section-title">防守模式</div>
+                            <div class="mode-tab-group" id="defenseModeTabs">
+                                <button type="button" class="mode-tab active" data-city-count="1">单城市</button>
+                                <button type="button" class="mode-tab" data-city-count="2">双城市</button>
+                                <button type="button" class="mode-tab" data-city-count="3">三城市</button>
+                            </div>
                         </div>
+
                     </div>
 
                     <!-- 中央画布 -->
@@ -102,7 +105,7 @@ window.addEventListener('error', function(e) {
                             <label class="switch-item"><input type="checkbox" id="toggleRange" checked> 显示射程范围</label>
                         </div>
                         <div class="canvas-hint">
-                            左键部署装备 · 右键删除 · 拖动调整 · 1/2/3 切换装备 · 空格开始 · V 切换倍速
+                            左键部署装备 · 右键删除 · 拖动调整 · 1/2/3/4 切换装备 · 空格开始 · V 切换倍速
                         </div>
                     </div>
 
@@ -111,6 +114,8 @@ window.addEventListener('error', function(e) {
                         <div class="sub-tab-nav">
                             <div class="sub-tab-btn active" data-subtab="stats">战斗记录</div>
                             <div class="sub-tab-btn" data-subtab="enemy-info">目标情报</div>
+                            <div class="sub-tab-btn" data-subtab="terrain-info">地形</div>
+                            <div class="sub-tab-btn" data-subtab="battle-log">日志</div>
                         </div>
 
                         <div class="sub-tab-content active" id="subtab-stats">
@@ -131,21 +136,37 @@ window.addEventListener('error', function(e) {
                             <div class="section-title">威胁情报</div>
                             <div class="enemy-info-list" id="enemyInfoList"></div>
                         </div>
+
+                        <div class="sub-tab-content" id="subtab-terrain-info">
+                            <div class="section-title">地形规则</div>
+                            <div class="terrain-info-list" id="terrainInfoList"></div>
+                        </div>
+
+                        <div class="sub-tab-content" id="subtab-battle-log">
+                            <div class="section-title">战斗日志</div>
+                            <div class="battle-log-list" id="battleLogList"></div>
+                        </div>
                     </div>
 
                 </div><!-- /.combat-layout -->
                 <div class="equip-tooltip" id="equipTooltip"></div>
             </div><!-- /#combat -->
 
-            <!-- ====== 国防科普 ====== -->
-            <div class="tab-content" id="science">
-                <div class="science-layout">
-                    <div class="science-side">
-                        <div class="section-title">装备章节</div>
-                        <div class="science-nav-list" id="scienceNavList"></div>
+            <!-- ====== 战报档案 ====== -->
+            <div class="tab-content" id="archive">
+                <div class="science-layout archive-layout">
+                    <div class="science-side archive-side">
+                        <div class="archive-side-head">
+                            <div>
+                                <div class="section-title">战报索引</div>
+                                <div class="archive-count" id="reportArchiveCount">0 份归档</div>
+                            </div>
+                            <button type="button" class="archive-clear-btn" id="btnClearReports">清空</button>
+                        </div>
+                        <div class="science-nav-list report-archive-list" id="reportArchiveList"></div>
                     </div>
-                    <div class="science-main">
-                        <div class="science-content" id="scienceContent"></div>
+                    <div class="science-main archive-main">
+                        <div class="science-content archive-content" id="reportArchiveContent"></div>
                     </div>
                 </div>
             </div>
@@ -153,7 +174,52 @@ window.addEventListener('error', function(e) {
         </div><!-- /.main-area -->
     </div><!-- /.app -->
 
-    <script src="js/scienceData.js"></script>
+    <div class="tutorial-guide light" id="tutorialGuide" role="dialog" aria-modal="true" aria-labelledby="tutorialTitle">
+        <div class="tutorial-panel">
+            <button type="button" class="tutorial-close" id="btnCloseTutorial" aria-label="关闭操作指南">×</button>
+            <div class="tutorial-eyebrow">OPERATION GUIDE</div>
+            <h2 id="tutorialTitle">欢迎来到城市防空模拟推演</h2>
+            <p class="tutorial-intro">你将负责保卫城市要地，合理部署雷达、防空导弹、近程火力和电子对抗设备，拦截不断来袭的空中目标。</p>
+
+            <div class="tutorial-grid">
+                <div class="tutorial-card">
+                    <span>01</span>
+                    <strong>选择装备</strong>
+                    <p>在左侧装备面板中选择雷达、导弹、近程火力或电子对抗设备。</p>
+                </div>
+                <div class="tutorial-card">
+                    <span>02</span>
+                    <strong>部署阵地</strong>
+                    <p>点击战场地图上的合适位置完成部署，不同装备有不同射程、价格和用途。</p>
+                </div>
+                <div class="tutorial-card">
+                    <span>03</span>
+                    <strong>开始推演</strong>
+                    <p>点击“开始推演”后，敌方目标会按波次来袭，系统会自动进行探测、拦截和结算。</p>
+                </div>
+                <div class="tutorial-card">
+                    <span>04</span>
+                    <strong>波次间调整</strong>
+                    <p>每波结束后会进入短暂部署期，你可以补充或调整装备，应对下一波攻击。</p>
+                </div>
+            </div>
+
+            <div class="tutorial-tip">
+                <strong>实用提示</strong>
+                <ul>
+                    <li>雷达负责发现目标，导弹适合中远程拦截，近程火力适合补漏。</li>
+                    <li>电子对抗设备可以削弱部分敌方目标，缓解防线压力。</li>
+                    <li>多要地模式下，要注意每座要地周边都需要基本防护。</li>
+                    <li>如果敌人经常从某个方向突破，下一波应优先加强该方向。</li>
+                </ul>
+            </div>
+
+            <button type="button" class="tutorial-start btn-primary" id="btnStartTutorial">开始推演</button>
+        </div>
+    </div>
+
+    <button type="button" class="tutorial-help-button" id="btnOpenTutorial" title="查看玩法" aria-label="查看玩法">?</button>
+
     <script src="js/utils.js"></script>
     <script src="js/data.js"></script>
     <script src="js/map.js"></script>
@@ -165,9 +231,3 @@ window.addEventListener('error', function(e) {
     <script src="js/main.js"></script>
 </body>
 </html>
-
-
-
-
-
-

@@ -4,6 +4,7 @@
 // hexToRgba 已迁移至 utils.js
 
 const EffectModule = {
+    // 答辩讲法：EffectModule 只负责视觉效果，比如爆炸、命中闪光、弹道线和浮动文字，不决定胜负。
     particles: [],
     floatingTexts: [],
     explosions: [],
@@ -11,6 +12,7 @@ const EffectModule = {
 
     // 添加爆炸效果
     addExplosion(x, y, color, size) {
+        // 答辩讲法：拦截成功或突防时会调用这里，用粒子和冲击波做视觉反馈。
         const count = Math.min(Math.floor(size * 2), 12);
         for (let i = 0; i < count; i++) {
             const angle = Math.random() * Math.PI * 2;
@@ -99,6 +101,7 @@ const EffectModule = {
 
     // 更新并绘制所有特效
     updateAndDraw(ctx) {
+        // 答辩讲法：每帧更新粒子寿命，寿命归零就删除，避免特效越来越多导致卡顿。
         // 粒子上限：超过 120 个时提前结束旧粒子
         if (this.particles.length > 120) {
             const excess = this.particles.length - 120;

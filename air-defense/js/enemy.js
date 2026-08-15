@@ -2,6 +2,7 @@
 // 增强：自适应学习路径、薄弱点分析、波次间10秒部署期、无人机蜂群行为
 
 const EnemyModule = {
+    // 答辩讲法：EnemyModule 管来袭目标，包括生成方向、飞行路线、波次推进、突防判断和击毁计分。
     list: [],
     waveIndex: 0,
     waveTimer: 0,
@@ -34,13 +35,15 @@ const EnemyModule = {
         this._justSpawnedNextWave = false;
         this.spawnRunId++;
         this._clearSpawnTimers();
+        if (typeof BattleLog !== 'undefined') BattleLog.reset();
     },
 
     // 生成单个敌人（增强：支持蜂群分散生成、自适应路径策略）
+    // 答辩讲法：这里不是简单从固定位置出现，而是从上下左右四个方向随机进入，还会优先选择之前防线薄弱的方向。
     spawnEnemy(type, targetX, targetY, options) {
         options = options || {};
-        const cx = targetX !== undefined ? targetX : CONFIG.centerX;
-        const cy = targetY !== undefined ? targetY : CONFIG.centerY;
+        const cx = options.targetX !== undefined ? options.targetX : (targetX !== undefined ? targetX : CONFIG.centerX);
+        const cy = options.targetY !== undefined ? options.targetY : (targetY !== undefined ? targetY : CONFIG.centerY);
         const w = MapModule.canvas.width;
         const h = MapModule.canvas.height;
         const margin = 30;
@@ -73,6 +76,8 @@ const EnemyModule = {
         const dist = Math.hypot(dx, dy);
 
         // 路径策略（多样化）
+        // direct 代表直线突防，weave/spiral/evasive/flanker 代表机动、迂回或侧翼接近。
+        // 这些路径不是精确军事模型，只是为了让观众看到“不同目标突防方式不同”。
         const pathRoll = Math.random();
         const learningFactor = Math.min(this.breachedSectors.length * 0.1, 0.4);
         let pathType;
@@ -87,6 +92,12 @@ const EnemyModule = {
         } else if (type === 'ballistic') {
             // 弹道导弹路径更直接
             pathType = Math.random() < 0.7 ? 'direct' : 'weave';
+        } else if (type === 'hypersonic') {
+            pathType = Math.random() < 0.7 ? 'evasive' : 'glide';
+        } else if (enemyType.terrainProfile === 'terrainFollow') {
+            pathType = Math.random() < 0.55 ? 'terrain-follow' : 'flanker';
+        } else if (enemyType.jammer || enemyType.decoy) {
+            pathType = Math.random() < 0.65 ? 'support' : 'weave';
         } else if (type === 'stealth') {
             // 隐身目标更狡猾
             pathType = Math.random() < 0.5 ? 'evasive' : 'flanker';
@@ -125,6 +136,15 @@ const EnemyModule = {
             stealth: enemyType.stealth || false,
             stealthDetected: false,
             isSwarm: isSwarm,
+            altitude: enemyType.altitude || 'medium',
+            signature: enemyType.signature === undefined ? 0.5 : enemyType.signature,
+            maneuver: enemyType.maneuver || 0,
+            jamResist: enemyType.jamResist || 0,
+            armor: enemyType.armor || 0,
+            terrainProfile: enemyType.terrainProfile || 'direct',
+            jammer: enemyType.jammer || false,
+            decoy: enemyType.decoy || false,
+            jammed: 0,
             pathType: pathType,
             weavePhase: Math.random() * Math.PI * 2,
             weaveAmp: Math.random() * 20 + 5,
@@ -136,13 +156,33 @@ const EnemyModule = {
             alive: true,
             reachedTarget: false,
             trail: [],
-            side: side
+            side: side,
+            targetId: options.targetId || 'city-1',
+            targetName: options.targetName || '城市要地',
+            attackRole: options.role || 'main',
+            waveNumber: options.waveNumber || this.waveIndex || 1,
+            logName: options.logName || (enemyType.name + '-' + (options.serial || (this.totalSpawned + 1)))
         });
 
+        if (typeof BattleLog !== 'undefined') {
+            const spawned = this.list[this.list.length - 1];
+            BattleLog.add('spawn', spawned.logName + ' 已录入战场情报', {
+                type,
+                side,
+                pathType,
+                targetId: spawned.targetId,
+                targetName: spawned.targetName,
+                role: spawned.attackRole,
+                waveNumber: spawned.waveNumber,
+                unitName: spawned.logName,
+                action: (spawned.attackRole === 'feint' ? '执行佯攻，目标 ' : '执行主攻，目标 ') + spawned.targetName
+            });
+        }
         return this.list[this.list.length - 1];
     },
 
     // 启动波次
+    // 答辩讲法：点击开始推演时会重置敌人、计分和薄弱点记录，从第一波重新开始。
     startWaves() {
         this.waveIndex = 0;
         this.waveTimer = 0;
@@ -156,33 +196,55 @@ const EnemyModule = {
         this.pendingSpawns = 0;
         this.spawnRunId++;
         this._clearSpawnTimers();
+        if (typeof rebuildWaves === 'function') {
+            rebuildWaves({
+                seed: Date.now(),
+                breaches: this.breachedSectors,
+                killStats: CONFIG.killStats,
+                sites: typeof getDefenseSites === 'function' ? getDefenseSites() : undefined,
+                equipment: EquipModule.list
+            });
+        }
+        if (typeof BattleLog !== 'undefined') {
+            BattleLog.reset();
+            BattleLog.add('system', '推演开始，敌方将按权重动态出击', { waves: getWaves().length });
+        }
         CONFIG.difficulty = 1;
         CONFIG.interWavePhase = false;
     },
 
     update() {
+        // 答辩讲法：update 是敌人模块的主逻辑，每帧处理波次、隐身探测、敌人移动和突防判断。
         // 【重要】波次间部署阶段：必须放在 isRunning 检查之前
+        CONFIG.logicFrame = (CONFIG.logicFrame || 0) + 1;
         if (CONFIG.interWavePhase) {
-            CONFIG.interWaveTimer++;
-            if (CONFIG.interWaveTimer >= CONFIG.interWaveDuration) {
-                // 10秒到，自动开始下一波
-                CONFIG.interWavePhase = false;
-                CONFIG.interWaveTimer = 0;
-                Game.isRunning = true;
-                this._spawnNextWave();
-            }
+            this.updateInterWaveCountdown();
             return;
         }
 
-        // 波次管理
-        if (this.waveActive && this.waveIndex < WAVES.length) {
-            const wave = WAVES[this.waveIndex];
+        // 波次管理：根据 data.js 里的 WAVES 顺序放出敌人，最后一波清空后弹出战后总结。
+        const waves = getWaves();
+        if (this.waveActive && this.waveIndex > 0 && this.waveIndex < waves.length && this.list.length === 0 && this.pendingSpawns === 0 && !CONFIG.interWavePhase && !this.waveComplete && !this._justSpawnedNextWave) {
+            this._triggerInterWave();
+            return;
+        }
+
+        if (this.waveActive && this.waveIndex < waves.length) {
+            const wave = waves[this.waveIndex];
             this.waveTimer++;
 
             if (this.waveTimer === 1) {
-                UIModule.showWaveAlert(wave.label, wave.difficulty, this.waveIndex + 1, WAVES.length);
+                UIModule.showWaveAlert(wave.label, wave.difficulty, this.waveIndex + 1, waves.length);
                 CONFIG.difficulty = wave.difficulty;
                 this.waveComplete = false;
+                if (typeof BattleLog !== 'undefined') {
+                    BattleLog.add('wave', '第' + (this.waveIndex + 1) + '波预警：' + wave.label, {
+                        difficulty: wave.difficulty,
+                        waveNumber: this.waveIndex + 1,
+                        unitName: wave.label,
+                        action: '进入预警阶段'
+                    });
+                }
             }
 
             if (this.waveTimer >= wave.delay && this.list.length === 0) {
@@ -190,13 +252,14 @@ const EnemyModule = {
                 this.waveIndex++;
                 this.waveTimer = 0;
             }
-        } else if (this.waveActive && this.waveIndex >= WAVES.length && this.list.length === 0 && this.pendingSpawns === 0 && !this.waveComplete) {
+        } else if (this.waveActive && this.waveIndex >= waves.length && this.list.length === 0 && this.pendingSpawns === 0 && !this.waveComplete) {
             // 最终波次完成
             this.waveComplete = true;
             this.waveActive = false;
             CONFIG.demoMode = false;
             Game.isRunning = false;
             document.getElementById('btnStart').textContent = '▶ 开始推演';
+            if (typeof BattleLog !== 'undefined') BattleLog.add('system', '全部波次结束，生成战报档案', {});
             UIModule.showBattleReport();
         }
 
@@ -204,7 +267,10 @@ const EnemyModule = {
         if (this._justSpawnedNextWave && this.list.length > 0) {
             this._justSpawnedNextWave = false;
         }
-        if (this.waveActive && this.waveIndex > 0 && this.waveIndex < WAVES.length && this.list.length === 0 && this.pendingSpawns === 0 && !CONFIG.interWavePhase && !this.waveComplete && !this._justSpawnedNextWave) {
+        if (this._justSpawnedNextWave && this.pendingSpawns === 0 && this.list.length === 0) {
+            this._justSpawnedNextWave = false;
+        }
+        if (this.waveActive && this.waveIndex > 0 && this.waveIndex < waves.length && this.list.length === 0 && this.pendingSpawns === 0 && !CONFIG.interWavePhase && !this.waveComplete && !this._justSpawnedNextWave) {
             this._triggerInterWave();
         }
 
@@ -213,7 +279,7 @@ const EnemyModule = {
         const w = MapModule.canvas.width;
         const h = MapModule.canvas.height;
 
-        // 分析薄弱点：追踪最接近目标的敌人方位
+        // 分析薄弱点：追踪最接近目标的敌人方位，后续波次会更倾向从薄弱方向进攻。
         let closestDist = Infinity;
         for (const e of this.list) {
             if (!e.alive) continue;
@@ -229,15 +295,21 @@ const EnemyModule = {
             }
         }
 
-        // 更新雷达对隐身目标的探测
+        // 更新雷达对隐身目标的探测：隐身目标默认更难发现，进入雷达有效范围后才显示清楚。
         const radars = EquipModule.list.filter(e => e.type === 'radar');
         for (const e of this.list) {
             if (!e.alive) continue;
             if (e.stealth && !e.stealthDetected) {
                 for (const r of radars) {
                     const d = Math.hypot(e.x - r.x, e.y - r.y);
-                    if (r.modelId === 'radar_jy27' && d < r.range * 0.5) { e.stealthDetected = true; break; }
-                    if (r.modelId === 'radar_fc' && d < r.range * 0.25) { e.stealthDetected = true; break; }
+                    const terrainMod = typeof getTerrainCombatModifiers === 'function' ? getTerrainCombatModifiers(e.x, e.y, e.type) : { detection: 1 };
+                    const antiStealth = r.antiStealth || (r.modelId === 'radar_jy27' ? 0.42 : 0.16);
+                    const detectionRange = r.range * (0.22 + antiStealth + e.signature * 0.35) * terrainMod.detection;
+                    if (d < detectionRange) {
+                        e.stealthDetected = true;
+                        if (typeof BattleLog !== 'undefined') BattleLog.add('detect', ENEMY_TYPES[e.type].name + '被雷达捕获', { radar: r.name });
+                        break;
+                    }
                 }
             }
         }
@@ -260,8 +332,10 @@ const EnemyModule = {
                 if (e.trail.length > 20) e.trail.shift();
             }
 
-            // 到达目标判定
-            const distToCenter = Math.hypot(e.x - e.finalTargetX || cx, e.y - e.finalTargetY || cy);
+            // 到达目标判定：敌人进入保护圈就算突防，并记录突防方向用于战后分析。
+            const tx = e.finalTargetX || cx;
+            const ty = e.finalTargetY || cy;
+            const distToCenter = Math.hypot(e.x - tx, e.y - ty);
             if (distToCenter < CONFIG.protectRadius && !e.reachedTarget) {
                 e.reachedTarget = true;
                 // 记录突防方位
@@ -275,11 +349,23 @@ const EnemyModule = {
                 if (!this.breachedSectors.includes(sector)) {
                     this.breachedSectors.push(sector);
                 }
+                if (e.targetId) {
+                    CONFIG.cityThreatMemory[e.targetId] = (CONFIG.cityThreatMemory[e.targetId] || 0) + 1;
+                }
                 CONFIG.lastBreakthroughPos = { x: e.x, y: e.y };
 
                 EffectModule.addExplosion(e.x, e.y, '#ff0000', 3);
                 EffectModule.addFloatingText(e.x, e.y - 20, '⚠ 突防！', '#ff4444');
+                if (typeof BattleLog !== 'undefined') BattleLog.add('breach', (e.logName || ENEMY_TYPES[e.type].name) + ' 突破保护圈', {
+                    sector,
+                    waveNumber: e.waveNumber || this.waveIndex,
+                    unitName: e.logName || ENEMY_TYPES[e.type].name,
+                    action: '突破保护圈'
+                });
                 UIModule.onEnemyBreakthrough();
+                e.alive = false;
+                this.list.splice(i, 1);
+                continue;
             }
 
             // 超出画布移除
@@ -305,28 +391,68 @@ const EnemyModule = {
         );
     },
 
+    updateInterWaveCountdown() {
+        CONFIG.interWaveTimer++;
+        if (CONFIG.interWaveTimer >= CONFIG.interWaveDuration) {
+            CONFIG.interWavePhase = false;
+            CONFIG.interWaveTimer = 0;
+            Game.isRunning = true;
+            if (typeof BattleLog !== 'undefined') BattleLog.add('wave', '部署间隙结束，下一波开始', {});
+            this._spawnNextWave();
+        }
+    },
+
     // 【新增】内部：触发波次间暂停
     _triggerInterWave() {
         CONFIG.interWavePhase = true;
         CONFIG.interWaveTimer = 0;
         Game.isRunning = false;
-        const nextWave = WAVES[this.waveIndex];
+        const waves = getWaves();
+        const nextWave = waves[this.waveIndex];
         CONFIG.nextWaveLabel = nextWave ? nextWave.label : '下一波';
-        UIModule.showInterWaveCountdown(this.waveIndex + 1, WAVES.length, CONFIG.nextWaveLabel);
+        if (typeof BattleLog !== 'undefined') BattleLog.add('system', '进入10秒波间部署期', { nextWave: CONFIG.nextWaveLabel });
+        UIModule.showInterWaveCountdown(this.waveIndex + 1, waves.length, CONFIG.nextWaveLabel);
     },
 
     // 【新增】内部：生成波次敌人
+    // 答辩讲法：这里把一波敌人拆成多个定时生成，避免所有目标瞬间同时出现；5倍速时生成间隔也会缩短。
     _spawnWaveEnemies(wave) {
         // 统计本波敌人总数，用于学习型分配
         let totalEnemies = 0;
         wave.enemies.forEach(e => totalEnemies += e.count);
+        const brainPlan = typeof EnemyBrain !== 'undefined' ? EnemyBrain.chooseAttackPlan({
+            waveIndex: Math.max(0, this.waveIndex),
+            sites: typeof getDefenseSites === 'function' ? getDefenseSites() : undefined,
+            equipment: EquipModule.list,
+            breachesByCity: CONFIG.cityThreatMemory,
+            breachedSectors: this.breachedSectors,
+            killStats: CONFIG.killStats,
+            seed: Date.now() + this.waveIndex * 97
+        }) : null;
+        const assignments = brainPlan && brainPlan.assignments && brainPlan.assignments.length
+            ? brainPlan.assignments
+            : wave.enemies.flatMap(e => Array.from({ length: e.count }, () => ({ type: e.type })));
+        totalEnemies = assignments.length;
+        if (typeof BattleLog !== 'undefined') {
+            const desc = this._summarizeAssignments(assignments);
+            const scoreDesc = (brainPlan?.cityScores || [])
+                .map(item => item.name + ':' + item.score)
+                .join(' / ');
+            BattleLog.add('wave', '敌方智能决策：' + desc, {
+                delay: wave.delay,
+                totalEnemies,
+                waveNumber: this.waveIndex + 1,
+                unitName: brainPlan?.doctrine || '敌方编队',
+                action: '依据要地评分' + (scoreDesc ? '（' + scoreDesc + '）' : '') + '，组织' + desc
+            });
+        }
 
         let globalIdx = 0;
         const runId = this.spawnRunId;
-        const spawnInterval = Math.max(80, Math.floor(600 / (CONFIG.simulationSpeed || 1)));
+        const waveNumber = this.waveIndex + 1;
+        const spawnInterval = this.getSpawnIntervalForWave(this.waveIndex, CONFIG.simulationSpeed || 1);
         this.pendingSpawns += totalEnemies;
-        wave.enemies.forEach(e => {
-            for (let i = 0; i < e.count; i++) {
+        assignments.forEach(assignment => {
                 const idx = globalIdx++;
                 const timerId = setTimeout(() => {
                     if (runId === this.spawnRunId && (Game.isRunning || CONFIG.interWavePhase)) {
@@ -335,22 +461,55 @@ const EnemyModule = {
                         if (idx < Math.ceil(totalEnemies * 0.4) && this.breachedSectors.length > 0) {
                             opts.forceSide = this.breachedSectors[idx % this.breachedSectors.length];
                         }
-                        this.spawnEnemy(e.type, undefined, undefined, opts);
+                        if (assignment.forceSide !== undefined) opts.forceSide = assignment.forceSide;
+                        opts.targetX = assignment.targetX;
+                        opts.targetY = assignment.targetY;
+                        opts.targetId = assignment.targetId;
+                        opts.targetName = assignment.targetName;
+                        opts.role = assignment.role;
+                        opts.waveNumber = waveNumber;
+                        opts.serial = idx + 1;
+                        this.spawnEnemy(assignment.type, undefined, undefined, opts);
                         this.totalSpawned++;
                     }
                     this.pendingSpawns = Math.max(0, this.pendingSpawns - 1);
                 }, idx * spawnInterval);
                 this.spawnTimers.push(timerId);
-            }
         });
+    },
+
+    _summarizeAssignments(assignments) {
+        const typeCounts = {};
+        const targetCounts = {};
+        (assignments || []).forEach(item => {
+            const typeName = ENEMY_TYPES[item.type]?.name || item.type || '未知目标';
+            const targetName = item.targetName || '城市要地';
+            typeCounts[typeName] = (typeCounts[typeName] || 0) + 1;
+            targetCounts[targetName] = (targetCounts[targetName] || 0) + 1;
+        });
+        const types = Object.entries(typeCounts)
+            .map(([name, count]) => name + 'x' + count)
+            .join(' / ');
+        const targets = Object.entries(targetCounts)
+            .map(([name, count]) => name + ' ' + count)
+            .join('，');
+        return (targets ? '目标分配：' + targets + '；' : '') + (types || '未知编队');
+    },
+
+    getSpawnIntervalForWave(waveIndex, speed) {
+        const base = 920;
+        const reduction = Math.max(0, waveIndex || 0) * 58;
+        const interval = Math.max(260, base - reduction);
+        return Math.max(70, Math.floor(interval / Math.max(1, speed || 1)));
     },
 
     // 【新增】内部：生成下一波
     _spawnNextWave() {
-        if (this.waveIndex < WAVES.length) {
+        const waves = getWaves();
+        if (this.waveIndex < waves.length) {
             this.waveTimer = 0;
             // 立即生成
-            this._spawnWaveEnemies(WAVES[this.waveIndex]);
+            this._spawnWaveEnemies(waves[this.waveIndex]);
             this.waveIndex++;
             this.waveTimer = 0;
             this._justSpawnedNextWave = true;
@@ -358,6 +517,7 @@ const EnemyModule = {
     },
 
     // 【增强】更新单敌路径（新增多种路径类型）
+    // 答辩讲法：这段决定目标怎么飞，不同 pathType 对应不同突防方式。
     _updateEnemyPath(e) {
         const cx = e.finalTargetX || CONFIG.centerX;
         const cy = e.finalTargetY || CONFIG.centerY;
@@ -393,15 +553,41 @@ const EnemyModule = {
             case 'evasive':
                 e.weavePhase += 0.04;
                 if (dist > 5) {
-                    const evadeAmp = 0.5;
+                    const evadeAmp = 0.42 + (e.maneuver || 0) * 0.45;
                     e.vx = (dx / dist) * e.speed + Math.cos(e.weavePhase) * evadeAmp;
                     e.vy = (dy / dist) * e.speed + Math.sin(e.weavePhase * 1.7) * evadeAmp;
                 }
                 break;
 
+            case 'terrain-follow':
+                e.weavePhase += 0.026;
+                if (dist > 5) {
+                    const terrainMod = typeof getTerrainCombatModifiers === 'function' ? getTerrainCombatModifiers(e.x, e.y, e.type) : { speed: 1, avoid: 0 };
+                    const sideSlip = terrainMod.avoid * 0.5 + Math.sin(e.weavePhase) * 0.28;
+                    e.vx = (dx / dist) * e.speed * terrainMod.speed + (-dy / dist) * sideSlip;
+                    e.vy = (dy / dist) * e.speed * terrainMod.speed + (dx / dist) * sideSlip;
+                }
+                break;
+
+            case 'support':
+                e.weavePhase += 0.018;
+                if (dist > 5) {
+                    e.vx = (dx / dist) * e.speed + Math.cos(e.weavePhase) * 0.18;
+                    e.vy = (dy / dist) * e.speed + Math.sin(e.weavePhase) * 0.18;
+                }
+                break;
+
+            case 'glide':
+                e.weavePhase += 0.06;
+                if (dist > 5) {
+                    e.vx = (dx / dist) * e.speed + Math.cos(e.weavePhase * 0.7) * (e.maneuver || 0) * 0.55;
+                    e.vy = (dy / dist) * e.speed + Math.sin(e.weavePhase * 1.2) * (e.maneuver || 0) * 0.55;
+                }
+                break;
+
             // 【新增】侧翼包抄
             case 'flanker':
-                e.flankProgress += 0.008;
+                e.flankProgress = Math.min(1, e.flankProgress + 0.008);
                 const flankAngle = e.flankAngle * (1 - e.flankProgress);
                 const baseAngle = Math.atan2(dy, dx);
                 const angle = baseAngle + flankAngle;
@@ -459,6 +645,44 @@ const EnemyModule = {
             e.vx += (dx / dist) * e.speed * pullStrength;
             e.vy += (dy / dist) * e.speed * pullStrength;
         }
+
+        this._applyDefensiveAvoidance(e);
+        this._applyElectronicSuppression(e);
+    },
+
+    _applyDefensiveAvoidance(e) {
+        if (!EquipModule || !EquipModule.list || (e.maneuver || 0) <= 0.15) return;
+        let avoidX = 0;
+        let avoidY = 0;
+        EquipModule.list.forEach(eq => {
+            if (eq.type === 'radar' || eq.type === 'ew') return;
+            const dx = e.x - eq.x;
+            const dy = e.y - eq.y;
+            const d = Math.max(1, Math.hypot(dx, dy));
+            const dangerRange = eq.range * 0.88;
+            if (d < dangerRange) {
+                const force = (1 - d / dangerRange) * (e.maneuver || 0) * 0.22;
+                avoidX += (dx / d) * force;
+                avoidY += (dy / d) * force;
+            }
+        });
+        e.vx += avoidX;
+        e.vy += avoidY;
+    },
+
+    _applyElectronicSuppression(e) {
+        let suppression = 0;
+        EquipModule.list.forEach(eq => {
+            if (eq.type !== 'ew' || !eq.suppression) return;
+            const d = Math.hypot(e.x - eq.x, e.y - eq.y);
+            if (d < eq.range) suppression = Math.max(suppression, eq.suppression * (1 - d / eq.range));
+        });
+        e.jammed = Math.max(0, suppression - (e.jamResist || 0) * 0.2);
+        if (e.jammed > 0) {
+            const factor = Math.max(0.66, 1 - e.jammed);
+            e.vx *= factor;
+            e.vy *= factor;
+        }
     },
 
     draw(ctx) {
@@ -473,16 +697,16 @@ const EnemyModule = {
             // 尾迹
             for (let j = 0; j < e.trail.length; j++) {
                 const t = e.trail[j];
-                const alpha = (j / e.trail.length) * 0.4 * stealthAlpha;
+                const alpha = (j / e.trail.length) * 0.18 * stealthAlpha;
                 ctx.beginPath();
                 ctx.arc(t.x, t.y, e.size * 0.5 * (j / e.trail.length), 0, Math.PI * 2);
-                ctx.fillStyle = Utils.hexToRgba(e.trailColor, alpha * 0.6);
+                ctx.fillStyle = Utils.hexToRgba(e.trailColor, alpha * 0.45);
                 ctx.fill();
             }
 
             ctx.save();
             ctx.shadowColor = e.color;
-            ctx.shadowBlur = e.isSwarm ? 6 : 15 * stealthAlpha;
+            ctx.shadowBlur = e.isSwarm ? 3 : 8 * stealthAlpha;
 
             const angle = Math.atan2(e.vy, e.vx);
 
@@ -499,7 +723,7 @@ const EnemyModule = {
                 ctx.lineTo(0, e.size);
                 ctx.closePath();
                 ctx.fill();
-                ctx.strokeStyle = '#ffffff30';
+                ctx.strokeStyle = 'rgba(198,229,231,0.16)';
                 ctx.lineWidth = 0.5;
                 ctx.stroke();
                 ctx.restore();
@@ -556,7 +780,7 @@ const EnemyModule = {
                 ctx.lineTo(-e.size * 0.8, e.size * 0.6);
                 ctx.closePath();
                 ctx.fill();
-                ctx.strokeStyle = '#ffffff40';
+                ctx.strokeStyle = 'rgba(198,229,231,0.18)';
                 ctx.lineWidth = 1;
                 ctx.stroke();
                 ctx.restore();
@@ -581,7 +805,7 @@ const EnemyModule = {
             ctx.restore();
 
             if (e.stealth && !e.stealthDetected) {
-                ctx.fillStyle = '#ffffff30';
+                ctx.fillStyle = 'rgba(198,229,231,0.22)';
                 ctx.font = '10px "Microsoft Yahei", sans-serif';
                 ctx.textAlign = 'center';
                 ctx.fillText('?', e.x, e.y - e.size - 8);
@@ -647,9 +871,10 @@ const EnemyModule = {
     },
 
     damageEnemy(enemy, damage) {
+        // 答辩讲法：被命中后扣血，血量归零就计为拦截成功，同时更新分数、连击和分类统计。
         enemy.hp -= damage;
         EffectModule.addHitFlash(enemy.x, enemy.y);
-        if (enemy.hp <= 0) {
+            if (enemy.hp <= 0) {
             const baseScore = enemy.score;
             const difficultyMult = DIFFICULTY_MULTIPLIER[CONFIG.difficulty] || 1;
             const finalScore = Math.floor(baseScore * difficultyMult);
@@ -675,6 +900,15 @@ const EnemyModule = {
                 EffectModule.addFloatingText(enemy.x, enemy.y - 35, '🔥 连击 x' + CONFIG.comboCount + '!', '#ffcc00');
             }
             EffectModule.addFloatingText(enemy.x, enemy.y - 15, '+' + finalScore, '#00ff88');
+            if (typeof BattleLog !== 'undefined') {
+                BattleLog.add('kill', (enemy.logName || ENEMY_TYPES[enemy.type]?.name || enemy.type) + ' 被拦截', {
+                    score: finalScore,
+                    combo: CONFIG.comboCount,
+                    waveNumber: enemy.waveNumber || this.waveIndex,
+                    unitName: enemy.logName || ENEMY_TYPES[enemy.type]?.name || enemy.type,
+                    action: '被拦截'
+                });
+            }
 
             enemy.alive = false;
             const idx = this.list.indexOf(enemy);

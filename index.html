@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>锐卫天演 · 一站式国防装备介绍及战略模拟平台</title>
+<title>一站式国防教育服务平台</title>
 <style>
 /* ====== 锐卫天演设计系统 ====== */
 :root{
@@ -81,31 +81,38 @@ a{text-decoration:none;color:inherit}
 
 /* ====== 主内容容器 ====== */
 .main-content{flex:1;min-height:0;overflow:hidden;position:relative;display:flex;flex-direction:column}
+.topbar[hidden]{display:none}
 
 /* ====== 门户视图 ====== */
-.portal-view{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+.portal-view{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;overflow-y:auto;overflow-x:hidden}
 .portal-view[hidden]{display:none}
 
-.hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#161d1b 0%,#243233 58%,#4e211b 100%);color:#fff;padding:56px 32px 48px;text-align:center;width:100%;flex-shrink:0}
-.hero::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(0deg,rgba(255,255,255,.024) 1px,transparent 1px);background-size:48px 48px;mask-image:linear-gradient(180deg,#000,transparent 80%)}
-.hero-content{position:relative;z-index:1;max-width:780px;margin:0 auto;animation:heroIn .55s var(--motion-smooth) both}
+.hero{position:relative;overflow:hidden;background:#16191c;background-size:cover;background-position:center;color:#fff;padding:clamp(64px,10vw,116px) 32px clamp(52px,7vw,86px);text-align:center;width:100%;flex-shrink:0}
+.hero::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,18,22,.68) 0%,rgba(14,18,22,.36) 48%,rgba(14,18,22,.76) 100%)}
+.hero-content{position:relative;z-index:1;max-width:820px;margin:0 auto;animation:heroIn .55s var(--motion-smooth) both}
 @keyframes heroIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-.hero-kicker{display:inline-flex;align-items:center;gap:10px;font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.58);margin-bottom:16px;border:1px solid rgba(255,255,255,.14);padding:5px 16px;border-radius:999px;background:rgba(255,255,255,.05);backdrop-filter:blur(10px)}
-.hero-kicker::before{content:"";width:6px;height:6px;border-radius:50%;background:#d96652;box-shadow:0 0 16px rgba(217,102,82,.8)}
-.hero h1{font-family:"Noto Serif SC","Songti SC","SimSun",serif;font-size:clamp(2.4rem,5.5vw,4.8rem);font-weight:900;line-height:1.05;letter-spacing:.02em;margin-bottom:10px;text-shadow:0 2px 36px rgba(0,0,0,.3)}
-.hero h1 .accent{color:#d96652}
-.hero .portal-subtitle{font-size:1.05rem;color:rgba(255,255,255,.64);max-width:560px;margin:0 auto 0;line-height:1.8}
+.hero-kicker{display:inline-flex;align-items:center;gap:10px;font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.84);margin-bottom:18px;border:1px solid rgba(255,255,255,.24);padding:6px 16px;border-radius:999px;background:rgba(255,255,255,.08);backdrop-filter:blur(10px)}
+.hero-kicker::before{content:"";width:6px;height:6px;border-radius:50%;background:#e06a52;box-shadow:0 0 16px rgba(224,106,82,.8)}
+.hero h1{font-family:"Noto Serif SC","Songti SC","SimSun",serif;font-size:clamp(2.6rem,6vw,5.2rem);font-weight:900;line-height:1.05;letter-spacing:.02em;margin-bottom:12px;text-shadow:0 2px 42px rgba(0,0,0,.5)}
+.hero h1 .accent{color:#e06a52}
+.hero .portal-subtitle{font-size:1.06rem;color:rgba(255,255,255,.88);max-width:700px;margin:0 auto 0;line-height:1.8}
 
 /* Portal entry cards */
-.portal-entries{display:grid;grid-template-columns:1fr 1fr;gap:22px;padding:28px 32px;max-width:1060px;width:100%;flex-shrink:0}
-.portal-entry{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:36px 28px;border:1px solid var(--line-soft);border-radius:var(--radius-lg);background:var(--paper);cursor:pointer;transition:transform var(--motion-smooth),box-shadow var(--motion-smooth),border-color var(--motion-fast);box-shadow:0 1px 0 rgba(17,24,23,.02);min-height:200px}
-.portal-entry::before{content:"";position:absolute;left:24px;right:24px;top:0;height:3px;background:linear-gradient(90deg,transparent,var(--accent),transparent);transform:scaleX(0);transform-origin:left;transition:transform .46s var(--motion-smooth);z-index:2}
-.portal-entry:hover{transform:translateY(-5px);box-shadow:var(--shadow-card);border-color:#d5ccc0}
-.portal-entry:hover::before{transform:scaleX(1)}
-.portal-entry h3{font-family:"Noto Serif SC","Songti SC","SimSun",serif;font-size:1.35rem;font-weight:900;color:var(--ink);margin-bottom:4px;letter-spacing:-.02em}
-.portal-entry p{font-size:.88rem;color:var(--muted);line-height:1.65;margin-bottom:14px}
-.portal-entry .entry-cta{display:inline-flex;align-items:center;gap:6px;font-size:.84rem;font-weight:800;color:var(--accent);transition:gap var(--motion-fast)}
-.portal-entry:hover .entry-cta{gap:10px}
+.portal-section-head{text-align:center;padding:38px 32px 0;width:100%;flex-shrink:0}
+.portal-section-head h2{font-family:"Noto Serif SC","Songti SC","SimSun",serif;font-size:clamp(1.4rem,3.2vw,2rem);font-weight:900;color:var(--ink);letter-spacing:-.02em;margin-bottom:6px}
+.portal-section-head p{font-size:.84rem;color:var(--muted);letter-spacing:.14em}
+.portal-entries{display:grid;grid-template-columns:1fr 1fr;gap:24px;padding:26px 32px 44px;max-width:1180px;width:100%;flex-shrink:0}
+.portal-entries-three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.portal-entry{position:relative;display:flex;flex-direction:column;justify-content:flex-end;text-align:left;padding:30px;border:none;border-radius:var(--radius-lg);background:#16191c;cursor:pointer;overflow:hidden;box-shadow:var(--shadow-soft);transition:transform var(--motion-smooth),box-shadow var(--motion-smooth);min-height:330px}
+.portal-entry-bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .9s var(--motion-smooth),filter .9s var(--motion-smooth);z-index:0}
+.portal-entry::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,20,24,.04) 0%,rgba(15,20,24,.22) 44%,rgba(15,20,24,.84) 100%);z-index:1}
+.portal-entry:hover{transform:translateY(-6px);box-shadow:var(--shadow-drop)}
+.portal-entry:hover .portal-entry-bg{transform:scale(1.06)}
+.portal-entry-body{position:relative;z-index:2}
+.portal-entry h3{font-family:"Noto Serif SC","Songti SC","SimSun",serif;font-size:1.5rem;font-weight:900;color:#fff;margin-bottom:6px;letter-spacing:-.02em;text-shadow:0 2px 18px rgba(0,0,0,.4)}
+.portal-entry p{font-size:.9rem;color:rgba(255,255,255,.9);line-height:1.7;margin-bottom:18px;max-width:430px;text-shadow:0 1px 12px rgba(0,0,0,.35)}
+.portal-entry .entry-cta{display:inline-flex;align-items:center;gap:8px;font-size:.86rem;font-weight:800;color:#fff;padding:9px 18px;border:1px solid rgba(255,255,255,.6);border-radius:999px;width:max-content;background:rgba(255,255,255,.06);backdrop-filter:blur(6px);transition:gap var(--motion-fast),background-color var(--motion-fast),border-color var(--motion-fast)}
+.portal-entry:hover .entry-cta{gap:12px;background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.9)}
 /* ====== 二级目录落地页 ====== */
 .landing-view{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;animation:fadeIn .3s var(--motion-smooth) both}
 .landing-view[hidden]{display:none}
@@ -118,20 +125,57 @@ a{text-decoration:none;color:inherit}
 .landing-back:hover{background:var(--ink);color:#fff;border-color:var(--ink);transform:translateX(-2px)}
 .landing-grid{display:grid;gap:18px;padding:18px 32px 40px;max-width:1060px;width:100%;flex-shrink:0}
 .landing-grid.cols-4{grid-template-columns:repeat(4,1fr)}
+.landing-grid.cols-3{grid-template-columns:repeat(3,1fr)}
 .landing-grid.cols-2{grid-template-columns:repeat(2,1fr)}
-.landing-card{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:34px 22px;border:1px solid var(--line-soft);border-radius:var(--radius-lg);background:var(--paper);cursor:pointer;transition:transform var(--motion-smooth),box-shadow var(--motion-smooth),border-color var(--motion-fast);box-shadow:0 1px 0 rgba(17,24,23,.02);min-height:190px;animation:cardIn .48s var(--motion-smooth) forwards;animation-delay:var(--delay,0ms)}
-.landing-card::before{content:"";position:absolute;left:22px;right:22px;top:0;height:3px;background:linear-gradient(90deg,transparent,var(--accent),transparent);transform:scaleX(0);transform-origin:left;transition:transform .46s var(--motion-smooth);z-index:2}
-.landing-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-card);border-color:#d5ccc0}
-.landing-card:hover::before{transform:scaleX(1)}
-.landing-card .lc-badge{position:absolute;top:14px;right:16px;padding:4px 10px;border-radius:999px;font-size:.68rem;font-weight:800;background:rgba(17,24,23,.06);color:var(--muted)}
-.landing-card h3{font-family:"Noto Serif SC","Songti SC","SimSun",serif;font-size:1.15rem;font-weight:900;color:var(--ink);margin-bottom:6px;letter-spacing:-.02em}
-.landing-card .lc-desc{font-size:.8rem;color:var(--muted);line-height:1.6;margin-bottom:12px}
-.landing-card .lc-go{display:inline-flex;align-items:center;gap:5px;font-size:.82rem;font-weight:800;color:var(--accent);transition:gap var(--motion-fast)}
-.landing-card:hover .lc-go{gap:9px}
+.landing-card{position:relative;display:flex;flex-direction:column;justify-content:flex-end;text-align:left;padding:20px;border:none;border-radius:var(--radius-lg);background:#16191c;cursor:pointer;overflow:hidden;box-shadow:var(--shadow-soft);transition:transform var(--motion-smooth),box-shadow var(--motion-smooth);min-height:220px;animation:cardIn .48s var(--motion-smooth) forwards;animation-delay:var(--delay,0ms)}
+.landing-card-bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .9s var(--motion-smooth),filter .9s var(--motion-smooth);z-index:0}
+.landing-card::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,20,24,.04) 0%,rgba(15,20,24,.24) 48%,rgba(15,20,24,.82) 100%);z-index:1}
+.landing-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-drop)}
+.landing-card:hover .landing-card-bg{transform:scale(1.07)}
+.landing-card .lc-badge{position:absolute;top:14px;right:14px;z-index:2;padding:4px 10px;border-radius:999px;font-size:.68rem;font-weight:800;background:rgba(17,24,23,.6);color:#fff;backdrop-filter:blur(6px)}
+.landing-card .lc-body{position:relative;z-index:2}
+.landing-card h3{font-family:"Noto Serif SC","Songti SC","SimSun",serif;font-size:1.18rem;font-weight:900;color:#fff;margin-bottom:5px;letter-spacing:-.02em;text-shadow:0 2px 14px rgba(0,0,0,.42)}
+.landing-card .lc-desc{font-size:.8rem;color:rgba(255,255,255,.88);line-height:1.6;margin-bottom:12px;text-shadow:0 1px 10px rgba(0,0,0,.35)}
+.landing-card .lc-go{display:inline-flex;align-items:center;gap:5px;font-size:.82rem;font-weight:800;color:#fff;padding:7px 14px;border:1px solid rgba(255,255,255,.55);border-radius:999px;width:max-content;background:rgba(255,255,255,.06);backdrop-filter:blur(5px);transition:gap var(--motion-fast),background-color var(--motion-fast)}
+.landing-card:hover .lc-go{gap:9px;background:rgba(255,255,255,.16)}
 .landing-card.accent-air{--accent-lc:#3a7bd5}.landing-card.accent-air::before{background:linear-gradient(90deg,transparent,#3a7bd5,transparent)}
 .landing-card.accent-navy{--accent-lc:#1a6b8a}.landing-card.accent-navy::before{background:linear-gradient(90deg,transparent,#1a6b8a,transparent)}
 .landing-card.accent-army{--accent-lc:#3d7a3d}.landing-card.accent-army::before{background:linear-gradient(90deg,transparent,#3d7a3d,transparent)}
 .landing-card.accent-sim{--accent-lc:var(--steel)}.landing-card.accent-sim::before{background:linear-gradient(90deg,transparent,var(--steel),transparent)}
+
+/* ====== 通用内容视图 ====== */
+.content-view{flex:1;display:flex;flex-direction:column;overflow:hidden;animation:fadeIn .3s var(--motion-smooth) both}
+.content-view[hidden]{display:none}
+.content-shell{width:100%;max-width:1060px;margin:0 auto;padding:12px 32px 36px;overflow:auto}
+.content-header{margin-bottom:18px}
+.content-eyebrow{display:inline-flex;align-items:center;gap:8px;padding:4px 12px;border-radius:999px;background:var(--accent-soft);color:var(--accent-dark);font-size:.72rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px}
+.content-header h2{font-family:"Noto Serif SC","Songti SC","SimSun",serif;font-size:clamp(1.5rem,4vw,2.2rem);font-weight:900;color:var(--ink);margin-bottom:6px;letter-spacing:-.02em}
+.content-header p{font-size:.92rem;color:var(--muted);line-height:1.8;max-width:760px}
+.content-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.content-card,.quiz-question,.link-item,.content-note{background:var(--paper);border:1px solid var(--line-soft);border-radius:var(--radius-lg);box-shadow:0 1px 0 rgba(17,24,23,.02)}
+.content-card{padding:22px 20px}
+.content-card h3{font-family:"Noto Serif SC","Songti SC","SimSun",serif;font-size:1.08rem;font-weight:900;color:var(--ink);margin-bottom:8px}
+.content-card p{font-size:.88rem;color:var(--muted);line-height:1.8}
+.content-note{margin-top:18px;padding:18px 20px;font-size:.85rem;color:var(--muted);line-height:1.8;background:linear-gradient(135deg,#fffaf6 0%,#fffdfa 100%)}
+.link-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.link-item{display:block;padding:18px 18px 16px;transition:transform var(--motion-fast),box-shadow var(--motion-fast),border-color var(--motion-fast)}
+.link-item:hover{transform:translateY(-3px);box-shadow:var(--shadow-card);border-color:#d5ccc0}
+.link-item strong{display:block;font-family:"Noto Serif SC","Songti SC","SimSun",serif;font-size:1rem;color:var(--ink);margin-bottom:6px}
+.link-item p{font-size:.84rem;color:var(--muted);line-height:1.75;margin-bottom:10px}
+.link-item span{font-size:.78rem;font-weight:800;color:var(--accent)}
+.quiz-shell{display:grid;gap:16px}
+.quiz-summary{padding:14px 18px;border-radius:999px;background:var(--accent-soft);color:var(--accent-dark);font-size:.86rem;font-weight:800;display:inline-flex;justify-self:flex-start}
+.quiz-question{padding:20px}
+.quiz-q-title{display:inline-flex;padding:4px 10px;border-radius:999px;background:#f3eee6;color:var(--muted);font-size:.72rem;font-weight:800;margin-bottom:10px}
+.quiz-question h3{font-size:1rem;color:var(--ink);line-height:1.7;margin-bottom:14px}
+.quiz-options{display:grid;gap:10px}
+.quiz-option{padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:#fffdfa;color:var(--ink-soft);text-align:left;transition:transform var(--motion-fast),border-color var(--motion-fast),background-color var(--motion-fast)}
+.quiz-option:hover{transform:translateY(-1px);border-color:rgba(143,47,34,.35);background:#fff8f4}
+.quiz-option:disabled{cursor:default;opacity:1}
+.quiz-option.is-correct{background:#ecf6ee;border-color:#9dc8aa;color:#28553a}
+.quiz-option.is-wrong{background:#fbeceb;border-color:#e0aaa1;color:#8f2f22}
+.quiz-feedback{margin-top:12px;padding:12px 14px;border-radius:14px;background:#f7f2eb;color:var(--muted);font-size:.84rem;line-height:1.75}
+.quiz-feedback strong{color:var(--ink)}
 
 /* ====== 装备浏览视图 ====== */
 .browse-view{flex:1;display:flex;flex-direction:column;overflow:hidden}
@@ -229,6 +273,12 @@ a{text-decoration:none;color:inherit}
 .source-link strong{font-size:.83rem;color:var(--ink);line-height:1.45}
 .source-link span{grid-column:1/-1;font-size:.73rem;color:var(--muted);line-height:1.55}
 .source-link em{font-style:normal;color:var(--accent);font-weight:900;font-size:.76rem;white-space:nowrap}
+.lead{font-size:1.02rem;color:var(--ink);line-height:2;margin:8px 0 24px;text-indent:2em}
+.article{display:grid;gap:20px}
+.article p{font-size:.96rem;color:var(--ink-soft);line-height:2;text-indent:2em}
+.article-fig{margin:0;border-radius:20px;overflow:hidden;background:#f1ede7;border:1px solid var(--line-soft)}
+.article-img{width:100%;height:auto;max-height:360px;object-fit:cover;display:block;background:#151d1b}
+.article-fig figcaption{padding:8px 14px;font-size:.76rem;color:var(--muted);background:rgba(255,253,250,.92)}
 .desc-block{border-top:1px solid var(--line-soft);padding-top:4px}
 .desc-block h4{font-family:"Noto Serif SC","Songti SC","SimSun",serif;font-size:1rem;color:var(--ink);margin:16px 0 6px;font-weight:900}
 .desc-block p{font-size:.9rem;color:var(--ink-soft);line-height:1.9;margin-bottom:10px;text-indent:2em}
@@ -339,29 +389,38 @@ a{text-decoration:none;color:inherit}
   .landing-header h2{font-size:1.3rem}
 }
 </style>
+<link rel="stylesheet" href="assets/css/platform-overhaul.css">
 </head>
 <body>
 
-<!-- ====== Topbar ====== -->
-<header class="topbar" id="topbar">
-  <div class="topbar-brand"><span aria-hidden="true">●</span><span class="txt">锐卫天演</span></div>
+<!-- ====== Hidden compatibility nav ====== -->
+<header class="topbar" id="topbar" hidden>
+  <div class="topbar-brand"><span aria-hidden="true">●</span><span class="txt">一站式国防教育服务平台</span></div>
   <button class="topbar-toggle" id="menuBtn" type="button" aria-label="打开分类菜单" aria-expanded="false" aria-controls="topbarNav">☰</button>
   <nav class="topbar-nav" id="topbarNav" aria-label="主要栏目">
-    <div class="nav-group" data-group="equip">
-      <span class="nav-group-label" tabindex="0">装备介绍·知识精进</span>
+    <div class="nav-group" data-group="learn">
+      <span class="nav-group-label" tabindex="0">学习</span>
       <div class="nav-group-dropdown">
-        <button class="nav-link active" type="button" data-cat="all" aria-current="page">全部</button>
-        <button class="nav-link" type="button" data-cat="airforce">空军</button>
-        <button class="nav-link" type="button" data-cat="navy">海军</button>
-        <button class="nav-link" type="button" data-cat="army">陆军</button>
+        <button class="nav-link" type="button" data-content="course" data-parent="learn">国防视频</button>
+        <button class="nav-link" type="button" data-content="quiz" data-parent="learn">知识问答</button>
       </div>
     </div>
     <div class="nav-group-divider" aria-hidden="true"></div>
-    <div class="nav-group" data-group="sim">
-      <span class="nav-group-label" tabindex="0">战略模拟·素养提升</span>
+    <div class="nav-group" data-group="read">
+      <span class="nav-group-label" tabindex="0">阅览</span>
+      <div class="nav-group-dropdown">
+        <button class="nav-link active" type="button" data-cat="all" data-parent="read" aria-current="page">装备介绍</button>
+        <button class="nav-link" type="button" data-content="news" data-parent="read">新闻速览</button>
+        <button class="nav-link" type="button" data-content="heroes" data-parent="read">聚焦英雄</button>
+      </div>
+    </div>
+    <div class="nav-group-divider" aria-hidden="true"></div>
+    <div class="nav-group" data-group="grow">
+      <span class="nav-group-label" tabindex="0">提升</span>
       <div class="nav-group-dropdown">
         <button class="nav-link sim-link" type="button" data-page="air-defense/index.html">防空战略模拟</button>
         <button class="nav-link sim-link" type="button" data-page="drone-strategy/index.html">飞控战略模拟</button>
+        <button class="nav-link sim-link" type="button" data-content="bases" data-parent="grow">教育基地</button>
       </div>
     </div>
   </nav>
@@ -372,24 +431,43 @@ a{text-decoration:none;color:inherit}
 
   <!-- 门户视图 -->
   <section class="portal-view" id="portalView">
-    <div class="hero">
+    <div class="hero" style="background-image:url('assets/equipment/fujian/images/fujian-01.jpg')">
       <div class="hero-content">
-        <div class="hero-kicker">公开防务专题 · 一站式平台</div>
-        <h1>锐卫<span class="accent">天演</span></h1>
-        <p class="portal-subtitle">一站式国防装备介绍及战略模拟平台</p>
+        <div class="hero-kicker">国防教育 · 阅览 · 学习 · 提升</div>
+        <h1>一站式<span class="accent">国防教育</span>服务平台</h1>
       </div>
     </div>
-    <div class="portal-entries">
-      <div class="portal-entry" id="entryEquip" role="button" tabindex="0" aria-label="进入装备介绍">
-        <h3>装备介绍 · 知识精进</h3>
-        <p>基于公开资料，按空军、海军、陆军分类浏览国防装备专题报道</p>
-        <span class="entry-cta">进入浏览 →</span>
+    <div class="portal-section-head">
+      <h2>选择你的入口</h2>
+      <p>阅览 · 学习 · 提升</p>
+    </div>
+    <div class="portal-entries portal-entries-three">
+      <div class="portal-entry" id="entryRead" role="button" tabindex="0" aria-label="进入阅览板块">
+        <div class="portal-entry-bg" style="background-image:url('assets/equipment/j20/images/j20-01.jpg')"></div>
+        <div class="portal-entry-body">
+          <h3>阅览</h3>
+          <p>装备介绍、新闻速览、聚焦英雄集中呈现，用真实清晰的资料支撑深度阅读与价值引导。</p>
+          <span class="entry-cta">进入阅览 →</span>
+        </div>
       </div>
-      <div class="portal-entry" id="entrySim" role="button" tabindex="0" aria-label="进入战略模拟">
-        <h3>战略模拟 · 素养提升</h3>
-        <p>交互式战略推演与战术模拟，在虚拟战场中磨炼指挥决策能力</p>
-        <span class="entry-cta">进入模拟 →</span>
+      <div class="portal-entry" id="entryLearn" role="button" tabindex="0" aria-label="进入学习板块">
+        <div class="portal-entry-bg" style="background-image:url('assets/equipment/j16/images/j16-04.jpg')"></div>
+        <div class="portal-entry-body">
+          <h3>学习</h3>
+          <p>国防视频与知识问答搭建学习闭环，帮助国防知识从观看理解走向互动巩固。</p>
+          <span class="entry-cta">进入学习 →</span>
+        </div>
       </div>
+      <div class="portal-entry" id="entryGrow" role="button" tabindex="0" aria-label="进入提升板块">
+        <div class="portal-entry-bg" style="background-image:url('assets/equipment/z10/images/z10-01.jpg')"></div>
+        <div class="portal-entry-body">
+          <h3>提升</h3>
+          <p>战略模拟、教育基地与复盘反馈结合，把知识转化为情境理解、判断与实践能力。</p>
+          <span class="entry-cta">进入提升 →</span>
+        </div>
+      </div>
+      <div id="entryEquip" hidden></div>
+      <div id="entrySim" hidden></div>
     </div>
   </section>
 
@@ -405,7 +483,7 @@ a{text-decoration:none;color:inherit}
   <!-- 装备浏览视图（默认隐藏） -->
   <section class="browse-view" id="browseView" hidden>
     <div class="browse-topbar">
-      <button class="browse-back" id="browseBack" type="button">← 返回门户</button>
+      <button class="browse-back" id="browseBack" type="button">← 返回上一级</button>
       <span class="browse-title" id="browseTitle">装备专题报道</span>
       <div class="browse-filters" id="browseFilters">
         <button class="nav-link active" type="button" data-cat="all">全部</button>
@@ -429,6 +507,17 @@ a{text-decoration:none;color:inherit}
       <div class="no-results" id="noResults" hidden>
         <h3>未找到匹配条目</h3><p>请尝试更短的关键词，或切换到"全部"频道。</p>
       </div>
+    </div>
+  </section>
+
+  <!-- 通用内容视图（默认隐藏） -->
+  <section class="content-view" id="contentView" hidden>
+    <div class="landing-back-row">
+      <button class="landing-back" id="contentBack" type="button">← 返回上一级</button>
+    </div>
+    <div class="content-shell">
+      <div class="content-header" id="contentHeader"></div>
+      <div class="content-body" id="contentBody"></div>
     </div>
   </section>
 
@@ -491,99 +580,107 @@ const sourceCatalog = {
   liaoning:[{name:'央视网｜《焦点访谈》中国首艘航母面世',url:'https://tv.cctv.com/2012/09/25/VIDE1355718737010762.shtml',note:'2012年9月25日交接入列'},{name:'新华网｜十年一舰——写在中国海军辽宁舰入列10周年之际',url:'https://www.news.cn/politics/2022-09/24/c_1129029473.htm',note:'舷号16、舰载机关键节点'},{name:'新华网｜新华社评出2012年国内十大新闻',url:'https://www.xinhuanet.com/politics/2012-12/29/c_114199280_7.htm',note:'辽宁舰交付与歼-15起降'},{name:'中国军网｜12年！今天，一起翻阅辽宁舰的成长相册',url:'https://www.81.cn/syjdt/16340620.html',note:'入列12周年回顾'}],
   type055:[{name:'中国军网｜海军055型驱逐舰南昌舰入列',url:'https://photo.81.cn/pla/2020-01/12/content_9716010.htm',note:'首舰南昌舰入列'},{name:'新华网｜8艘驱逐舰已公开亮相！南昌舰入列6周年',url:'https://www.news.cn/milpro/20260113/44f028c146664775bf8bede277211f1f/c.html',note:'112个单元通用垂直发射系统'},{name:'央视网｜首艘万吨级！南昌舰入列 有何看家本领？',url:'https://news.cctv.com/2020/01/12/ARTIixMaOa3IByNY7HdpfREn200112.shtml',note:'万吨级、垂直发射单元'},{name:'央视网｜海军055型驱逐舰南昌舰入列',url:'https://news.cctv.com/2020/01/13/ARTIv0ZwDxy5swbGHa7Q0wWG200113.shtml',note:'防空、反导、反舰、反潜能力'}],
   type052d:[{name:'新华网｜能力强大！它是大国舰阵新成员、海军攻防新利器',url:'https://www.news.cn/milpro/20260420/32c6862acf2b408187cbac4279dfebd7/c.html',note:'64枚多类型弹药、冷热共架垂发'},{name:'中国军网｜052D型驱逐舰娄底舰升级系统公开报道',url:'https://www.81.mil.cn/ChinaMilitary/BILINGUAL/16435211.html',note:'升级相控阵雷达、武器和网络系统'},{name:'央视网｜剑指"台独" 中华神盾·052D！',url:'https://v.cctv.com/2024/05/26/VIDE0gFlo6YlonECOMmKvd5A240526.shtml',note:'相控阵雷达与垂直发射区域防空导弹系统'},{name:'央视网｜中国最强驱逐舰赴俄参演 新一代"中华神盾"国际首秀',url:'https://news.cctv.com/2017/06/18/ARTIylJ4sQjNaEJlwrRTHWtm170618.shtml',note:'四面主动相控阵雷达、通用垂直发射装置'}],
-  type99a:[{name:'央视网｜解码阅兵武器装备｜"陆战之王"彰显铁甲雄风',url:'https://news.cctv.com/2025/08/22/ARTIBBCNhEYLGXbo8P7jnbbb250822.shtml',note:'99A发展与主炮、发动机'},{name:'新华网｜图解中国99A坦克：轻松击穿1米厚装甲',url:'https://www.xinhuanet.com/mil/2016-02/29/c_128761263.htm',note:'125mm滑膛炮、1500马力、战斗全重'},{name:'新华网｜专家：我军99A主战坦克火力强大信息化能力出众',url:'https://www.xinhuanet.com/mil/2015-09/09/c_128211282.htm',note:'1500马力发动机与信息化能力'},{name:'中国军网｜"陆战之王"99A式坦克 今天它来了！',url:'https://www.81.cn/zt/2020nzt/zxjpqjsxzyxwmzzwbg_196319/zbzqljmb_196359/9897307.html?big=fan',note:'125毫米主炮与车辆外形'}]
+  type99a:[{name:'央视网｜解码阅兵武器装备｜"陆战之王"彰显铁甲雄风',url:'https://news.cctv.com/2025/08/22/ARTIBBCNhEYLGXbo8P7jnbbb250822.shtml',note:'99A发展与主炮、发动机'},{name:'新华网｜图解中国99A坦克：轻松击穿1米厚装甲',url:'https://www.xinhuanet.com/mil/2016-02/29/c_128761263.htm',note:'125mm滑膛炮、1500马力、战斗全重'},{name:'新华网｜专家：我军99A主战坦克火力强大信息化能力出众',url:'https://www.xinhuanet.com/mil/2015-09/09/c_128211282.htm',note:'1500马力发动机与信息化能力'},{name:'中国军网｜"陆战之王"99A式坦克 今天它来了！',url:'https://www.81.cn/zt/2020nzt/zxjpqjsxzyxwmzzwbg_196319/zbzqljmb_196359/9897307.html?big=fan',note:'125毫米主炮与车辆外形'}],
+  h6k:[{name:'中国军网｜战神出击！空军轰-6K战机跨昼夜远程奔袭训练',url:'http://www.81.cn/kj_208559/jdt_208560/10210477.html',note:'轰-6K跨昼夜训练画面与公开介绍'},{name:'央视网｜解码轰-6K轰炸机',url:'https://news.cctv.com/2025/08/24/ARTIHHRT6oFdYKUNQRdNSMpz250824.shtml',note:'轰-6K能力定位与战术用途'},{name:'新华网｜中国空军轰-6K轰炸机赴南海战斗巡航',url:'https://www.xinhuanet.com/mil/2016-08/06/c_129209997.htm',note:'远海巡航公开报道'}],
+  j16:[{name:'中国军网｜潜龙出击！空军歼-16战机夜间飞行训练',url:'http://www.81.cn/kj_208559/jdt_208560/10314558.html',note:'歼-16夜训与作战训练场景'},{name:'央视网｜歼-16战机跨昼夜飞行训练',url:'https://military.cctv.com/2022/07/14/ARTIAnPPRTD4Y2US0VY5bZ1J220714.shtml',note:'跨昼夜飞行训练公开画面'},{name:'央视网｜走近国产重型多用途战斗机歼-16',url:'https://tv.cctv.com/2023/06/10/VIDE5wREHkU0nhpLLQqNPh8Y230610.shtml',note:'型号定位与任务能力介绍'}]
 };
 
 // ====== EQUIPMENT DATA ======
 var E = [
-  {"id":"j20","c":"airforce","n":"歼-20","fn":"歼-20 \"威龙\" 隐身战斗机","rd":[98,92,98,95,88],"sp":{"类型":"第五代单座双发隐身战斗机","制造商":"成都飞机工业集团","首飞":"2011.1.11","服役":"2017年","产量":"200+架(2025)","长度":"21.2m","最大速度":"2.5马赫","作战半径":"2000+km","发动机":"涡扇-15(国产)","武器":"PL-10/12/15空空导弹","单价":"约7亿人民币"},"ds":["歼-20\"威龙\"是中国自主研制的第五代隐身战斗机，采用独创的鸭式气动布局配合DSI进气道和全动V型尾翼，在隐身性能、超音速巡航和高态势感知方面均达到世界先进水平。2025年已换装国产涡扇-15发动机，年产约40-50架，装备规模突破200架。","2025年九三阅兵中，歼-20、歼-20A、歼-20S等五型隐身战机同场受阅。歼-20可与攻击-11隐身无人机、歼-16组成\"新三剑客\"编队实现有人/无人协同。","歼-20承担夺取制空权、猎杀敌方预警机和加油机等高价值目标的核心任务，是中国空天防御的\"国之利刃\"。预计到2027年建军百年时将装备超过300架。"],"s":"active"},
-  {"id":"y20","c":"airforce","n":"运-20","fn":"运-20 \"鲲鹏\" 战略运输机","rd":[30,55,65,75,92],"sp":{"类型":"大型战略运输机","制造商":"西安飞机工业集团","服役":"2016年","最大起飞重量":"220吨","最大载重":"66吨","最大航程":"7800km(涡扇-20)","货舱":"20×4×4m","改型":"运油-20、空警-3000平台"},"ds":["运-20\"鲲鹏\"是中国首款200吨级大型运输机，货舱可装载99A主战坦克和直升机，终结了\"大装备运不了、远距离投不动\"的历史。换装国产涡扇-20后航程达7800公里，具备跨洲际战略投送能力。","近年来运-20多次参与海外撤侨和国际人道主义救援。运油-20空中加油改型解决了歼-20等战机远程作战的瓶颈。截至2025年装备超80架，持续以每年15-20架速度生产。"],"s":"active"},
-  {"id":"fujian","c":"navy","n":"福建舰","fn":"003型航空母舰 \"福建舰\"","rd":[95,88,72,92,90],"sp":{"类型":"大型航空母舰(电磁弹射)","排水量":"约8万吨","长度":"约316m","入列":"2025.11.5","弹射":"电磁弹射×3","舰载机":"歼-35/歼-15T/空警-600/直-20","动力":"常规动力(综合电力)","造价":"约500亿人民币","母港":"海南三亚"},"ds":["福建舰(舷号18)是中国首艘完全自主设计建造的电磁弹射型航母，2025年11月5日在三亚入列。全球仅中美掌握电磁弹射技术——加速更平稳、能量利用率更高、可自动调节弹射力度适应不同机型。","福建舰排水量约8万吨，可搭载50-60架各型舰载机。电磁弹射使其可弹射从轻型的攻击-11无人机到重载歼-15T的全系列机型，作战效能远超滑跃起飞航母。","入列标志着中国海军迈入\"三航母时代\"。2026年正进行高强度舰机适配和多航母编队协同演练，加速向\"完全形成战斗力\"推进。"],"s":"active"},
-  {"id":"shandong","c":"navy","n":"山东舰","fn":"002型航空母舰 \"山东舰\"","rd":[82,80,65,78,82],"sp":{"类型":"中型航母(滑跃)","排水量":"约6-7万吨","入列":"2019.12.17","舰载机":"歼-15(约36架)","母港":"三亚","特点":"中国首艘国产航母"},"ds":["山东舰(舷号17)是中国首艘自主设计建造的航母，在辽宁舰经验上优化：舰岛缩小25%增加甲板面积、机库扩容、雷达升级。可搭载约36架歼-15，入列后迅速形成战斗力，近年来多次率编队参与南海和台海实战化训练。"],"s":"active"},
-  {"id":"liaoning","c":"navy","n":"辽宁舰","fn":"001型航空母舰 \"辽宁舰\"","rd":[78,75,62,72,75],"sp":{"类型":"中型航母(滑跃)","排水量":"约6万吨","入列":"2012.9.25","舰载机":"歼-15(约24架)","母港":"青岛","特点":"中国第一艘航母"},"ds":["辽宁舰(舷号16)是中国首艘航母，由苏联\"瓦良格\"号续建而成，2012年入列结束了中国没有航母的历史。十余年来为中国培养了第一批舰载机飞行员和航母指挥官，近年完成多次西太平洋远海实战化训练。"],"s":"active"},
-  {"id":"type055","c":"navy","n":"055型驱逐舰","fn":"055型 万吨级导弹驱逐舰","rd":[98,82,80,95,88],"sp":{"类型":"万吨级导弹驱逐舰","排水量":"约1.2-1.3万吨","服役":"2020年(南昌舰)","垂发":"112单元通用VLS","武器":"鹰击-21高超音速导弹、HHQ-9B","雷达":"双波段相控阵","造价":"约60亿/艘"},"ds":["055型是当今世界排水量最大的驱逐舰(美方归类为巡洋舰)。一体化桅杆和综合射频系统将上百部天线集成为少数共形天线，隐身性能卓越。112单元通用垂发兼容防空、反舰、反潜和对陆攻击导弹。","055最具威慑力的武器是鹰击-21舰载高超音速反舰导弹，末端速度10马赫，现有任何防空系统几乎无法拦截，一艘055的鹰击-21齐射足以重创超级航母。首批8艘已全部入列，第二批改进型055A正在建造中。"],"s":"active"},
-  {"id":"type052d","c":"navy","n":"052D型驱逐舰","fn":"052D型 导弹驱逐舰","rd":[88,72,75,85,82],"sp":{"类型":"多用途导弹驱逐舰","排水量":"约7500吨","服役":"2014年","垂发":"64单元通用VLS","武器":"HHQ-9B、鹰击-18","雷达":"346A型有源相控阵","数量":"30+艘"},"ds":["052D型是中国建造数量最多的现代化驱逐舰，装备64单元垂发和\"中华神盾\"相控阵雷达。最新052DL型延长甲板搭载直-20反潜直升机，换装新型反隐身雷达可探测F-22/F-35。30+艘服役或在建，是水面舰艇部队的中坚。"],"s":"active"},
-  {"id":"type99a","c":"army","n":"99A式主战坦克","fn":"99A式 主战坦克","rd":[96,95,78,90,85],"sp":{"类型":"第三代信息化主战坦克","战斗全重":"约58吨","乘员":"3人","主炮":"125mm滑膛炮(自动装填)","发动机":"1500马力","最大速度":"80km/h","装甲":"复合装甲+FY-5爆反","特点":"激光压制观瞄系统"},"ds":["99A式是中国陆军最新型主战坦克。125mm滑膛炮发射钨合金穿甲弹时2000米穿透800mm+均质钢装甲。独门激光压制系统可自动致盲敌方观瞄设备，正面防护等效超1000mm均质钢。","99A装备数字战场管理系统，通过数据链与无人机和友邻坦克实时共享态势。已大规模装备重型合成旅，是地面突击力量无可争议的核心。"],"s":"active"},
+  {"id":"j20","c":"airforce","n":"歼-20","fn":"歼-20 \"威龙\" 隐身战斗机","rd":[98,92,98,95,88],"sp":{"类型":"第五代单座双发隐身战斗机","制造商":"成都飞机工业集团","首飞":"2011.1.11","服役":"2017年","产量":"200+架(2025)","长度":"21.2m","最大速度":"2.5马赫","作战半径":"2000+km","发动机":"涡扇-15(国产)","武器":"PL-10/12/15空空导弹","单价":"约7亿人民币"},"ds":["歼-20“威龙”是我国自主研制的第五代隐身战斗机，采用鸭式气动布局与DSI进气道、全动V型尾翼，兼具高隐身、超音速巡航与高态势感知能力，是中国空军的“国之利刃”。","2011年1月11日歼-20成功首飞，此后历经多年试飞完善；2017年正式列装空军作战部队，标志着我国成为第二个装备第五代隐身战斗机的国家。","换装国产涡扇-15发动机后，歼-20A具备了超音速巡航能力，动力与机动性大幅提升，航电与传感器融合水平也达到世界先进水准。","2025年阅兵中歼-20、歼-20A、歼-20S三型同场亮相，双座型歼-20S可充当无人僚机指挥平台，引导攻击-11等无人机群协同作战。","歼-20与歼-16、攻击-11组成“新三剑客”有人/无人编队，实现夺取制空权、猎杀敌预警机与加油机等高价值目标的战术运用。","目前歼-20现役规模已突破200架，年产量稳步提升，是维护国家空天安全、支撑战略空军转型的核心作战力量。"],"s":"active"},
+  {"id":"y20","c":"airforce","n":"运-20","fn":"运-20 \"鲲鹏\" 战略运输机","rd":[96,92,90,88,86],"radarConfig":{"labels":["战略投送","装载能力","航程续航","体系支援","任务适配"],"color":"#8f2f22"},"sp":{"类型":"大型战略运输机","制造商":"西安飞机工业集团","服役":"2016年","最大起飞重量":"220吨","最大载重":"66吨","最大航程":"7800km(涡扇-20)","货舱":"20×4×4m","改型":"运油-20、空警-3000平台"},"ds":["运-20“鲲鹏”是我国自主研制的大型运输机，货舱可装载99A主战坦克与直升机，结束了“大装备运不了、远距离投不动”的历史。","运-20最大起飞重量约220吨、最大载重66吨，机舱宽大，可执行人员、装备与物资的远距离战略投送任务。","最新型运-20B换装国产涡扇-20发动机，航程突破近万公里，具备跨洲际战略投送能力，摆脱了对进口发动机的依赖。","运油-20空中加油改型解决了歼-20等战机远程作战的航程瓶颈，显著拓展了空军远海远域作战半径。","运-20多次参与海外撤侨与国际人道主义救援，向多国运送防疫物资，展现大国担当，成为空军战略投送的中坚。","截至近年运-20装备数量持续增长，与运油-20、预警机改型共同构成我国远程战略投送与支援保障体系的核心。"],"s":"active"},
+  {"id":"fujian","c":"navy","n":"福建舰","fn":"003型航空母舰 \"福建舰\"","rd":[95,88,72,92,90],"sp":{"类型":"大型航空母舰(电磁弹射)","排水量":"约8万吨","长度":"约316m","入列":"2025.11.5","弹射":"电磁弹射×3","舰载机":"歼-35/歼-15T/空警-600/直-20","动力":"常规动力(综合电力)","造价":"约500亿人民币","母港":"海南三亚"},"ds":["福建舰是我国首艘电磁弹射型航空母舰，舷号18，满载排水量8万余吨，采用平直通长飞行甲板，是我国完全自主设计建造的国之重器。","福建舰配置电磁弹射和阻拦装置，是全球首艘常规动力加电磁弹射的航母，弹射加速更平稳、能量利用率更高，可适配不同机型。","2025年11月5日，福建舰在海南三亚交接入列并正式命名授旗，标志着人民海军进入“三航母时代”。","电磁弹射使福建舰可弹射歼-35、歼-15T、空警-600预警机、直-20及攻击-11无人机等全系列机型，作战效能远超滑跃起飞航母。","入列后福建舰持续进行高强度舰机适配试验，开展多航母编队协同演练，加速向“完全形成战斗力”迈进。","作为我国最新型航空母舰，福建舰大幅提升海军远海作战与体系对抗能力，是建设世界一流海军的标志性装备。"],"s":"active"},
+  {"id":"shandong","c":"navy","n":"山东舰","fn":"002型航空母舰 \"山东舰\"","rd":[82,80,65,78,82],"sp":{"类型":"中型航母(滑跃)","排水量":"约6-7万吨","入列":"2019.12.17","舰载机":"歼-15(约36架)","母港":"三亚","特点":"中国首艘国产航母"},"ds":["山东舰是我国首艘自主设计建造的航空母舰，舷号17，2019年12月17日交付海军入列，实现了从引进改装到自主建造的跨越。","山东舰在辽宁舰基础上优化，缩小舰岛、扩大甲板与机库面积，满载排水量约5.5万吨，采用滑跃式飞行甲板。","山东舰可搭载约36架歼-15舰载机，入列后迅速形成体系作战能力，是中国海军重要的海上力量平台。","近年来山东舰多次率编队参与南海、台海等方向实战化训练与远海训练，检验了航母编队作战能力。","2024年，山东舰与辽宁舰完成首次双航母编队演练，展示了我国多航母协同作战能力取得重要进展。","作为首艘国产航母，山东舰锻炼培养了我国航母建造、管理与作战人才，为后续航母发展奠定坚实基础。"],"s":"active"},
+  {"id":"liaoning","c":"navy","n":"辽宁舰","fn":"001型航空母舰 \"辽宁舰\"","rd":[78,75,62,72,75],"sp":{"类型":"中型航母(滑跃)","排水量":"约6万吨","入列":"2012.9.25","舰载机":"歼-15(约24架)","母港":"青岛","特点":"中国第一艘航母"},"ds":["辽宁舰是我国第一艘航空母舰，舷号16，由苏联“瓦良格”号续建改造而成，使我国跨入了航母国家的行列。","2012年9月25日辽宁舰正式交接入列，结束了中国没有航母的历史，开启了人民海军走向深蓝的新征程。","2012年11月，歼-15舰载机首次在辽宁舰上成功着舰与起飞，实现了中国航母与舰载机结合的历史性突破。","十余年来辽宁舰作为试验训练平台，培养了我国第一批舰载机飞行员和航母指挥官，为航母事业发展奠定人才基础。","辽宁舰多次组织西太平洋等远海实战化训练，持续检验和提升航母编队的远海作战能力。","作为中国航母事业的“种子舰”，辽宁舰见证并推动了中国海军由近海防御向远海防卫的战略转型。"],"s":"active"},
+  {"id":"type055","c":"navy","n":"055型驱逐舰","fn":"055型 万吨级导弹驱逐舰","rd":[98,82,80,95,88],"sp":{"类型":"万吨级导弹驱逐舰","排水量":"约1.2-1.3万吨","服役":"2020年(南昌舰)","垂发":"112单元通用VLS","武器":"鹰击-21高超音速导弹、HHQ-9B","雷达":"双波段相控阵","造价":"约60亿/艘"},"ds":["055型是我国吨位最大、技术最先进的万吨级导弹驱逐舰，首舰南昌舰2020年1月入列，被誉为航母编队的“带刀护卫”。","055采用一体化桅杆与综合射频系统，将多部天线集成为少数共形天线，隐身性能与态势感知能力突出。","055配备112单元通用垂直发射系统，可兼容发射防空、反舰、反潜和对陆攻击等多型导弹，火力强大。","055可发射鹰击-21舰载高超音速反舰导弹，末端速度高、突防能力强，是航母编队的核心反舰力量。","首批8艘055型已全部入列，第二批改进型055A正在建造，持续增强人民海军的远海作战能力。","作为航母编队的“带刀护卫”，055型显著提升了海军的区域防空、反导与对海打击能力，是现代化海军的骨干。"],"s":"active"},
+  {"id":"type052d","c":"navy","n":"052D型驱逐舰","fn":"052D型 导弹驱逐舰","rd":[88,72,75,85,82],"sp":{"类型":"多用途导弹驱逐舰","排水量":"约7500吨","服役":"2014年","垂发":"64单元通用VLS","武器":"HHQ-9B、鹰击-18","雷达":"346A型有源相控阵","数量":"30+艘"},"ds":["052D型是我国建造数量最多的“中华神盾”驱逐舰，首舰昆明舰2014年入列，是海军水面舰艇部队的中坚力量。","052D装备346A型有源相控阵雷达，具备强大的区域防空与多目标探测能力，可有效应对空中威胁。","052D配备64单元通用垂直发射系统，可发射海红旗-9B防空导弹、鹰击-18反舰导弹等，攻防兼备。","最新052DL型延长飞行甲板、搭载直-20反潜直升机，并换装新型雷达，反潜与反隐身能力进一步提升。","052D承担区域防空、反舰、反潜和对陆打击等多重任务，广泛参与远海训练与护航行动。","30余艘052D服役或在建，与055型共同构成我国驱逐舰部队的主力，支撑海军走向深蓝。"],"s":"active"},
+  {"id":"type99a","c":"army","n":"99A式主战坦克","fn":"99A式 主战坦克","rd":[96,95,78,90,85],"sp":{"类型":"第三代信息化主战坦克","战斗全重":"约58吨","乘员":"3人","主炮":"125mm滑膛炮(自动装填)","发动机":"1500马力","最大速度":"80km/h","装甲":"复合装甲+FY-5爆反","特点":"激光压制观瞄系统"},"ds":["99A式是我国首型信息化主战坦克，被誉为“陆战之王”，2015年九三阅兵首次公开亮相，是陆军地面突击的核心力量。","99A装备125毫米滑膛炮，发射穿甲弹可在2000米距离穿透厚装甲，火力处于世界先进水平。","99A采用复合装甲与爆炸反应装甲，正面防护能力突出，并配备激光自卫系统可干扰敌方观瞄设备。","99A换装1500马力大功率发动机，机动性能大幅提升，具备良好的越野与突击能力。","99A装备数字战场管理系统，通过数据链与无人机、友邻坦克实时共享态势，实现协同攻防。","99A已大规模装备重型合成旅，显著提升陆军装甲部队的突击与信息化作战能力。"],"s":"active"},
+  {"id":"h6k","c":"airforce","n":"轰-6K","fn":"轰-6K 远程轰炸机","rd":[95,82,90,85,88],"radarConfig":{"labels":["远程打击","挂载能力","航程续航","体系协同","威慑覆盖"],"color":"#8f2f22"},"sp":{"类型":"远程轰炸机","制造商":"西安飞机工业集团","服役":"2011年后持续列装","最大航程":"约8000km+","主要武器":"长剑巡航导弹等","任务定位":"远程精确打击 / 战略巡航","特点":"远程奔袭、对海对陆兼顾"},"ds":["轰-6K是人民空军远程打击体系中的关键平台，在航程、挂载与信息化水平上较早期型号实现显著提升，承担远程巡航、对海打击与战略威慑任务。","轰-6K换装新型发动机和综合航电系统后，具备更远航程与更强任务规划能力，可携带巡航导弹等远程精确打击武器执行体系化作战任务。","依托预警机、电子战飞机、加油机和地面指挥系统支援，轰-6K能够在较远距离外实施火力投送，是联合打击链条中的重要一环。","近年来轰-6K多次参与远海远洋训练和战略巡航，持续检验复杂气象、跨昼夜和远距离奔袭条件下的部队组织与保障能力。","在对海方向，轰-6K可作为远程反舰与区域拒止力量的重要平台，与海空侦察、岸基火力和水面舰艇共同构成纵深打击体系。","在国防教育场景中，轰-6K适合用于说明“战略投送、远程威慑、体系打击”三者之间的关系，帮助理解现代空军从战术支援向战略空军转型。"],"s":"active"},
+  {"id":"j16","c":"airforce","n":"歼-16","fn":"歼-16 重型多用途战斗机","rd":[90,88,84,92,89],"radarConfig":{"labels":["多用途作战","体系协同","机动性能","航电感知","对地打击"],"color":"#8f2f22"},"sp":{"类型":"双座双发多用途战斗机","制造商":"沈阳飞机工业集团","定位":"制空 / 对地 / 对海打击","特点":"载弹量大、航程远、任务弹性高","航电":"先进航电与多用途任务系统","武器":"空空导弹、精确制导弹药等","任务价值":"空军战术打击主力机型"},"ds":["歼-16是人民空军重型多用途战斗机代表型号之一，兼具制空作战与对地、对海精确打击能力，在战术打击体系中承担骨干角色。","该机采用双座双发构型，航程远、载弹量大、任务弹性高，可根据任务挂载空空导弹、精确制导弹药和电子对抗吊舱等多型载荷。","依托先进航电与雷达系统，歼-16具备较强态势感知和多目标处理能力，能够执行空战护航、压制防空、对地突击和海上目标打击等任务。","双座布局让飞行员与武器系统操作员可以分工协同，在复杂电磁环境和多目标交战条件下提升任务规划、目标识别和武器使用效率。","在体系作战中，歼-16可与歼-20、预警机、电子战飞机和无人机协同，承担火力投送、伴随掩护和战场信息节点等多重角色。","对国防教育展示而言，歼-16能够直观体现现代战斗机从单一空战平台向多用途、体系化、信息化空中作战节点转变的趋势。"],"s":"active"}
 ];
 
 // ====== DOM REFS ======
+const contentCatalog = {
+  course:{title:'国防科普视频',subtitle:'按视频内容类型搭建国防科普视频入口，后续可接入原理动画、策略讲解、战事分析、装备评价等视频素材。',parent:'learn',blocks:[{title:'原理拆解',text:'适合放置3D结构拆解、武器系统原理、作战流程动画等可视化视频。'},{title:'策略讲解',text:'适合放置防空部署、无人机协同、海空联合、任务推演等策略类视频。'},{title:'战事分析',text:'适合放置经典战例、热点冲突、战术复盘和地缘态势解读视频。'},{title:'装备评价',text:'适合放置装备性能解读、型号对比、体系定位和发展脉络类视频。'},{title:'科技前沿',text:'适合放置人工智能、无人系统、电磁弹射、空天技术等国防科技内容。'},{title:'国防常识',text:'适合放置面向大众的国防知识、军兵种基础、法规常识与安全教育视频。'}]},
+  news:{title:'新闻速览',subtitle:'以权威来源为主入口，配合专题方向和阅读动线，形成更有层次的军事新闻阅读页。',parent:'read',links:[{name:'中国军网',desc:'军事新闻、部队动态、装备报道与国防专题。',url:'https://www.81.cn/',img:'assets/equipment/type052d/images/type052d-01.jpg',tags:['权威发布','部队动态','专题报道']},{name:'国防部官网',desc:'国防政策、例行记者会、权威发布与专题信息。',url:'http://www.mod.gov.cn/'},{name:'央视网军事',desc:'央视军事新闻、国防报道、视频专题与公开节目。',url:'https://military.cctv.com/'},{name:'新华网军事',desc:'新华社军事与国防报道入口，适合补充权威时政新闻。',url:'http://www.news.cn/mil/'}]},
+  heroes:{title:'聚焦英雄',subtitle:'先按历史时间分层搭建英雄人物与英雄群体框架，后续再填入具体人物、事迹和精神关键词。',parent:'read'},
+  bases:{title:'教育基地',subtitle:'以中国地图和省份入口为主框架，点击省份后展示该省国防教育基地、纪念馆、军事博物馆等列表位置。',parent:'grow'}
+};
+
+const heroTimeline=[
+  {era:'革命战争时期',desc:'聚焦建军、长征、抗战、解放战争等历史阶段中的英雄人物与英雄群体。',slots:[['人物','预留代表人物卡片'],['群体','预留英雄部队/战斗集体'],['事迹','预留战斗故事与历史节点'],['精神关键词','信仰、牺牲、纪律、人民立场']]},
+  {era:'新中国建设时期',desc:'聚焦保家卫国、边海防建设、国防工业奠基等阶段的典型事迹。',slots:[['人物','预留功臣模范与建设者'],['群体','预留边防、海防、科研团队'],['事迹','预留国防建设和抢险救灾线索'],['精神关键词','担当、坚守、自力更生']]},
+  {era:'改革强军时期',desc:'聚焦军队现代化转型、联合作战能力建设和重大任务中的先进代表。',slots:[['人物','预留训练尖兵和任务骨干'],['群体','预留维和、护航、演训群体'],['事迹','预留转型建设与实战化训练案例'],['精神关键词','转型、精武、协同']]},
+  {era:'新时代强军时期',desc:'聚焦新时代强军实践中的英雄人物、先进集体和国防科技工作者。',slots:[['人物','预留新时代官兵与科研人物'],['群体','预留航天、舰艇、空勤、边防群体'],['事迹','预留重大任务、国防科技与一线守护'],['精神关键词','强军、创新、忠诚、胜战']]}
+];
+
+const baseProvinceList=['北京','天津','河北','山西','内蒙古','辽宁','吉林','黑龙江','上海','江苏','浙江','安徽','福建','江西','山东','河南','湖北','湖南','广东','广西','海南','重庆','四川','贵州','云南','西藏','陕西','甘肃','青海','宁夏','新疆','香港','澳门','台湾'];
+
+const quizBank=[
+  {q:'我国的国防属于什么性质？',options:['扩张型国防','自卫型国防','同盟型国防','殖民型国防'],answer:1,explain:'我国坚持防御性国防政策，国防建设以自卫防御为根本原则。'},
+  {q:'人民军队的根本宗旨是什么？',options:['听党指挥','能打胜仗','作风优良','全心全意为人民服务'],answer:3,explain:'全心全意为人民服务是人民军队的根本宗旨。'},
+  {q:'我国现行兵役制度的主体形式是？',options:['志愿兵役为主','义务兵役与志愿兵役相结合','全民长期服役','完全职业化兵役'],answer:1,explain:'我国实行义务兵与志愿兵相结合、民兵与预备役相结合的兵役制度。'},
+  {q:'“做中学”的核心更接近哪一项？',options:['只记概念','只看视频','把知识转化为判断与行动能力','只完成考试'],answer:2,explain:'“做中学”强调通过任务、体验与复盘把知识内化为能力。'},
+  {q:'以下哪一项更适合作为“阅览”板块内容？',options:['知识问答练习','装备专题报道','阶段练习反馈','模拟战术评分'],answer:1,explain:'“阅览”板块主要承载装备介绍、新闻速览和英雄事迹等阅读内容。'},
+  {q:'教育基地研学的主要价值不包括？',options:['连接历史与现实','增强情境体验','替代全部课堂学习','培养家国情怀'],answer:2,explain:'教育基地研学是课堂的延伸，不是对全部课堂学习的替代。'}
+];
+let quizState={answered:{},correct:0};
+
 var grid=document.getElementById('cardsGrid'),noR=document.getElementById('noResults');
 var mOver=document.getElementById('modalOverlay'),mCont=document.getElementById('modalContent');
 var mClose=document.getElementById('modalClose'),sIn=document.getElementById('searchInput');
 var tNav=document.getElementById('topbarNav'),mBtn=document.getElementById('menuBtn');
 var clearSearch=document.getElementById('clearSearch'),resultSummary=document.getElementById('resultSummary');
-var portalView=document.getElementById('portalView'),browseView=document.getElementById('browseView');
+var portalView=document.getElementById('portalView'),browseView=document.getElementById('browseView'),contentView=document.getElementById('contentView');
 var landingView=document.getElementById('landingView'),landingHeader=document.getElementById('landingHeader');
 var landingGrid=document.getElementById('landingGrid'),landingBack=document.getElementById('landingBack');
-var browseTitle=document.getElementById('browseTitle');
-var state={category:'all',query:'',activeModalId:null,lastFocusedElement:null,currentView:'portal',landingType:null};
+var browseTitle=document.getElementById('browseTitle'),contentHeader=document.getElementById('contentHeader'),contentBody=document.getElementById('contentBody'),contentBack=document.getElementById('contentBack');
+var state={category:'all',query:'',activeModalId:null,lastFocusedElement:null,currentView:'portal',landingType:null,contentKey:null,section:null,sectionHint:null};
 var renderTimer=null,searchTimer=null;
 
 // ====== VIEW SWITCHING ======
-function showPortal(){
-  state.currentView='portal';
-  state.landingType=null;
-  portalView.hidden=false;
-  landingView.hidden=true;
-  browseView.hidden=true;
-  updateActiveNav();
+function showPortal(){state.currentView='portal';state.landingType=null;state.contentKey=null;state.section=null;state.sectionHint=null;portalView.hidden=false;landingView.hidden=true;browseView.hidden=true;contentView.hidden=true;updateActiveNav()}
+function showLanding(type){state.landingType=type;state.currentView='landing';state.contentKey=null;state.section=type;state.sectionHint=type;portalView.hidden=true;landingView.hidden=false;browseView.hidden=true;contentView.hidden=true;updateActiveNav();buildLanding(type)}
+function showBrowse(cat){cat=cat||state.category||'all';state.category=cat;state.currentView='browse';state.contentKey=null;state.landingType=null;state.section='read';state.sectionHint='read';portalView.hidden=true;landingView.hidden=true;browseView.hidden=false;contentView.hidden=true;var cm=catMeta[cat];browseTitle.textContent=(cm?cm.name:'全部')+'装备专题';updateAllFilters();render(filterItems());document.getElementById('cardsScroll').scrollTop=0}
+function showContent(key,parentType){state.currentView='content';state.contentKey=key;state.section=parentType||(contentCatalog[key]&&contentCatalog[key].parent)||state.section||state.sectionHint||'read';state.sectionHint=state.section;portalView.hidden=true;landingView.hidden=true;browseView.hidden=true;contentView.hidden=false;updateActiveNav();renderContentPage(key)}
+
+function landingCard(i,actionText){
+  var attrs=i.url?'data-url="'+i.url+'"':(i.cat?'data-cat="'+i.cat+'" data-parent="'+(i.parent||'read')+'"':'data-content="'+i.content+'" data-parent="'+(i.parent||'learn')+'"');
+  return '<div class="landing-card '+i.cls+'" role="button" tabindex="0" '+attrs+' style="--delay:'+i.delay+'ms"><div class="landing-card-bg" style="background-image:url(\''+i.img+'\')"></div><span class="lc-badge">'+escapeHtml(i.badge||'框架')+'</span><div class="lc-body"><h3>'+escapeHtml(i.name)+'</h3><span class="lc-go">'+escapeHtml(actionText||'进入模块')+' →</span></div></div>';
+}
+function buildLanding(type){var hdr='',cards='',cols='cols-3';
+  if(type==='learn'){hdr='<h2>学习</h2>';cols='cols-2';var arr=[{content:'course',parent:'learn',name:'国防视频',desc:'',cls:'accent-learning',delay:0,badge:'视频',img:'assets/equipment/y20/images/y20-02.jpg'},{content:'quiz',parent:'learn',name:'知识问答',desc:'',cls:'accent-learning',delay:80,badge:'问答',img:'assets/equipment/j16/images/j16-03.jpg'}];cards=arr.map(function(i){return landingCard(i,'进入学习')}).join('');}
+  else if(type==='read'){hdr='<h2>阅览</h2>';var arr=[{cat:'all',parent:'read',name:'装备介绍',desc:'',cls:'accent-reading',delay:0,badge:'装备',img:'assets/equipment/j20/images/j20-02.jpg'},{content:'news',parent:'read',name:'新闻速览',desc:'',cls:'accent-reading',delay:70,badge:'新闻',img:'assets/equipment/type052d/images/type052d-01.jpg'},{content:'heroes',parent:'read',name:'聚焦英雄',desc:'',cls:'accent-reading',delay:140,badge:'人物',img:'assets/equipment/type99a/images/type99a-02.jpg'}];cards=arr.map(function(i){return landingCard(i,i.cat?'进入浏览':'进入专题')}).join('');}
+  else {hdr='<h2>提升</h2>';cols='cols-3';var arr=[{url:'air-defense/index.html',name:'防空战略模拟',desc:'',cls:'accent-growth',delay:0,badge:'模拟',img:'air-defense/assets/images/missile.jpg'},{url:'drone-strategy/index.html',name:'飞控战略模拟',desc:'',cls:'accent-growth',delay:70,badge:'模拟',img:'assets/equipment/z10/images/z10-02.jpg'},{content:'bases',parent:'grow',name:'教育基地',desc:'',cls:'accent-growth',delay:140,badge:'基地',img:'assets/equipment/y20/images/y20-03.jpg'}];cards=arr.map(function(i){return landingCard(i,i.url?'进入模块':'进入框架')}).join('');}
+  landingHeader.innerHTML=hdr;landingGrid.className='landing-grid '+cols;landingGrid.innerHTML=cards;
 }
 
-function showLanding(type){
-  state.landingType=type;
-  state.currentView='landing';
-  portalView.hidden=true;
-  landingView.hidden=false;
-  browseView.hidden=true;
-  updateActiveNav();
-  buildLanding(type);
-}
+function renderCardList(items){return '<section class="framework-board"><div class="framework-ribbon">框架搭建</div><div class="content-grid">'+items.map(function(item){return '<article class="content-card"><h3>'+escapeHtml(item.title)+'</h3><p>'+escapeHtml(item.text||item.body||item.desc||'')+'</p></article>'}).join('')+'</div></section>'}
+function renderLinkList(items){return '<div class="link-list">'+items.map(function(item){return '<a class="link-item" href="'+escapeHtml(item.url)+'" target="_blank" rel="noopener noreferrer"><strong>'+escapeHtml(item.name)+'</strong><p>'+escapeHtml(item.desc)+'</p><span>打开链接 ↗</span></a>'}).join('')+'</div>'}
+function renderNewsPage(items){var feature=items[0],rest=items.slice(1);var lanes=[['权威发布','政策发布、例行记者会、重大活动报道集中阅读。'],['装备动态','新装备、训练演训、科技强军相关报道入口。'],['视频报道','适合课堂播放与展示的公开视频、专题节目。'],['时政资讯','新华社、央视等公开军事时政资讯补充入口。']];return '<section class="news-board"><a class="news-feature" href="'+escapeHtml(feature.url)+'" target="_blank" rel="noopener noreferrer"><div class="news-feature-bg" style="background-image:url(\''+escapeHtml(feature.img||'assets/equipment/type052d/images/type052d-01.jpg')+'\')"></div><div class="news-feature-body"><span class="news-chip">主推荐</span><h3>'+escapeHtml(feature.name)+'</h3><p>'+escapeHtml(feature.desc)+'</p><div class="news-tag-row">'+(feature.tags||[]).map(function(tag){return '<span class="news-tag">'+escapeHtml(tag)+'</span>'}).join('')+'</div><span class="news-open">打开权威入口 →</span></div></a><div class="news-side">'+rest.map(function(item){return '<a class="news-source" href="'+escapeHtml(item.url)+'" target="_blank" rel="noopener noreferrer"><strong>'+escapeHtml(item.name)+'</strong><span>访问 ↗</span><p>'+escapeHtml(item.desc)+'</p></a>'}).join('')+'</div></section><section class="news-lanes">'+lanes.map(function(item){return '<article class="news-lane"><h4>'+escapeHtml(item[0])+'</h4><p>'+escapeHtml(item[1])+'</p></article>'}).join('')+'</section>'}
+function renderHeroTimeline(){return '<section class="framework-board"><div class="framework-ribbon">时间框架</div><div class="hero-timeline">'+heroTimeline.map(function(item){return '<article class="hero-era"><h3>'+escapeHtml(item.era)+'</h3><p>'+escapeHtml(item.desc)+'</p><div class="hero-slots">'+item.slots.map(function(slot){return '<div class="hero-slot"><strong>'+escapeHtml(slot[0])+'</strong><span>'+escapeHtml(slot[1])+'</span></div>'}).join('')+'</div></article>'}).join('')+'</div></section>'}
+function renderBaseExplorer(activeProvince){var current=activeProvince||'北京';var buttons=baseProvinceList.map(function(name){return '<button class="province-btn'+(name===current?' active':'')+'" type="button" data-province="'+escapeHtml(name)+'">'+escapeHtml(name)+'</button>'}).join('');return '<section class="base-explorer"><div class="province-map-panel"><div class="framework-ribbon">省份地图</div><div class="china-map-frame"><div class="china-map-shape" aria-hidden="true"></div><div class="province-grid">'+buttons+'</div></div></div>'+renderBasePanel(current)+'</section>'}
+function renderBasePanel(province){var types=['国防教育基地','纪念馆','军事博物馆','革命遗址','烈士陵园','研学线路'];return '<aside class="base-list-panel" id="baseListPanel"><h3>'+escapeHtml(province)+'教育基地列表</h3><div class="base-type-row">'+types.map(function(type){return '<span>'+escapeHtml(type)+'</span>'}).join('')+'</div><ul class="base-placeholder-list"><li>基地条目 1：预留名称、所在地、开放时间、适合年级。</li><li>基地条目 2：预留纪念馆/博物馆/革命遗址简介。</li><li>基地条目 3：预留预约方式、交通说明、研学任务单。</li></ul></aside>'}
+function updateBaseProvince(province){var panel=document.getElementById('baseListPanel');if(panel)panel.outerHTML=renderBasePanel(province);var buttons=contentBody.querySelectorAll('.province-btn');for(var i=0;i<buttons.length;i++)buttons[i].classList.toggle('active',buttons[i].dataset.province===province)}
+function renderQuiz(){quizState={answered:{},correct:0};var body=quizBank.map(function(item,idx){var opts=item.options.map(function(opt,oi){return '<button class="quiz-option" type="button" data-quiz-index="'+idx+'" data-quiz-choice="'+oi+'">'+String.fromCharCode(65+oi)+'．'+escapeHtml(opt)+'</button>'}).join('');return '<section class="quiz-question" data-quiz-card="'+idx+'"><div class="quiz-q-title">第 '+(idx+1)+' 题</div><h3>'+escapeHtml(item.q)+'</h3><div class="quiz-options">'+opts+'</div><div class="quiz-feedback" id="quiz-feedback-'+idx+'" hidden></div></section>'}).join('');return '<div class="quiz-shell"><div class="quiz-summary" id="quizSummary">已作答 0 / '+quizBank.length+' 题 · 当前得分 0</div>'+body+'</div>'}
+function updateQuizSummary(){var answeredCount=Object.keys(quizState.answered).length,summary=document.getElementById('quizSummary');if(summary)summary.textContent='已作答 '+answeredCount+' / '+quizBank.length+' 题 · 当前得分 '+quizState.correct}
+function renderContentPage(key){if(key==='quiz'){contentHeader.innerHTML='<div class="content-eyebrow">学习</div><h2>知识问答</h2><p>通过题库、题目与解析形成可参与、可反馈、可复盘的学习巩固模块。</p>';contentBody.innerHTML=renderQuiz();return}var data=contentCatalog[key];if(!data)return;var groupMap={learn:'学习',read:'阅览',grow:'提升'};contentHeader.innerHTML='<div class="content-eyebrow">'+groupMap[data.parent]+'</div><h2>'+escapeHtml(data.title)+'</h2><p>'+escapeHtml(data.subtitle)+'</p>';if(key==='news'){contentBody.innerHTML=renderNewsPage(data.links);return}if(key==='heroes'){contentBody.innerHTML=renderHeroTimeline();return}if(key==='bases'){contentBody.innerHTML=renderBaseExplorer('北京');return}contentBody.innerHTML=renderCardList(data.blocks||[])}
 
-function buildLanding(type){
-  var hdr='',cards='',cols='';
-  if(type==='equip'){
-    hdr='<h2>装备介绍 · 知识精进</h2><p class="landing-sub">基于公开资料，按军种分类浏览国防装备专题报道</p>';
-    var cats=[
-      {id:'all',name:'全部装备',desc:'浏览所有军种的装备专题',cls:'',count:8,delay:0},
-      {id:'airforce',name:'空军装备',desc:'歼-20、运-20',cls:'accent-air',count:2,delay:60},
-      {id:'navy',name:'海军装备',desc:'福建舰、山东舰、辽宁舰、055、052D',cls:'accent-navy',count:5,delay:110},
-      {id:'army',name:'陆军装备',desc:'99A式',cls:'accent-army',count:1,delay:160}
-    ];
-    cols='cols-4';
-    cards=cats.map(function(c){
-      return '<div class="landing-card '+c.cls+'" role="button" tabindex="0" data-cat="'+c.id+'" style="--delay:'+c.delay+'ms"><div class="lc-badge">'+c.count+' 条报道</div><h3>'+c.name+'</h3><div class="lc-desc">'+c.desc+'</div><span class="lc-go">进入浏览 →</span></div>';
-    }).join('');
-  }else{
-    hdr='<h2>战略模拟 · 素养提升</h2><p class="landing-sub">交互式战略推演与战术模拟，在虚拟战场中磨炼指挥决策能力</p>';
-    var sims=[
-      {id:'airdef',name:'防空战略模拟',desc:'城市要地防空态势复盘与装备部署推演',cls:'accent-sim',delay:0,url:'air-defense/index.html'},
-      {id:'drone',name:'飞控战略模拟',desc:'无人机集群协同作战与战术策略推演',cls:'accent-sim',delay:70,url:'drone-strategy/index.html'}
-    ];
-    cols='cols-2';
-    cards=sims.map(function(s){
-      return '<div class="landing-card '+s.cls+'" role="button" tabindex="0" data-url="'+s.url+'" style="--delay:'+s.delay+'ms"><h3>'+s.name+'</h3><div class="lc-desc">'+s.desc+'</div><span class="lc-go">进入模拟 →</span></div>';
-    }).join('');
-  }
-  landingHeader.innerHTML=hdr;
-  landingGrid.className='landing-grid '+cols;
-  landingGrid.innerHTML=cards;
-}
+// ====== NAV / FILTER UPDATES ======
+function updateAllFilters(){var topLinks=tNav.querySelectorAll('.nav-link');for(var i=0;i<topLinks.length;i++){var active=(state.currentView==='browse'&&topLinks[i].dataset.cat===state.category)||(state.currentView==='content'&&topLinks[i].dataset.content===state.contentKey);topLinks[i].classList.toggle('active',active);if(active)topLinks[i].setAttribute('aria-current','page');else topLinks[i].removeAttribute('aria-current')}var bf=document.getElementById('browseFilters');if(bf){var flinks=bf.querySelectorAll('.nav-link');for(var j=0;j<flinks.length;j++)flinks[j].classList.toggle('active',flinks[j].dataset.cat===state.category)}}
+function updateActiveNav(){if(state.currentView==='portal'||state.currentView==='landing'){var topLinks=tNav.querySelectorAll('.nav-link');for(var i=0;i<topLinks.length;i++){topLinks[i].classList.remove('active');topLinks[i].removeAttribute('aria-current')}return}updateAllFilters()}
 
-function showBrowse(cat){
-  cat=cat||state.category||'all';
-  state.category=cat;
-  state.currentView='browse';
-  state.landingType=null;
-  portalView.hidden=true;
-  landingView.hidden=true;
-  browseView.hidden=false;
-  var cm=catMeta[cat];
-  browseTitle.textContent=(cm?cm.name:'全部')+'装备专题';
-  updateAllFilters();
-  render(filterItems());
-  document.getElementById('cardsScroll').scrollTop=0;
-}
+// ====== INTERACTIONS ======
+function scheduleRender(){clearTimeout(searchTimer);searchTimer=setTimeout(function(){render(filterItems())},90)}
+function closeMenu(){document.body.classList.remove('menu-open');if(mBtn){mBtn.setAttribute('aria-expanded','false');mBtn.setAttribute('aria-label','打开分类菜单')}}
+function toggleMenu(){var open=document.body.classList.toggle('menu-open');mBtn.setAttribute('aria-expanded',open?'true':'false');mBtn.setAttribute('aria-label',open?'关闭分类菜单':'打开分类菜单')}
+function openItemFromCard(el){if(!el)return;var item=findItemById(el.dataset.id);if(!item)return;el.classList.add('is-pressed');setTimeout(function(){el.classList.remove('is-pressed');openModal(item,el)},120)}
+function setCategory(cat){cat=cat||'all';state.category=cat;if(state.currentView==='portal'||state.currentView==='landing'){showBrowse(cat)}else{updateAllFilters();render(filterItems());document.getElementById('cardsScroll').scrollTop=0}}
+function bindEvents(){document.getElementById('entryLearn').addEventListener('click',function(){showLanding('learn')});document.getElementById('entryLearn').addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();showLanding('learn')}});document.getElementById('entryRead').addEventListener('click',function(){showLanding('read')});document.getElementById('entryRead').addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();showLanding('read')}});document.getElementById('entryGrow').addEventListener('click',function(){showLanding('grow')});document.getElementById('entryGrow').addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();showLanding('grow')}});landingBack.addEventListener('click',showPortal);contentBack.addEventListener('click',function(){showLanding(state.section||'read')});landingGrid.addEventListener('click',function(e){var c=safeClosest(e.target,'.landing-card');if(!c)return;e.preventDefault();if(c.dataset.url){window.location.href=c.dataset.url;return}if(c.dataset.cat){setCategory(c.dataset.cat);return}if(c.dataset.content){showContent(c.dataset.content,c.dataset.parent)}});landingGrid.addEventListener('keydown',function(e){if(e.key!=='Enter'&&e.key!==' ')return;var c=safeClosest(e.target,'.landing-card');if(!c)return;e.preventDefault();if(c.dataset.url){window.location.href=c.dataset.url;return}if(c.dataset.cat){setCategory(c.dataset.cat);return}if(c.dataset.content){showContent(c.dataset.content,c.dataset.parent)}});document.getElementById('browseBack').addEventListener('click',function(){showLanding('read')});grid.addEventListener('click',function(e){var c=safeClosest(e.target,'.card[data-id]');if(c&&grid.contains(c)){e.preventDefault();openItemFromCard(c)}});grid.addEventListener('keydown',function(e){if(e.key!=='Enter'&&e.key!==' ')return;var c=safeClosest(e.target,'.card[data-id]');if(c&&grid.contains(c)){e.preventDefault();openItemFromCard(c)}});tNav.addEventListener('click',function(e){var b=safeClosest(e.target,'.nav-link');if(!b)return;e.preventDefault();if(b.dataset.page){window.location.href=b.dataset.page;return}if(b.dataset.cat){setCategory(b.dataset.cat);closeMenu();return}if(b.dataset.content){showContent(b.dataset.content,b.dataset.parent);closeMenu();return}closeMenu()});var bf=document.getElementById('browseFilters');bf.addEventListener('click',function(e){var b=safeClosest(e.target,'.nav-link');if(!b)return;e.preventDefault();if(b.dataset.cat)setCategory(b.dataset.cat)});tNav.addEventListener('click',function(e){var label=safeClosest(e.target,'.nav-group-label');if(!label)return;if(document.body.classList.contains('menu-open')){e.preventDefault();var dd=label.parentElement.querySelector('.nav-group-dropdown');if(dd){dd.style.display=dd.style.display==='flex'?'none':'flex'}}});sIn.addEventListener('input',function(){state.query=sIn.value.trim();if(state.query&&(state.currentView==='portal'||state.currentView==='landing'||state.currentView==='content'))showBrowse(state.category);scheduleRender()});clearSearch.addEventListener('click',function(){sIn.value='';state.query='';render(filterItems());sIn.focus()});contentBody.addEventListener('click',function(e){var province=safeClosest(e.target,'.province-btn');if(province&&contentBody.contains(province)){e.preventDefault();updateBaseProvince(province.dataset.province);return}var option=safeClosest(e.target,'.quiz-option');if(option&&contentBody.contains(option)){var qi=parseInt(option.dataset.quizIndex,10),choice=parseInt(option.dataset.quizChoice,10);if(quizState.answered[qi]!==undefined)return;quizState.answered[qi]=choice;var data=quizBank[qi],correct=choice===data.answer;if(correct)quizState.correct+=1;var wrap=contentBody.querySelector('[data-quiz-card="'+qi+'"]');if(wrap){var buttons=wrap.querySelectorAll('.quiz-option');for(var i=0;i<buttons.length;i++){buttons[i].disabled=true;if(parseInt(buttons[i].dataset.quizChoice,10)===data.answer)buttons[i].classList.add('is-correct');if(buttons[i]===option&&!correct)buttons[i].classList.add('is-wrong')}}var feedback=document.getElementById('quiz-feedback-'+qi);if(feedback){feedback.hidden=false;feedback.innerHTML='<strong>'+(correct?'回答正确':'回答错误')+'：</strong>'+escapeHtml(data.explain)}updateQuizSummary();return}});mClose.addEventListener('click',closeModal);mOver.addEventListener('click',function(e){if(e.target===mOver)closeModal()});mCont.addEventListener('click',function(e){var sourceToggle=safeClosest(e.target,'[data-source-toggle]');if(sourceToggle&&mCont.contains(sourceToggle)){var panel=document.getElementById('sourcePanel');if(panel){panel.hidden=!panel.hidden;if(!panel.hidden)panel.scrollIntoView({block:'nearest',behavior:'smooth'})}return}var sourceClose=safeClosest(e.target,'[data-source-close]');if(sourceClose&&mCont.contains(sourceClose)){var p=document.getElementById('sourcePanel');if(p)p.hidden=true;return}var b=safeClosest(e.target,'[data-media-type]');if(!b||!mCont.contains(b))return;switchModalMedia(b.dataset.mediaType,parseInt(b.dataset.mediaIndex||'0',10))});mBtn.addEventListener('click',function(e){e.stopPropagation();toggleMenu()});document.addEventListener('click',function(e){if(!safeClosest(e.target,'#topbar')&&document.body.classList.contains('menu-open'))closeMenu()});document.addEventListener('keydown',function(e){if(e.key==='Escape'){if(mOver.classList.contains('show'))closeModal();else if(document.body.classList.contains('menu-open'))closeMenu();else if(state.currentView==='landing')showPortal();else if(state.currentView==='browse')showLanding('read');else if(state.currentView==='content'&&state.sectionHint)showLanding(state.sectionHint);else if(state.query){sIn.value='';state.query='';render(filterItems())}}})}
 
+// ====== INIT ======
+function init(){if(window.location.hash==='#grow')showLanding('grow');else showPortal();updateAllFilters();bindEvents();render(E)}
+init();
 // ====== HELPERS ======
 function normalizeText(value){return String(value||'').toLowerCase().replace(/\s+/g,'').trim()}
 function flattenSearchText(value){
@@ -631,9 +728,14 @@ function buildVideoStage(video,x){
 }
 function buildMediaGallery(x){
   var imgs=getMediaImages(x),video=getMediaVideo(x),first=imgs[0];
-  var thumbs=imgs.map(function(img,i){return '<button class="media-thumb '+(i===0?'active ':'')+(normalizeMediaStatus(img.status)==='fallback'||normalizeMediaStatus(img.status)==='missing'?'fallback':'')+'" type="button" data-media-type="image" data-media-index="'+i+'" aria-label="查看第 '+(i+1)+' 张图片">'+imgTag(img,'')+'<span class="thumb-label">图 '+(i+1)+'</span></button>'}).join('');
-  thumbs+='<button class="media-thumb '+(!video.src?'fallback':'')+'" type="button" data-media-type="video" data-media-index="0" aria-label="查看视频">'+imgTag({src:video.poster||VIDEO_PLACEHOLDER,alt:video.title||x.n+' 视频封面'},'')+'<span class="play-mark">▶</span><span class="thumb-label">视频</span></button>';
-  return '<section class="modal-media" data-equipment-id="'+escapeHtml(x.id)+'"><div class="media-stage" id="mediaStage">'+buildImageStage(first,x,0)+'</div><div class="media-thumbs" role="listbox" aria-label="媒体缩略图">'+thumbs+'</div><div class="media-source" id="mediaSource">'+mediaSourceHtml(first,'图片 1')+'</div></section>';
+  var thumbs=imgs.map(function(img,i){
+    var status=normalizeMediaStatus(img.status),fallback=status==='fallback'||status==='missing';
+    return '<button class="media-thumb '+(i===0?'active ':'')+(fallback?'fallback':'')+'" type="button" data-media-type="image" data-media-index="'+i+'" aria-label="查看 '+escapeHtml(x.n)+' 图片 '+(i+1)+'">'+imgTag(img,'thumb-img')+'<span class="thumb-label">图 '+(i+1)+'</span></button>';
+  }).join('');
+  if(hasRealVideo(x)||hasWebVideo(x)){
+    thumbs+='<button class="media-thumb" type="button" data-media-type="video" data-media-index="0" aria-label="查看 '+escapeHtml(x.n)+' 视频">'+imgTag({src:video.poster||VIDEO_PLACEHOLDER,alt:x.n+' 视频封面'},'thumb-img')+'<span class="play-mark">▶</span><span class="thumb-label">视频</span></button>';
+  }
+  return '<section class="modal-media" data-equipment-id="'+escapeHtml(x.id)+'"><div class="media-stage" id="mediaStage">'+buildImageStage(first,x,0)+'</div><div class="media-thumbs">'+thumbs+'</div><div class="media-source" id="mediaSource">'+mediaSourceHtml(first,'图片 1')+'</div></section>';
 }
 function pauseModalVideo(){if(!mCont||!mCont.querySelectorAll)return;var videos=mCont.querySelectorAll('video');for(var i=0;i<videos.length;i++)videos[i].pause&&videos[i].pause()}
 function switchModalMedia(type,index){
@@ -703,6 +805,10 @@ function card(x,i){
   return d;
 }
 
+function articleFigure(img,index){
+  return '<figure class="article-fig">'+imgTag(img,'article-img')+'<figcaption>图 '+(index+1)+' · '+escapeHtml(img.sourceName||'公开来源')+'</figcaption></figure>';
+}
+
 // ====== RADAR ======
 function drawRadar(canvas,labels,scores,color){
   var dpr=window.devicePixelRatio||1,css=250;
@@ -731,16 +837,21 @@ function drawRadar(canvas,labels,scores,color){
 function openModal(x,triggerEl){
   if(!x)return;
   state.activeModalId=x.id;state.lastFocusedElement=triggerEl||document.activeElement;
-  var pre=radarPresets[x.c]||radarPresets.airforce,rid='radarC';
-  var sr=Object.keys(x.sp).map(function(k){return'<div class="spec-item"><span class="spec-label">'+escapeHtml(k)+'</span><span class="spec-value">'+escapeHtml(x.sp[k])+'</span></div>'}).join('');
-  var ri=x.rd.map(function(s,i){return'<div class="radar-row"><div class="dot" style="background:'+pre.color+'"></div><span class="lbl">'+escapeHtml(pre.labels[i])+'</span><div class="bar-wrap"><div class="bar-fill" style="width:'+s+'%;background:'+pre.color+'"></div></div><span class="val">'+s+'</span></div>'}).join('');
-  var dh=x.ds.map(function(p,i){var t=['概述','技术特点','战略意义'];return'<h4>'+(t[i]||'补充信息')+'</h4><p>'+escapeHtml(p)+'</p>'}).join('');
+  var paras=x.ds&&x.ds.length?x.ds:[''];
+  var imgs=getMediaImages(x);
+  var lead=paras[0]||'';
+  var sections='';
+  for(var i=1;i<paras.length;i++){
+    var img=imgs[i]||imgs[0];
+    sections+=articleFigure(img,i)+'<p>'+escapeHtml(paras[i])+'</p>';
+  }
+  if(!sections&&imgs[1])sections=articleFigure(imgs[1],1);
   var cm=catMeta[x.c]||{name:x.c,icon:''};
-  mCont.innerHTML=buildMediaGallery(x)+'<div class="modal-body"><div class="modal-tags"><span class="modal-tag">'+escapeHtml(cm.name)+'</span><span class="modal-status '+(x.s==='active'?'tag-active':'tag-test')+'">'+(x.s==='active'?'● 现役':'◎ 测试中')+'</span><button class="source-open-btn" type="button" data-source-toggle>数据来源</button></div><h2 id="modalTitle">'+escapeHtml(x.n)+'</h2><div class="model-name">'+escapeHtml(x.fn)+'</div>'+buildSourcePanel(x)+'<div class="specs-grid">'+sr+'</div><div class="radar-block"><div class="radar-canvas-wrap"><canvas id="'+rid+'" width="250" height="250" aria-label="'+escapeHtml(x.n)+'五维能力雷达图"></canvas></div><div class="radar-info"><h4>五维能力观察</h4><div class="radar-note">基于公开报道要点转译为专题阅读指标，具体来源可点"数据来源"核对。</div>'+ri+'</div></div><div class="desc-block">'+dh+'</div></div>';
+  mCont.innerHTML=buildMediaGallery(x)+'<div class="modal-body"><div class="modal-tags"><span class="modal-tag">'+escapeHtml(cm.name)+'</span><span class="modal-status '+(x.s==='active'?'tag-active':'tag-test')+'">'+(x.s==='active'?'● 现役':'◎ 测试中')+'</span><button class="source-open-btn" type="button" data-source-toggle>数据来源</button></div><h2 id="modalTitle">'+escapeHtml(x.n)+'</h2><div class="model-name">'+escapeHtml(x.fn)+'</div>'+buildSourcePanel(x)+'<p class="lead">'+escapeHtml(lead)+'</p><div class="article">'+sections+'</div></div>';
   mOver.classList.add('show');mOver.setAttribute('aria-hidden','false');
   document.body.classList.add('modal-open');
   mCont.parentElement.scrollTop=0;
-  setTimeout(function(){var c=document.getElementById(rid);if(c)drawRadar(c,pre.labels,x.rd,pre.color);if(mClose)mClose.focus()},160);
+  setTimeout(function(){if(mClose)mClose.focus()},160);
 }
 function closeModal(){
   pauseModalVideo();
@@ -752,157 +863,6 @@ function closeModal(){
   setTimeout(function(){if(last&&document.body.contains(last))last.focus()},180);
 }
 
-// ====== NAV / FILTER UPDATES ======
-function updateAllFilters(){
-  // Topbar nav dropdown
-  var topLinks=tNav.querySelectorAll('.nav-link');
-  for(var i=0;i<topLinks.length;i++){
-    var active=topLinks[i].dataset.cat===state.category;
-    topLinks[i].classList.toggle('active',active);
-    if(active)topLinks[i].setAttribute('aria-current','page');else topLinks[i].removeAttribute('aria-current');
-  }
-  // Browse view filters
-  var bf=document.getElementById('browseFilters');
-  if(bf){
-    var flinks=bf.querySelectorAll('.nav-link');
-    for(var j=0;j<flinks.length;j++){
-      flinks[j].classList.toggle('active',flinks[j].dataset.cat===state.category);
-    }
-  }
-}
-
-function updateActiveNav(){
-  // In portal or landing view, remove all active states from category links
-  if(state.currentView==='portal'||state.currentView==='landing'){
-    var allLinks=tNav.querySelectorAll('.nav-link[data-cat]');
-    for(var i=0;i<allLinks.length;i++){
-      allLinks[i].classList.remove('active');
-      allLinks[i].removeAttribute('aria-current');
-    }
-    // Activate "全部" as default
-    var allBtn=tNav.querySelector('.nav-link[data-cat="all"]');
-    if(allBtn){allBtn.classList.add('active');allBtn.setAttribute('aria-current','page')}
-  } else {
-    updateAllFilters();
-  }
-}
-
-// ====== INTERACTIONS ======
-function scheduleRender(){clearTimeout(searchTimer);searchTimer=setTimeout(function(){render(filterItems())},90)}
-function closeMenu(){document.body.classList.remove('menu-open');if(mBtn){mBtn.setAttribute('aria-expanded','false');mBtn.setAttribute('aria-label','打开分类菜单')}}
-function toggleMenu(){var open=document.body.classList.toggle('menu-open');mBtn.setAttribute('aria-expanded',open?'true':'false');mBtn.setAttribute('aria-label',open?'关闭分类菜单':'打开分类菜单')}
-function openItemFromCard(el){
-  if(!el)return;var item=findItemById(el.dataset.id);if(!item)return;
-  el.classList.add('is-pressed');setTimeout(function(){el.classList.remove('is-pressed');openModal(item,el)},120);
-}
-
-function setCategory(cat){
-  cat=cat||'all';
-  state.category=cat;
-  if(state.currentView==='portal'||state.currentView==='landing'){showBrowse(cat)}
-  else{updateAllFilters();render(filterItems());document.getElementById('cardsScroll').scrollTop=0}
-}
-
-function bindEvents(){
-  // Portal entry — equipment → landing
-  document.getElementById('entryEquip').addEventListener('click',function(){showLanding('equip')});
-  document.getElementById('entryEquip').addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();showLanding('equip')}});
-  // Portal entry — simulation → landing
-  document.getElementById('entrySim').addEventListener('click',function(){showLanding('sim')});
-  document.getElementById('entrySim').addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();showLanding('sim')}});
-
-  // Landing back button
-  landingBack.addEventListener('click',showPortal);
-
-  // Landing grid clicks
-  landingGrid.addEventListener('click',function(e){
-    var c=safeClosest(e.target,'.landing-card');if(!c)return;
-    e.preventDefault();
-    if(c.dataset.url){window.location.href=c.dataset.url;return}
-    if(c.dataset.cat){setCategory(c.dataset.cat)}
-  });
-  landingGrid.addEventListener('keydown',function(e){
-    if(e.key!=='Enter'&&e.key!==' ')return;
-    var c=safeClosest(e.target,'.landing-card');if(!c)return;
-    e.preventDefault();
-    if(c.dataset.url){window.location.href=c.dataset.url;return}
-    if(c.dataset.cat){setCategory(c.dataset.cat)}
-  });
-
-  // Browse back button
-  document.getElementById('browseBack').addEventListener('click',showPortal);
-
-  // Cards grid clicks
-  grid.addEventListener('click',function(e){var c=safeClosest(e.target,'.card[data-id]');if(c&&grid.contains(c)){e.preventDefault();openItemFromCard(c)}});
-  grid.addEventListener('keydown',function(e){if(e.key!=='Enter'&&e.key!==' ')return;var c=safeClosest(e.target,'.card[data-id]');if(c&&grid.contains(c)){e.preventDefault();openItemFromCard(c)}});
-
-  // Topbar nav clicks
-  tNav.addEventListener('click',function(e){
-    var b=safeClosest(e.target,'.nav-link');if(!b)return;
-    e.preventDefault();
-    if(b.dataset.page){window.location.href=b.dataset.page;return}
-    if(b.dataset.cat){setCategory(b.dataset.cat)}
-    closeMenu();
-  });
-
-  // Browse filters clicks
-  var bf=document.getElementById('browseFilters');
-  bf.addEventListener('click',function(e){
-    var b=safeClosest(e.target,'.nav-link');if(!b)return;
-    e.preventDefault();if(b.dataset.cat)setCategory(b.dataset.cat);
-  });
-
-  // Handle nav-group label clicks — toggle dropdown on mobile, no-op on desktop
-  tNav.addEventListener('click',function(e){
-    var label=safeClosest(e.target,'.nav-group-label');
-    if(!label)return;
-    if(document.body.classList.contains('menu-open')){
-      e.preventDefault();
-      var dd=label.parentElement.querySelector('.nav-group-dropdown');
-      if(dd){dd.style.display=dd.style.display==='flex'?'none':'flex'}
-    }
-  });
-
-  // Search
-  sIn.addEventListener('input',function(){state.query=sIn.value.trim();if(state.query&&(state.currentView==='portal'||state.currentView==='landing'))showBrowse(state.category);scheduleRender()});
-  clearSearch.addEventListener('click',function(){sIn.value='';state.query='';render(filterItems());sIn.focus()});
-
-  // Modal
-  mClose.addEventListener('click',closeModal);
-  mOver.addEventListener('click',function(e){if(e.target===mOver)closeModal()});
-  mCont.addEventListener('click',function(e){
-    var sourceToggle=safeClosest(e.target,'[data-source-toggle]');
-    if(sourceToggle&&mCont.contains(sourceToggle)){var panel=document.getElementById('sourcePanel');if(panel){panel.hidden=!panel.hidden;if(!panel.hidden)panel.scrollIntoView({block:'nearest',behavior:'smooth'});}return;}
-    var sourceClose=safeClosest(e.target,'[data-source-close]');
-    if(sourceClose&&mCont.contains(sourceClose)){var p=document.getElementById('sourcePanel');if(p)p.hidden=true;return;}
-    var b=safeClosest(e.target,'[data-media-type]');if(!b||!mCont.contains(b))return;switchModalMedia(b.dataset.mediaType,parseInt(b.dataset.mediaIndex||'0',10))
-  });
-
-  // Mobile menu
-  mBtn.addEventListener('click',function(e){e.stopPropagation();toggleMenu()});
-  document.addEventListener('click',function(e){if(!safeClosest(e.target,'#topbar')&&document.body.classList.contains('menu-open'))closeMenu()});
-
-  // Keyboard
-  document.addEventListener('keydown',function(e){
-    if(e.key==='Escape'){
-      if(mOver.classList.contains('show'))closeModal();
-      else if(document.body.classList.contains('menu-open'))closeMenu();
-      else if(state.currentView==='landing')showPortal();
-      else if(state.currentView==='browse')showPortal();
-      else if(state.query){sIn.value='';state.query='';render(filterItems())}
-    }
-  });
-}
-
-// ====== INIT ======
-function init(){
-  showPortal();
-  updateAllFilters();
-  bindEvents();
-  // Pre-render equipment cards for instant switch
-  render(E);
-}
-init();
 </script>
 </body>
 </html>

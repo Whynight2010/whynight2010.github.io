@@ -4,12 +4,13 @@
 
 function getUnitIcon(type) {
     const icons = {
-        'scout': 'R',
-        'attack': 'A',
-        'strike': 'S',
-        'swarm': 'H'
+        'scout': '侦',
+        'attack': '打',
+        'strike': '击',
+        'strike_assault': '强',
+        'swarm': '蜂'
     };
-    return icons[type] || type.charAt(0).toUpperCase();
+    return icons[type] || '单';
 }
 
 function getUnitShortName(fullName) {
@@ -23,13 +24,13 @@ function getUnitShortName(fullName) {
 
 function getEnemyIcon(type) {
     const icons = {
-        'aa_short': 'D',
-        'aa_long': 'L',
-        'radar': 'R',
-        'enemy_uav': 'U',
-        'command': 'C'
+        'aa_short': '近',
+        'aa_long': '远',
+        'radar': '雷',
+        'enemy_uav': '敌',
+        'command': '指'
     };
-    return icons[type] || 'E';
+    return icons[type] || '敌';
 }
 
 function updateUnitDisplay(unit) {
@@ -60,13 +61,6 @@ function spawnUnits() {
             e.stopPropagation();  // 阻止事件冒泡到地图
             openUnitModal(unit);
         };
-
-        const nameLabel = document.createElement('div');
-        nameLabel.className = 'unit-name-label';
-        nameLabel.textContent = getUnitShortName(unit.name);
-        nameLabel.style.left = '-15px';
-        nameLabel.style.top = '28px';
-        el.appendChild(nameLabel);
 
         view.appendChild(el);
     });
@@ -154,8 +148,8 @@ function getAvailableActions(unit) {
     } else if (unit.type === 'attack') {
         // 察打一体：部署、侦察、攻击、防守、转移、编组、召回
         actions.push('scout', 'attack', 'defend', 'move');
-    } else if (unit.type === 'strike') {
-        // 攻击无人机：部署、攻击、转移、编组、召回
+    } else if (unit.type === 'strike' || unit.type === 'strike_assault') {
+        // 攻击/强击无人机：部署、攻击、转移、编组、召回
         actions.push('attack', 'move');
     } else if (unit.type === 'swarm') {
         // 蜂巢发射车（可移动地面单位）：部署、发射蜂群、转移、编组、召回
@@ -244,9 +238,7 @@ function showLaunchCountSelector(unit) {
                 closeUnitModal();
                 launchDroneCount = count;
                 launchTargetUnit = unit;
-                addBattleLog(unit.name + ' 准备发射 ' + count + ' 架无人机');
-                showMapPrompt('点击地图选择发射方向', '发射 ' + count + ' 架蜂群无人机');
-                setupRangePreview();
+                addBattleLog(unit.name + ' 准备发射 ' + count + ' 架无人机，请点击地图选择发射方向...');
                 var satelliteView = document.getElementById('satellite-view');
                 satelliteView.style.cursor = 'crosshair';
             };
@@ -269,36 +261,32 @@ function showLaunchCountSelector(unit) {
 function enterSwarmMoveSelection(unit) {
     launchTargetUnit = unit;  // 复用 launchTargetUnit 标记移动选择
     launchDroneCount = -1;    // -1 表示移动模式
-    addBattleLog(unit.name + ' 进入转移模式（基地向外' + unit.maxRange + '范围）');
-    showMapPrompt('点击地图选择转移目标', '基地向外' + unit.maxRange + '范围');
-    setupRangePreview();
     var satelliteView = document.getElementById('satellite-view');
     satelliteView.style.cursor = 'crosshair';
 }
 
 // --- 蜂巢无人机编组：生成 ---
 function spawnDroneSquad(launcher, count, targetX, targetY) {
-    friendlyCommandIssued = true;
     droneSquadIdCounter++;
     var squadId = 'squad_' + droneSquadIdCounter;
     var drones = [];
 
     var baseAngle = Math.atan2(targetY - launcher.y, targetX - launcher.x);
-    var spawnDist = 9;
+    var spawnDist = 15;
 
     for (var i = 0; i < count; i++) {
-        var angleOffset = (i - (count - 1) / 2) * (Math.PI / 18);
+        var angleOffset = (i - (count - 1) / 2) * (Math.PI / 14);
         var angle = baseAngle + angleOffset;
         var drone = {
             id: 'drone_' + droneSquadIdCounter + '_' + (i + 1),
             squadId: squadId,
             x: launcher.x + Math.cos(angle) * spawnDist,
             y: launcher.y + Math.sin(angle) * spawnDist,
-            health: 12,
-            maxHealth: 12,
-            attackPower: 22,
-            attackRange: 20,
-            speed: 6.5,
+            health: 15,
+            maxHealth: 15,
+            attackPower: 30,
+            attackRange: 25,
+            speed: 5,
             targetX: null,
             targetY: null,
             status: 'idle',
@@ -329,23 +317,26 @@ function spawnDroneSquad(launcher, count, targetX, targetY) {
     // 生成DOM元素
     spawnDroneElements(squad);
 
-    // 编组向目标移动
-    setSquadMoveCommand(squad, targetX, targetY);
-
     addBattleLog(launcher.name + ' 发射 ' + count + ' 架无人机（编组 ' + squadId + '），航向：(' + Math.round(targetX) + ', ' + Math.round(targetY) + ')');
     addBattleLog('编组 ' + squadId + ' 作战半径300单位，将自动搜索并攻击范围内敌方目标');
+
+    // 下一帧再启动机动，避免发射瞬间的 DOM / 布局峰值叠加
+    requestAnimationFrame(function() {
+        setSquadMoveCommand(squad, targetX, targetY);
+    });
 }
 
 // --- 蜂巢无人机编组：DOM元素生成 ---
 function spawnDroneElements(squad) {
     var view = document.getElementById('satellite-view');
+    var fragment = document.createDocumentFragment();
 
     squad.drones.forEach(function(drone) {
         var el = document.createElement('div');
         el.className = 'unit mini-drone';
         el.style.left = drone.x + 'px';
         el.style.top = drone.y + 'px';
-        el.textContent = '◆';
+        el.innerHTML = '<span class="mini-drone-icon">◉</span>';
         el.title = '蜂群无人机 ' + drone.id + '（' + squad.id + '）';
         el.setAttribute('data-drone-id', drone.id);
         el.setAttribute('data-squad-id', squad.id);
@@ -354,8 +345,10 @@ function spawnDroneElements(squad) {
             openSquadModal(squad);
         };
 
-        view.appendChild(el);
+        fragment.appendChild(el);
     });
+
+    view.appendChild(fragment);
 }
 
 // --- 蜂巢无人机编组：DOM位置更新 ---
@@ -454,9 +447,6 @@ function enterSquadAttackSelection(squad) {
     launchTargetUnit = null;
     launchDroneCount = 0;
     squad._pendingCommand = 'attack';
-    addBattleLog('蜂群编组 ' + squad.id + ' 选择攻击目标');
-    showMapPrompt('点击地图选择攻击目标', '蜂群编组 ' + squad.id);
-    setupRangePreview();
     var satelliteView = document.getElementById('satellite-view');
     satelliteView.style.cursor = 'crosshair';
 }
@@ -467,9 +457,6 @@ function enterSquadMoveSelection(squad) {
     launchTargetUnit = null;
     launchDroneCount = 0;
     squad._pendingCommand = 'move';
-    addBattleLog('蜂群编组 ' + squad.id + ' 选择转移目标');
-    showMapPrompt('点击地图选择转移目标', '蜂群编组 ' + squad.id);
-    setupRangePreview();
     var satelliteView = document.getElementById('satellite-view');
     satelliteView.style.cursor = 'crosshair';
 }
@@ -658,7 +645,7 @@ function createFormation(unitIds) {
         targetX: null,
         targetY: null,
         isRecalling: false,
-        formationSpacing: 16
+        formationSpacing: 25
     };
 
     formations.push(fg);
@@ -822,9 +809,7 @@ function executeFormationAction(action) {
             }
             closeUnitModal();
             formationCmdPending = { formation: fg, command: 'attack' };
-            addBattleLog(fg.name + ' 选择攻击目标');
-            showMapPrompt('点击地图选择攻击目标', '编组 ' + fg.name);
-            setupRangePreview();
+            addBattleLog(fg.name + ' 进入目标选择模式，请点击地图选择攻击目标...');
             document.getElementById('satellite-view').style.cursor = 'crosshair';
             break;
 
@@ -842,9 +827,7 @@ function executeFormationAction(action) {
             }
             closeUnitModal();
             formationCmdPending = { formation: fg, command: 'move' };
-            addBattleLog(fg.name + ' 选择转移目标');
-            showMapPrompt('点击地图选择转移目标', '编组 ' + fg.name);
-            setupRangePreview();
+            addBattleLog(fg.name + ' 进入目标选择模式，请点击地图选择转移目标...');
             document.getElementById('satellite-view').style.cursor = 'crosshair';
             break;
 
@@ -867,7 +850,7 @@ function executeUnitAction(action) {
                 selectedUnit.status = 'deployed';
                 // 部署至基地前端位置（朝向战场方向，而非基地方位内）
                 const baseX = 90;
-                const baseY = 360;
+                const baseY = 390;
                 selectedUnit.x = baseX + 40 + Math.random() * 40;
                 selectedUnit.y = baseY - 30 - Math.random() * 30;
                 selectedUnit.patrolTargetX = selectedUnit.x;
@@ -897,8 +880,7 @@ function executeUnitAction(action) {
             } else if (selectedUnit.type === 'scout') {
                 addBattleLog(selectedUnit.name + ' 侦察机无法执行攻击任务！');
             } else {
-                addBattleLog(selectedUnit.name + ' 进入目标选择模式，请点击地图选择攻击目标...');
-                enterAttackTargetSelection(selectedUnit);
+                showAttackTargetModeSelector(selectedUnit);
             }
             break;
 
@@ -936,7 +918,7 @@ function executeUnitAction(action) {
             } else {
                 // 使用最优路径机制直线返回基地，不再瞬移
                 const baseReturnX = 70 + selectedUnit.id * 6;
-                const baseReturnY = 340;
+                const baseReturnY = 370;
                 selectedUnit.status = 'recall';
                 selectedUnit.isRecalling = true;
                 addBattleLog(selectedUnit.name + ' 收到召回指令，按最优路径返回基地...');
@@ -968,18 +950,22 @@ function updateEnemyDisplay() {
                 el.dataset.id = unit.id;
                 el.textContent = getEnemyIcon(unit.type);
                 el.title = unit.name;
-
-                const nameLabel = document.createElement('div');
-                nameLabel.className = 'unit-name-label';
-                nameLabel.textContent = getUnitShortName(unit.name);
-                nameLabel.style.left = '-15px';
-                nameLabel.style.top = '28px';
-                el.appendChild(nameLabel);
-
+                el.addEventListener('mouseenter', function(e) {
+                    showEnemyTargetTooltip(unit, e);
+                });
+                el.addEventListener('mousemove', function(e) {
+                    showEnemyTargetTooltip(unit, e);
+                });
+                el.addEventListener('mouseleave', hideEnemyTargetTooltip);
+                el.addEventListener('click', function(e) {
+                    handleEnemyTargetClick(unit, e);
+                });
                 view.appendChild(el);
             }
             el.style.left = unit.x + 'px';
             el.style.top = unit.y + 'px';
+            el.classList.toggle('attack-selectable', attackSelectionMode === 'enemy' && attackTargetUnits.length > 0);
+            el.classList.toggle('attack-targeted', enemyTargetTooltipUnit && enemyTargetTooltipUnit.id === unit.id);
         } else {
             const el = document.querySelector(`.unit.enemy[data-id="${unit.id}"]`);
             if (el) {
@@ -987,4 +973,126 @@ function updateEnemyDisplay() {
             }
         }
     });
+}
+
+function showAttackTargetModeSelector(unit) {
+    closeUnitModal();
+    attackTargetUnits = [unit];
+    attackSelectionMode = null;
+
+    var panel = document.getElementById('attack-target-mode');
+    if (!panel) return;
+
+    panel.innerHTML = [
+        '<div class="attack-target-mode-card">',
+        '  <div class="attack-target-mode-title">选择攻击方式</div>',
+        '  <div class="attack-target-mode-subtitle">' + unit.name + '</div>',
+        '  <div class="attack-target-mode-buttons">',
+        '    <button class="action-btn primary" onclick="setAttackSelectionMode(\'point\')">目标点位</button>',
+        '    <button class="action-btn secondary" onclick="setAttackSelectionMode(\'enemy\')">敌方单位</button>',
+        '    <button class="action-btn secondary" onclick="cancelAttackTargetSelection()">取消</button>',
+        '  </div>',
+        '</div>'
+    ].join('');
+    panel.classList.add('active');
+    panel.hidden = false;
+    document.getElementById('satellite-view').style.cursor = 'default';
+}
+
+function setAttackSelectionMode(mode) {
+    attackSelectionMode = mode;
+    hideAttackTargetModePanel();
+
+    var unit = attackTargetUnits[0];
+    if (!unit) return;
+
+    document.getElementById('satellite-view').style.cursor = 'crosshair';
+    if (mode === 'enemy') {
+        addBattleLog(unit.name + ' 已切换为敌方单位攻击模式，请点击敌方单位图标锁定目标');
+    } else {
+        addBattleLog(unit.name + ' 已切换为目标点位攻击模式，请点击地图指定坐标');
+    }
+}
+
+function cancelAttackTargetSelection() {
+    attackTargetUnits = [];
+    attackSelectionMode = 'point';
+    hideAttackTargetModePanel();
+    document.getElementById('satellite-view').style.cursor = 'default';
+    hideEnemyTargetTooltip();
+}
+
+function hideAttackTargetModePanel() {
+    var panel = document.getElementById('attack-target-mode');
+    if (!panel) return;
+    panel.classList.remove('active');
+    panel.hidden = true;
+    panel.innerHTML = '';
+}
+
+function handleEnemyTargetClick(unit, e) {
+    if (attackSelectionMode !== 'enemy' || attackTargetUnits.length === 0) return;
+    if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+    confirmEnemyAttackTarget(unit);
+}
+
+function confirmEnemyAttackTarget(enemy) {
+    var selectedUnits = attackTargetUnits.slice();
+    if (selectedUnits.length === 0) return;
+
+    hideAttackTargetModePanel();
+    document.getElementById('satellite-view').style.cursor = 'default';
+
+    selectedUnits.forEach(function(unit) {
+        unit.attackTargetX = enemy.x;
+        unit.attackTargetY = enemy.y;
+        unit.attackTargetUnitId = enemy.id;
+        unit.attackTargetMode = 'enemy';
+        addBattleLog(unit.name + ' 锁定敌方单位 ' + enemy.name + '，执行巡航接敌');
+        moveToAttackTarget(unit);
+    });
+
+    attackTargetUnits = [];
+    attackSelectionMode = 'point';
+    hideEnemyTargetTooltip();
+}
+
+function showEnemyTargetTooltip(unit, e) {
+    if (attackSelectionMode !== 'enemy' || attackTargetUnits.length === 0) return;
+
+    enemyTargetTooltipUnit = unit;
+    var tip = document.getElementById('enemy-target-tooltip');
+    if (!tip) {
+        tip = document.createElement('div');
+        tip.id = 'enemy-target-tooltip';
+        tip.className = 'enemy-target-tooltip';
+        document.body.appendChild(tip);
+    }
+
+    var ammoText = typeof unit.ammo === 'number' && typeof unit.maxAmmo === 'number'
+        ? '<div>弹药 ' + unit.ammo + '/' + unit.maxAmmo + '</div>'
+        : '';
+    tip.innerHTML = '<div class="tip-title">' + unit.name + '</div>' +
+        '<div>类型 ' + getEnemyTypeText(unit.type) + '</div>' +
+        '<div>生命 ' + Math.max(0, unit.health) + '/' + unit.maxHealth + '</div>' +
+        '<div>射程 ' + unit.attackRange + '</div>' +
+        '<div>探测 ' + unit.scoutRange + '</div>' +
+        ammoText;
+
+    var x = (e && e.clientX) ? e.clientX : 0;
+    var y = (e && e.clientY) ? e.clientY : 0;
+    tip.style.left = (x + 14) + 'px';
+    tip.style.top = (y + 14) + 'px';
+    tip.classList.add('active');
+}
+
+function hideEnemyTargetTooltip() {
+    enemyTargetTooltipUnit = null;
+    var tip = document.getElementById('enemy-target-tooltip');
+    if (tip) {
+        tip.classList.remove('active');
+    }
 }

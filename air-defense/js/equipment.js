@@ -2,6 +2,7 @@
 
 // ======================== 防空装备模块 ========================
 const EquipModule = {
+    // 答辩讲法：EquipModule 管“我方装备”，包括选择型号、部署位置、拖动调整、删除装备和绘制射程圈。
     list: [],
     selectedModel: null,
     mouseX: 0, // 画布原始像素X
@@ -19,6 +20,7 @@ const EquipModule = {
     hoveredEquip: -1,
 
     // 实时更新画布缩放比例
+    // 答辩讲法：浏览器里 canvas 可能被 CSS 缩放，所以鼠标坐标要换算成真实画布坐标，否则部署会偏。
     updateCanvasScale() {
         const canvas = MapModule.canvas;
         const rect = canvas.getBoundingClientRect();
@@ -27,6 +29,7 @@ const EquipModule = {
     },
 
     init() {
+        // 答辩讲法：这里绑定鼠标事件。左键部署，右键删除，拖动调整位置。
         const canvas = MapModule.canvas;
         if (!canvas) return;
 
@@ -89,8 +92,10 @@ const EquipModule = {
                 newX = Math.max(15, Math.min(canvasW - 15, newX));
                 newY = Math.max(15, Math.min(canvasH - 15, newY));
                 // 禁止拖入保护区
-                const distToCenter = Math.hypot(newX - CONFIG.centerX, newY - CONFIG.centerY);
-                if (distToCenter >= CONFIG.protectRadius) {
+                const sites = typeof getDefenseSites === 'function' ? getDefenseSites() : [{ x: CONFIG.centerX, y: CONFIG.centerY, protectRadius: CONFIG.protectRadius }];
+                const blockedByCity = sites.some(site => Math.hypot(newX - site.x, newY - site.y) < (site.protectRadius || CONFIG.protectRadius));
+                const terrainCheck = typeof canDeployAt === 'function' ? canDeployAt(newX, newY, item.type) : { ok: true };
+                if (!blockedByCity && terrainCheck.ok) {
                     item.x = newX;
                     item.y = newY;
                 }
@@ -153,6 +158,7 @@ const EquipModule = {
     },
 
     // 新增装备，传入坐标为画布原始绘图像素（已缩放换算）
+    // 答辩讲法：addEquip 会做三个检查：不能放进保护区、不能和其他装备重叠、不能超出地图边界。
     addEquip(x, y) {
         const model = this.selectedModel;
         if (!model || !model.type || !EQUIP_DATA[model.type]) return;
@@ -162,18 +168,15 @@ const EquipModule = {
         const canvasH = MapModule.canvas.height;
 
         // 保护区拦截
-        const distToCenter = Math.hypot(x - CONFIG.centerX, y - CONFIG.centerY);
-        if (distToCenter < CONFIG.protectRadius) return;
-        // 双要地模式：检查所有保护区
-        if (CONFIG.mapLevel === 2 && typeof MAP_CONFIG !== 'undefined' && MAP_CONFIG[2]) {
-            var areas2 = MAP_CONFIG[2].centers;
-            for (var j = 0; j < areas2.length; j++) {
-                if (Math.hypot(x - areas2[j].x, y - areas2[j].y) < MAP_CONFIG[2].protectRadius) {
-                    return;
-                }
+        const sites = typeof getDefenseSites === 'function' ? getDefenseSites() : [{ x: CONFIG.centerX, y: CONFIG.centerY, protectRadius: CONFIG.protectRadius }];
+        if (sites.some(site => Math.hypot(x - site.x, y - site.y) < (site.protectRadius || CONFIG.protectRadius))) return;
+        const terrainCheck = typeof canDeployAt === 'function' ? canDeployAt(x, y, model.type) : { ok: true };
+        if (!terrainCheck.ok) {
+            if (typeof EffectModule !== 'undefined') {
+                EffectModule.addFloatingText(x, y - 18, terrainCheck.reason, '#FF8A3D');
             }
+            return;
         }
-
         // 装备重叠拦截
         for (let item of this.list) {
             if (Math.hypot(x - item.x, y - item.y) < 28) return;
@@ -191,6 +194,13 @@ const EquipModule = {
            damage: model.damage,
            fireRate: model.fireRate,
            fireCooldown: model.fireCooldown || 30,
+           accuracy: model.accuracy || 0,
+           ammo: model.ammo === undefined ? Infinity : model.ammo,
+           suppression: model.suppression || 0,
+           lure: model.lure || 0,
+           detection: model.detection || 0,
+           lowAltitude: model.lowAltitude || 0,
+           antiStealth: model.antiStealth || 0,
            color: typeData.color,
            state: 'idle',
            cooldown: 0,
@@ -226,6 +236,7 @@ const EquipModule = {
     },
 
     // 右键删除指定坐标装备
+    // 答辩讲法：删除时按鼠标点附近 20 像素查找装备，找到就移除并播放一个小爆炸效果。
    removeEquipAt(x, y) {
        for (let i = this.list.length - 1; i >= 0; i--) {
            const item = this.list[i];
@@ -244,6 +255,7 @@ const EquipModule = {
     },
 
     // 统一绘制入口
+    // 答辩讲法：draw 负责把装备、射程圈、部署预览都画出来；真正开火逻辑在 combat.js。
     draw(ctx) {
         const now = Date.now();
 
@@ -359,6 +371,7 @@ const EquipModule = {
     },
 
     // 装备图标绘制：x/y严格为几何中心点，无内部偏移
+    // 答辩讲法：这里是纯视觉绘制，近防炮、导弹、雷达用不同图形区分，便于展示时看懂。
     drawIcon(ctx, type, x, y, color, isHover, isFiring) {
         ctx.save();
         ctx.shadowColor = isFiring ? '#ffff00' : color;
@@ -444,6 +457,28 @@ const EquipModule = {
                 ctx.beginPath();
                 ctx.moveTo(0, -5);
                 ctx.lineTo(Math.sin(a * 0.3) * 8 + a * 0.5, 2 + Math.cos(a * 0.3) * 4);
+                ctx.stroke();
+            }
+            ctx.resetTransform();
+        } else if (type === 'ew') {
+            ctx.translate(x, y);
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(0, 0, 7, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(-8, 0);
+            ctx.lineTo(8, 0);
+            ctx.moveTo(0, -8);
+            ctx.lineTo(0, 8);
+            ctx.strokeStyle = '#ffffff99';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+            for (let r = 11; r <= 17; r += 3) {
+                ctx.beginPath();
+                ctx.arc(0, 0, r, -0.8, 0.8);
+                ctx.strokeStyle = hexToRgba(color, 0.35);
                 ctx.stroke();
             }
             ctx.resetTransform();
