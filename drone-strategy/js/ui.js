@@ -9,6 +9,15 @@ function goBack() {
     window.location.href = '../index.html#grow';
 }
 
+function syncNavHeight() {
+    const navbar = document.querySelector('.navbar');
+    if (!navbar) return;
+    const navHeight = Math.ceil(navbar.getBoundingClientRect().height || 0);
+    if (navHeight > 0) {
+        document.documentElement.style.setProperty('--nav-height', navHeight + 'px');
+    }
+}
+
 // 切换当前显示页面
 function showPage(pageId) {
     console.log('showPage called with:', pageId);
@@ -61,11 +70,17 @@ function setupNavigation() {
     }
 }
 
+function initializeLayout() {
+    syncNavHeight();
+    setupNavigation();
+    window.addEventListener('resize', syncNavHeight);
+}
+
 // 页面加载时执行导航设置
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', setupNavigation);
+    document.addEventListener('DOMContentLoaded', initializeLayout);
 } else {
-    setupNavigation();
+    initializeLayout();
 }
 
 // --- 规则页面切换 ---

@@ -197,9 +197,9 @@ a:focus-visible,
 .page {
     display: none !important;
     box-sizing: border-box;
-    padding-top: var(--nav-height);
-    min-height: 100vh;
-    min-height: 100dvh;
+    margin-top: var(--nav-height);
+    min-height: calc(100vh - var(--nav-height));
+    min-height: calc(100dvh - var(--nav-height));
 }
 
 .page.active {
@@ -434,8 +434,7 @@ a:focus-visible,
 
 /* Rules */
 .rules-page {
-    height: calc(100vh - var(--nav-height));
-    height: calc(100dvh - var(--nav-height));
+    height: 100%;
     grid-template-columns: 280px minmax(0, 1fr);
     gap: 14px;
     padding: 14px;
@@ -576,8 +575,7 @@ a:focus-visible,
     grid-template-rows: minmax(0, 1fr) 132px;
     gap: 14px;
     padding: 14px;
-    height: calc(100vh - var(--nav-height));
-    height: calc(100dvh - var(--nav-height));
+    height: 100%;
     background: var(--bg);
 }
 
@@ -1391,8 +1389,7 @@ a:focus-visible,
 
 /* Report */
 .report-page {
-    height: calc(100vh - var(--nav-height));
-    height: calc(100dvh - var(--nav-height));
+    height: 100%;
     grid-template-columns: 300px minmax(0, 1fr);
     gap: 14px;
     padding: 14px;
@@ -1726,6 +1723,607 @@ a:focus-visible,
     border-color: rgba(215, 79, 93, 0.28) !important;
 }
 
+/* Defense-inspired theme alignment */
+:root {
+    --bg: #f4f3ef;
+    --surface: rgba(255, 253, 248, 0.96);
+    --surface-2: #f7f1e8;
+    --surface-3: #efe7da;
+    --text: #111817;
+    --text-2: #3f5158;
+    --muted: #6f7a76;
+    --line: #d7d0c4;
+    --line-2: #ece4d8;
+    --primary: #26312f;
+    --primary-soft: rgba(38, 49, 47, 0.10);
+    --teal: #6f917a;
+    --teal-soft: rgba(111, 145, 122, 0.14);
+    --amber: #c9964a;
+    --amber-soft: rgba(201, 150, 74, 0.14);
+    --orange: #b94b35;
+    --danger: #d45a4b;
+    --danger-soft: rgba(212, 90, 75, 0.14);
+    --shadow: 0 18px 40px rgba(17, 24, 23, 0.08);
+    --shadow-strong: 0 24px 56px rgba(17, 24, 23, 0.14);
+    --radius: 16px;
+}
+
+body {
+    background:
+        radial-gradient(circle at 18% 0%, rgba(185, 75, 53, 0.08), transparent 26rem),
+        radial-gradient(circle at 100% 100%, rgba(111, 145, 122, 0.08), transparent 24rem),
+        linear-gradient(180deg, rgba(255, 253, 248, 0.96), rgba(244, 243, 239, 0.98)),
+        var(--bg);
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+        linear-gradient(rgba(38, 49, 47, 0.028) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(38, 49, 47, 0.022) 1px, transparent 1px);
+    background-size: 96px 96px;
+    mask-image: radial-gradient(circle at center, rgba(0, 0, 0, 0.72), transparent 82%);
+    opacity: 0.45;
+}
+
+button:focus-visible,
+a:focus-visible,
+.unit-item:focus-visible,
+.rules-sidebar li:focus-visible,
+.report-item:focus-visible {
+    outline-color: rgba(185, 75, 53, 0.26);
+}
+
+::-webkit-scrollbar-track {
+    background: #ece5db;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c8bfb3;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #ab9f8e;
+}
+
+.navbar {
+    background: rgba(255, 253, 248, 0.88);
+    border-bottom: 1px solid rgba(33, 42, 39, 0.12);
+    box-shadow: 0 14px 34px rgba(17, 24, 23, 0.10);
+}
+
+.navbar::after {
+    height: 3px;
+    background: rgba(185, 75, 53, 0.22);
+}
+
+.back-page-btn {
+    border-color: rgba(33, 42, 39, 0.14);
+    background: rgba(255, 253, 248, 0.92);
+    color: var(--text-2);
+    box-shadow: 0 8px 22px rgba(17, 24, 23, 0.05);
+    transition: border-color 180ms ease, box-shadow 180ms ease, background-color 180ms ease, color 180ms ease;
+}
+
+.back-page-btn:hover {
+    transform: none;
+    border-color: rgba(185, 75, 53, 0.28);
+    box-shadow: 0 12px 26px rgba(17, 24, 23, 0.08);
+    background: #fff8ef;
+}
+
+.navbar .logo {
+    letter-spacing: 0.04em;
+}
+
+.navbar .nav-links a {
+    border-color: rgba(33, 42, 39, 0.06);
+    color: var(--muted);
+    transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.navbar .nav-links a:hover {
+    background: #f2ebe2;
+    border-color: rgba(33, 42, 39, 0.12);
+    color: var(--text);
+    transform: none;
+    box-shadow: 0 8px 18px rgba(17, 24, 23, 0.06);
+}
+
+.navbar .nav-links a.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #fffdf8;
+    box-shadow: 0 12px 24px rgba(17, 24, 23, 0.14);
+}
+
+.home-page {
+    background:
+        linear-gradient(90deg, rgba(255, 253, 248, 0.94) 0%, rgba(255, 253, 248, 0.70) 50%, rgba(255, 253, 248, 0.26) 100%),
+        url("../../assets/poster/defense-rollup-hero.png") center right / cover no-repeat;
+}
+
+.home-page::before {
+    background:
+        linear-gradient(180deg, rgba(255, 253, 248, 0.18) 0%, rgba(244, 243, 239, 0.48) 52%, rgba(244, 243, 239, 0.88) 100%),
+        linear-gradient(90deg, rgba(255, 253, 248, 0.82) 0%, rgba(255, 253, 248, 0.18) 48%, rgba(255, 253, 248, 0) 100%);
+}
+
+.home-page::after {
+    border-color: rgba(38, 49, 47, 0.10);
+    background:
+        linear-gradient(180deg, rgba(255, 253, 248, 0.12), rgba(255, 253, 248, 0.02)),
+        linear-gradient(rgba(38, 49, 47, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(38, 49, 47, 0.06) 1px, transparent 1px);
+}
+
+.home-page h1 {
+    font-family: "Noto Serif SC", "Songti SC", "SimSun", serif;
+    color: var(--text);
+    text-shadow: 0 10px 28px rgba(255, 253, 248, 0.44);
+}
+
+.home-page h1::after {
+    color: var(--orange);
+}
+
+.home-page .subtitle {
+    color: var(--text-2);
+}
+
+.home-page .btn {
+    background: linear-gradient(135deg, var(--primary), #111817);
+    box-shadow: 0 16px 30px rgba(17, 24, 23, 0.16);
+    transition: box-shadow 180ms ease, filter 180ms ease, background-color 180ms ease;
+}
+
+.home-page .btn:hover {
+    transform: none;
+    filter: none;
+    box-shadow: 0 20px 36px rgba(17, 24, 23, 0.20);
+}
+
+.home-page .feature-card,
+.help-modal,
+.unit-modal,
+.rules-sidebar,
+.rules-content,
+.battle-map,
+.battle-info,
+.control-panel,
+.report-list,
+.report-detail,
+.mission-card,
+.attack-target-mode-card,
+.terrain-legend,
+.analysis-section {
+    border-color: rgba(33, 42, 39, 0.12);
+    background: rgba(255, 253, 248, 0.92);
+    box-shadow: var(--shadow);
+}
+
+.home-page .feature-card {
+    border-radius: 18px;
+    backdrop-filter: blur(12px);
+}
+
+.home-page .feature-card h3,
+.rules-content h2,
+.report-detail h2,
+.mission-card h2 {
+    font-family: "Noto Serif SC", "Songti SC", "SimSun", serif;
+}
+
+.help-btn {
+    border-color: rgba(33, 42, 39, 0.12);
+    background: rgba(255, 253, 248, 0.96);
+    color: var(--orange);
+    box-shadow: 0 16px 34px rgba(17, 24, 23, 0.12);
+}
+
+.help-modal,
+.unit-modal {
+    border-radius: 18px;
+}
+
+.help-modal td:first-child {
+    color: var(--orange);
+}
+
+.rules-sidebar h3,
+.report-list h3,
+.control-panel h4,
+.info-header h3,
+.rules-content h3,
+.report-detail h3,
+.analysis-section h4 {
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.rules-sidebar h3::before,
+.report-list h3::before,
+.control-panel h4::before,
+.info-header h3::before {
+    content: "";
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin-right: 8px;
+    border-radius: 50%;
+    background: var(--orange);
+    box-shadow: 0 0 0 4px rgba(185, 75, 53, 0.12);
+    vertical-align: middle;
+}
+
+.rules-sidebar li {
+    border-color: rgba(33, 42, 39, 0.08);
+    background: rgba(255, 253, 248, 0.48);
+}
+
+.rules-sidebar li:hover {
+    transform: none;
+    background: #f3ece3;
+    border-color: rgba(33, 42, 39, 0.14);
+}
+
+.rules-sidebar li.active {
+    color: var(--text);
+    background: rgba(38, 49, 47, 0.08);
+    border-color: rgba(38, 49, 47, 0.18);
+    box-shadow: inset 0 0 0 1px rgba(38, 49, 47, 0.06);
+}
+
+.rules-content table,
+.rules-content th,
+.rules-content td {
+    border-color: var(--line);
+}
+
+.rules-content th {
+    background: #f3ece3;
+}
+
+.battle-map {
+    background: linear-gradient(180deg, #fbf8f2 0%, #efe7da 100%);
+}
+
+.satellite-view {
+    background:
+        radial-gradient(circle at 20% 30%, rgba(185, 75, 53, 0.08) 0%, transparent 24%),
+        radial-gradient(circle at 72% 58%, rgba(111, 145, 122, 0.10) 0%, transparent 22%),
+        linear-gradient(180deg, #f4efe6 0%, #e6ddd0 100%);
+}
+
+.satellite-view .map-container {
+    background-image:
+        radial-gradient(circle at 20% 30%, rgba(164, 129, 68, 0.24) 0%, transparent 54px),
+        radial-gradient(circle at 72% 60%, rgba(122, 103, 76, 0.16) 0%, transparent 44px),
+        radial-gradient(circle at 40% 74%, rgba(102, 118, 129, 0.12) 0%, transparent 64px),
+        linear-gradient(rgba(38, 49, 47, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(38, 49, 47, 0.03) 1px, transparent 1px);
+    background-size: auto, auto, auto, 44px 44px, 44px 44px;
+}
+
+.satellite-view .base {
+    border-color: var(--teal);
+    background: rgba(111, 145, 122, 0.18);
+    box-shadow: 0 0 0 6px rgba(111, 145, 122, 0.10);
+}
+
+.terrain.mountain {
+    background: linear-gradient(135deg, #b68a58 0%, #8d6842 100%);
+    border-color: #876141;
+}
+
+.terrain.hill {
+    background: linear-gradient(135deg, #b9b1a5 0%, #93877a 100%);
+}
+
+.terrain.plain {
+    background: rgba(111, 145, 122, 0.18);
+}
+
+.terrain-legend {
+    background: rgba(255, 253, 248, 0.86);
+    color: var(--text-2);
+}
+
+.legend-color.cloud {
+    background: linear-gradient(180deg, #fffdf8 0%, #efe7da 100%);
+    border-color: rgba(33, 42, 39, 0.08);
+}
+
+.legend-color.base {
+    background: rgba(111, 145, 122, 0.95);
+    border-color: rgba(111, 145, 122, 0.95);
+}
+
+.unit.friendly {
+    background: var(--primary);
+}
+
+.unit.friendly.deployed {
+    background: var(--teal);
+    box-shadow: 0 0 0 4px rgba(111, 145, 122, 0.14);
+}
+
+.unit.friendly.scouting,
+.unit.scout,
+.unit.mini-drone {
+    background: var(--amber);
+    color: #111817;
+}
+
+.unit.friendly.attacking,
+.unit.enemy {
+    background: var(--danger);
+}
+
+.unit.friendly.moving {
+    background: #5b6f7a;
+    box-shadow: 0 0 0 4px rgba(91, 111, 122, 0.14);
+}
+
+.unit.friendly.recalling {
+    background: #9a8d79;
+    box-shadow: 0 0 0 4px rgba(154, 141, 121, 0.16);
+}
+
+.unit.friendly.swarm {
+    background: var(--orange);
+    border-color: #9a422f;
+    box-shadow: 0 0 0 4px rgba(185, 75, 53, 0.14);
+}
+
+.unit.friendly.swarm.deployed {
+    background: #cb6f4c;
+}
+
+.unit.mini-drone {
+    border-color: rgba(201, 150, 74, 0.62);
+    box-shadow: 0 0 0 4px rgba(201, 150, 74, 0.14);
+}
+
+.battle-info {
+    background: linear-gradient(180deg, rgba(255, 253, 248, 0.96), rgba(247, 241, 232, 0.96));
+}
+
+.info-header {
+    background: linear-gradient(180deg, rgba(255, 253, 248, 0.96), rgba(245, 239, 231, 0.96));
+}
+
+.info-header .filter-btn {
+    border-color: rgba(33, 42, 39, 0.12);
+    background: rgba(255, 253, 248, 0.88);
+}
+
+.units-list {
+    padding: 10px 11px 12px;
+}
+
+.unit-item {
+    border-color: rgba(33, 42, 39, 0.10);
+    background: linear-gradient(180deg, rgba(255, 253, 248, 0.98), rgba(248, 242, 234, 0.98));
+}
+
+.unit-item:hover {
+    transform: none;
+    border-color: rgba(33, 42, 39, 0.18);
+    background: rgba(255, 250, 244, 0.98);
+    box-shadow: 0 12px 24px rgba(17, 24, 23, 0.08);
+}
+
+.unit-status.ready {
+    background: rgba(111, 145, 122, 0.14);
+    color: #426352;
+}
+
+.unit-status.deployed {
+    background: rgba(38, 49, 47, 0.10);
+    color: var(--primary);
+}
+
+.unit-status.mission {
+    background: rgba(111, 145, 122, 0.14);
+    color: var(--teal);
+}
+
+.unit-status.attack {
+    background: rgba(212, 90, 75, 0.12);
+    color: #9f4035;
+}
+
+.unit-status.scout {
+    background: rgba(201, 150, 74, 0.16);
+    color: #9b6d2d;
+}
+
+.unit-status.damaged {
+    background: rgba(124, 135, 130, 0.14);
+    color: #6d7570;
+}
+
+.enemy-list .unit-item {
+    border-left-color: rgba(212, 90, 75, 0.42);
+    background: linear-gradient(180deg, #fffbf8, #fbf0eb);
+}
+
+.enemy-list .unit-item:hover {
+    border-color: rgba(212, 90, 75, 0.22);
+    background: #fdf1eb;
+}
+
+.enemy-list .unit-item .unit-name {
+    color: #a84333;
+}
+
+.enemy-list .enemy-health-bar {
+    background: #efe7da;
+}
+
+.enemy-list .unit-item.stale-intel {
+    border-left-color: rgba(201, 150, 74, 0.72);
+    background: #fff8ef;
+}
+
+.control-panel {
+    background: linear-gradient(180deg, rgba(255, 253, 248, 0.96), rgba(247, 241, 232, 0.92));
+}
+
+.action-btn {
+    border-color: rgba(33, 42, 39, 0.12);
+    background: rgba(255, 253, 248, 0.94);
+    color: var(--text-2);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+    transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease, box-shadow 180ms ease;
+}
+
+.action-btn:hover {
+    transform: none;
+    background: #f6eee5;
+    box-shadow: 0 10px 20px rgba(17, 24, 23, 0.08);
+}
+
+.action-btn.primary {
+    background: linear-gradient(135deg, var(--primary), #111817);
+    color: #fffdf8;
+}
+
+.action-btn.primary:hover {
+    background: linear-gradient(135deg, #31403d, #111817);
+}
+
+.action-btn.secondary {
+    background: rgba(255, 253, 248, 0.96);
+    color: var(--text-2);
+    border-color: rgba(33, 42, 39, 0.12);
+}
+
+.action-btn.secondary:hover {
+    background: #f4ede3;
+    color: var(--text);
+}
+
+.status-display .value,
+.mission-stats .stat-value,
+.summary-card .summary-value,
+.timeline-item .time {
+    color: var(--orange);
+}
+
+.battle-log {
+    border-color: rgba(33, 42, 39, 0.10);
+    border-radius: 12px;
+    background: rgba(247, 241, 232, 0.88);
+}
+
+.progress-bar {
+    background: #e8dfd3;
+}
+
+.progress-bar .progress-fill {
+    background: linear-gradient(90deg, var(--teal), #4f7b61);
+}
+
+.preparation-overlay {
+    background: rgba(244, 243, 239, 0.72);
+}
+
+.mission-card {
+    border-radius: 18px;
+    background: rgba(255, 253, 248, 0.97);
+}
+
+.mission-stats .stat {
+    background: rgba(247, 241, 232, 0.88);
+}
+
+.mission-card .start-btn {
+    background: linear-gradient(135deg, var(--orange), #8f2f22);
+    box-shadow: 0 14px 26px rgba(185, 75, 53, 0.18);
+}
+
+.attack-target-mode-card,
+.enemy-target-tooltip,
+.report-list,
+.report-detail,
+.summary-card,
+.analysis-section {
+    background: rgba(255, 253, 248, 0.96);
+}
+
+.enemy-target-tooltip .tip-title {
+    color: var(--orange);
+}
+
+.report-item {
+    transition: background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.report-item:hover {
+    transform: none;
+    background: #f7f0e8;
+    box-shadow: inset 0 0 0 1px rgba(33, 42, 39, 0.06);
+}
+
+.report-item .result.win {
+    background: rgba(111, 145, 122, 0.14);
+    color: #426352;
+}
+
+.report-item .result.lose {
+    background: rgba(212, 90, 75, 0.12);
+    color: #a24439;
+}
+
+.timeline::before {
+    background: #dad0c4;
+}
+
+.timeline-item::before {
+    background: var(--orange);
+    box-shadow: 0 0 0 4px rgba(185, 75, 53, 0.12);
+}
+
+.analysis-section .point::before {
+    color: var(--orange);
+}
+
+.formation-item {
+    border-left-color: rgba(201, 150, 74, 0.42) !important;
+    background: #fff8ef !important;
+}
+
+.formation-item:hover {
+    background: #f9f0e2 !important;
+}
+
+.formation-item .unit-name,
+.formation-section-title,
+.formation-member-tag {
+    color: #9b6d2d !important;
+}
+
+.formation-member-tag {
+    background: rgba(201, 150, 74, 0.14);
+}
+
+#page-battle [style*="border-top: 1px solid #1e3a5f"] {
+    border-top-color: var(--line) !important;
+}
+
+#enemy-list [style*="padding: 20px; text-align: center; color: #555"] {
+    color: var(--muted) !important;
+}
+
+#unit-modal input[style*="accent-color: #ffd93d"] {
+    accent-color: var(--amber) !important;
+}
+
 /* Mobile */
 @media (max-width: 1180px) {
     .home-page {
@@ -1755,8 +2353,7 @@ a:focus-visible,
         display: flex !important;
         flex-direction: column;
         height: auto;
-        min-height: calc(100vh - var(--nav-height));
-        min-height: calc(100dvh - var(--nav-height));
+        min-height: 100%;
         overflow-y: auto;
     }
 
@@ -1900,8 +2497,7 @@ a:focus-visible,
     }
 
     .battle-page.active {
-        min-height: calc(100vh - var(--nav-height));
-        min-height: calc(100dvh - var(--nav-height));
+        min-height: 100%;
     }
 
     .battle-map {

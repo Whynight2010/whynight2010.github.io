@@ -235,7 +235,7 @@ function showLaunchCountSelector(unit) {
     const maxLaunch = Math.min(6, unit.ammo);
 
     var title = document.createElement('div');
-    title.style.cssText = 'grid-column: 1 / -1; color: #64ffda; text-align: center; margin-bottom: 5px; font-size: 13px;';
+    title.style.cssText = 'grid-column: 1 / -1; color: var(--orange); text-align: center; margin-bottom: 5px; font-size: 13px; font-weight: 700; letter-spacing: 0.08em;';
     title.textContent = '选择发射数量（剩余 ' + unit.ammo + ' 架）：';
     actionsContainer.appendChild(title);
 

@@ -506,7 +506,7 @@ function updateEnemyList() {
     countLabel.textContent = discovered.length + ' 单位';
 
     if (discovered.length === 0) {
-        list.innerHTML = '<div style="padding: 20px; text-align: center; color: #555; font-size: 12px;">暂无发现敌方单位<br>派出侦察无人机探明战场</div>';
+        list.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--muted); font-size: 12px;">暂无发现敌方单位<br>派出侦察无人机探明战场</div>';
         return;
     }
 
