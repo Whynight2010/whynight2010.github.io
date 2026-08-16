@@ -4,10 +4,12 @@
 
 // --- 页面切换 ---
 
+// 返回首页
 function goBack() {
     window.location.href = '../index.html#grow';
 }
 
+// 切换当前显示页面
 function showPage(pageId) {
     console.log('showPage called with:', pageId);
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -27,6 +29,7 @@ function showPage(pageId) {
     console.log('Active pages:', document.querySelectorAll('.page.active').length);
 }
 
+// 绑定导航与地图点击
 function setupNavigation() {
     document.getElementById('nav-home').addEventListener('click', (e) => {
         e.preventDefault();
@@ -67,6 +70,7 @@ if (document.readyState === 'loading') {
 
 // --- 规则页面切换 ---
 
+// 切换规则内容
 function showRule(index) {
     document.querySelectorAll('.rules-sidebar li').forEach((li, i) => {
         li.classList.toggle('active', i === index);
@@ -78,12 +82,14 @@ function showRule(index) {
 
 // --- 帮助弹窗 ---
 
+// 开关帮助弹窗
 function toggleHelp() {
     document.getElementById('help-modal').classList.toggle('active');
 }
 
 // --- 战报分析 ---
 
+// 渲染战报列表
 function loadReports() {
     const container = document.getElementById('report-items');
     container.innerHTML = mockBattles.map(battle => `
@@ -105,6 +111,7 @@ function loadReports() {
     `).join('');
 }
 
+// 展示单份战报详情
 function showReport(id) {
     const battle = mockBattles.find(b => b.id === id);
     if (!battle) return;

@@ -2,6 +2,7 @@
 // enemy.js - 敌方AI、移动、攻击、列表显示
 // ============================================================
 
+// --- 敌方AI主循环 ---
 function simulateEnemyAI() {
     mockEnemyUnits.forEach(function(enemy) {
         if (enemy.health <= 0) return;
@@ -108,6 +109,7 @@ function simulateEnemyAI() {
     });
 }
 
+// --- 敌方无人机补给 ---
 function updateEnemyUavResupply(enemy) {
     if (enemy.resupplyX === null || enemy.resupplyY === null) {
         enemy.resupplyX = enemy.x;
@@ -144,6 +146,7 @@ function updateEnemyUavResupply(enemy) {
     }
 }
 
+// --- 敌方开火射击 ---
 function fireEnemyShot(enemy, target) {
     if (enemy.type === 'enemy_uav' && enemy.ammo <= 0) {
         updateEnemyUavResupply(enemy);
@@ -189,10 +192,12 @@ function fireEnemyShot(enemy, target) {
     return true;
 }
 
+// --- 判定可否开火 ---
 function canEnemyFire(enemy) {
     return enemy.type !== 'enemy_uav' || enemy.ammo > 0;
 }
 
+// --- 寻找射程内目标 ---
 function findPlayerUnitInRange(enemy) {
     var playerUnits = mockUnits.filter(function(u) {
         return u.status !== 'ready' && u.health > 0;
@@ -242,6 +247,7 @@ function findPlayerUnitInRange(enemy) {
     return closestTarget;
 }
 
+// --- 判定单位被侦测 ---
 function isUnitDetectedByEnemy(player, enemy) {
     var dx = enemy.x - player.x;
     var dy = enemy.y - player.y;
@@ -258,6 +264,7 @@ function isUnitDetectedByEnemy(player, enemy) {
     return distance < effectiveRange;
 }
 
+// --- 敌方移动入口 ---
 function moveEnemyUnit(enemy) {
     if (!enemy.targetX || !enemy.targetY) {
         setRandomTarget(enemy);
@@ -271,6 +278,7 @@ function moveEnemyUnit(enemy) {
     }
 }
 
+// --- 敌方持续移动 ---
 function continueEnemyMove(enemy) {
     if (enemy.health <= 0) return;
 
@@ -311,6 +319,7 @@ function continueEnemyMove(enemy) {
     });
 }
 
+// --- 随机目标设置 ---
 function setRandomTarget(enemy) {
     var baseX = enemy.x;
     var baseY = enemy.y;
@@ -343,6 +352,7 @@ function setRandomTarget(enemy) {
     enemy.targetY = Math.max(50, Math.min(250, baseY + (Math.random() - 0.5) * 150));
 }
 
+// --- 寻找附近云层 ---
 function findNearbyCloud(x, y) {
     var closestCloud = null;
     var minDistance = 150;
@@ -364,6 +374,7 @@ function findNearbyCloud(x, y) {
     return closestCloud;
 }
 
+// --- 寻找附近山丘 ---
 function findNearbyHill(x, y) {
     for (var i = 0; i < terrainData.hills.length; i++) {
         var hill = terrainData.hills[i];
@@ -380,6 +391,7 @@ function findNearbyHill(x, y) {
     return null;
 }
 
+// --- 执行敌方攻击 ---
 function executeEnemyAttack(enemy, target) {
     var now = Date.now();
     if (now - enemy.lastAttack < enemy.attackCooldown) {
@@ -401,6 +413,7 @@ function executeEnemyAttack(enemy, target) {
     }
 }
 
+// --- 择优目标选择 ---
 function findBestTarget(enemy, targets) {
     var bestTarget = null;
     var highestPriority = -1;
@@ -433,6 +446,7 @@ function findBestTarget(enemy, targets) {
     return bestTarget;
 }
 
+// --- 伤害数值计算 ---
 function calculateDamage(attacker, target) {
     if (attacker.type === 'enemy_uav') {
         return attacker.attackDamage || 40;
@@ -455,6 +469,7 @@ function calculateDamage(attacker, target) {
     return Math.floor(baseDamage * distanceFactor * randomFactor);
 }
 
+// --- 敌方类型文本 ---
 function getEnemyTypeText(type) {
     var map = {
         'command': '指挥中心',
@@ -466,6 +481,7 @@ function getEnemyTypeText(type) {
     return map[type] || type;
 }
 
+// --- 标记发现敌方 ---
 function markEnemyDiscovered(enemy) {
     if (!enemy.discovered) {
         enemy.discovered = true;
@@ -477,6 +493,7 @@ function markEnemyDiscovered(enemy) {
     updateEnemyList();
 }
 
+// --- 敌方列表更新 ---
 function updateEnemyList() {
     var list = document.getElementById('enemy-list');
     var countLabel = document.getElementById('enemy-count-label');

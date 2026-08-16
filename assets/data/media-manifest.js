@@ -1,4 +1,5 @@
 window.EQUIPMENT_MEDIA = {
+  // --- 歼-20 ---
   "j20": {
     "images": [
       {
@@ -109,6 +110,8 @@ window.EQUIPMENT_MEDIA = {
       "notes": "视频为本地生成兜底，保证离线播放。"
     }
   },
+
+  // --- 运-20 ---
   "y20": {
     "images": [
       {
@@ -219,6 +222,8 @@ window.EQUIPMENT_MEDIA = {
       "notes": "视频为本地生成兜底，保证离线播放。"
     }
   },
+
+  // --- 福建舰 ---
   "fujian": {
     "images": [
       {
@@ -329,6 +334,8 @@ window.EQUIPMENT_MEDIA = {
       "notes": "视频为本地生成兜底，保证离线播放。"
     }
   },
+
+  // --- 山东舰 ---
   "shandong": {
     "images": [
       {
@@ -439,6 +446,8 @@ window.EQUIPMENT_MEDIA = {
       "notes": "已从中国军网公开页面补齐 7 张图片。"
     }
   },
+
+  // --- 辽宁舰 ---
   "liaoning": {
     "images": [
       {
@@ -549,6 +558,8 @@ window.EQUIPMENT_MEDIA = {
       "notes": "已从中国军网公开页面补齐 7 张图片。"
     }
   },
+
+  // --- 055型驱逐舰 ---
   "type055": {
     "images": [
       {
@@ -659,6 +670,8 @@ window.EQUIPMENT_MEDIA = {
       "notes": "视频为本地生成兜底，保证离线播放。"
     }
   },
+
+  // --- 052D型驱逐舰 ---
   "type052d": {
     "images": [
       {
@@ -769,6 +782,8 @@ window.EQUIPMENT_MEDIA = {
       "notes": "7 张图片均来自中国军网公开页面；视频登记为 web_only，联网跳转八一视频·中国军网页面观看。"
     }
   },
+
+  // --- 99A式主战坦克 ---
   "type99a": {
     "images": [
       {
@@ -879,6 +894,8 @@ window.EQUIPMENT_MEDIA = {
       "notes": "7 张图片来自中国军网公开页面；视频登记为央视网 web_only，联网跳转官方页面观看。"
     }
   },
+
+  // --- 轰-6K ---
   "h6k": {
     "images": [
       {
@@ -989,6 +1006,8 @@ window.EQUIPMENT_MEDIA = {
       "notes": "3张图片来自中国军网公开页面（已验证）；4张来自央视网/新华网公开页面（待复核下载）。视频登记为中国军网 web_only。"
     }
   },
+
+  // --- 歼-16 ---
   "j16": {
     "images": [
       {
@@ -1099,6 +1118,8 @@ window.EQUIPMENT_MEDIA = {
       "notes": "3张图片来自中国军网公开页面（已验证）；4张来自央视网公开页面（待复核下载）。视频登记为央视网 web_only。"
     }
   },
+
+  // --- 空警-500 ---
   "kj500": {
     "images": [
       {
@@ -1209,6 +1230,8 @@ window.EQUIPMENT_MEDIA = {
       "notes": "3张图片来自中国军网公开页面（已验证）；4张来自央视网公开页面（待复核下载）。视频登记为央视网 web_only。"
     }
   },
+
+  // --- PHL-191 ---
   "phl191": {
     "images": [
       {
@@ -1319,6 +1342,8 @@ window.EQUIPMENT_MEDIA = {
       "notes": "3张图片来自中国军网公开页面（已验证）；4张来自央视网/新华网公开页面（待复核下载）。视频登记为央视网 web_only。"
     }
   },
+
+  // --- 直-10 ---
   "z10": {
     "images": [
       {
@@ -1429,6 +1454,8 @@ window.EQUIPMENT_MEDIA = {
       "notes": "3张图片来自中国军网公开页面（已验证）；4张来自央视网/新华网公开页面（待复核下载）。视频登记为央视网 web_only。"
     }
   },
+
+  // --- 红旗-17A ---
   "hq17a": {
     "images": [
       {
@@ -1539,6 +1566,8 @@ window.EQUIPMENT_MEDIA = {
       "notes": "3张图片来自中国军网公开页面（已验证）；4张来自央视网公开页面（待复核下载）。视频登记为央视网 web_only。"
     }
   },
+
+  // --- 04A式步兵战车 ---
   "zbd04a": {
     "images": [
       {

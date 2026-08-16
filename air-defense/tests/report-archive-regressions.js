@@ -1,8 +1,10 @@
+// --- 加载依赖 ---
 const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
 const assert = require('assert');
 
+// --- 存储工具 ---
 function createStorage() {
     const store = new Map();
     return {
@@ -18,6 +20,7 @@ function createStorage() {
     };
 }
 
+// --- 加载 UI 模块 ---
 function loadUiModule() {
     const source = fs.readFileSync(path.join(__dirname, '..', 'js', 'ui.js'), 'utf8');
     const sandbox = {
@@ -47,6 +50,7 @@ function loadUiModule() {
     return { UIModule, storage: sandbox.localStorage };
 }
 
+// --- 战报夹具 ---
 function makeReport(id, score) {
     return {
         id,
@@ -64,21 +68,26 @@ function makeReport(id, score) {
     };
 }
 
+// --- 加载模块 ---
 const { UIModule } = loadUiModule();
 
+// --- 接口检查 ---
 assert.strictEqual(typeof UIModule.saveReport, 'function', 'UIModule.saveReport should exist');
 assert.strictEqual(typeof UIModule.loadReports, 'function', 'UIModule.loadReports should exist');
 assert.strictEqual(typeof UIModule.clearReports, 'function', 'UIModule.clearReports should exist');
 
+// --- 保存战报 ---
 UIModule.clearReports();
 UIModule.saveReport(makeReport('old', 100));
 UIModule.saveReport(makeReport('new', 200));
 
+// --- 读取顺序 ---
 let reports = UIModule.loadReports();
 assert.strictEqual(reports.length, 2, 'two reports should be saved');
 assert.strictEqual(reports[0].id, 'new', 'newest report should appear first');
 assert.strictEqual(reports[1].id, 'old', 'older report should appear second');
 
+// --- 存档上限 ---
 for (let i = 0; i < 14; i++) {
     UIModule.saveReport(makeReport('cap-' + i, i));
 }
@@ -87,7 +96,9 @@ reports = UIModule.loadReports();
 assert.strictEqual(reports.length, 12, 'archive should keep only the latest 12 reports');
 assert.strictEqual(reports[0].id, 'cap-13', 'latest capped report should be first');
 
+// --- 清空存档 ---
 UIModule.clearReports();
 assert.strictEqual(UIModule.loadReports().length, 0, 'clearReports should empty the archive');
 
+// --- 输出结果 ---
 console.log('report archive regressions passed');

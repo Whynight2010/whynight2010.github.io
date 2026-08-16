@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="720" viewBox="0 0 960 720" role="img" aria-label="北京焦庄户地道战遗址纪念馆示意图">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f3ede1"/>
+      <stop offset="100%" stop-color="#e5d6bf"/>
+    </linearGradient>
+  </defs>
+  <rect width="960" height="720" fill="url(#bg)"/>
+  <rect x="170" y="170" width="620" height="320" rx="24" fill="#fffaf5" stroke="#8a6b45" stroke-width="8"/>
+  <path d="M250 400 C350 310, 430 310, 500 380 C570 450, 660 450, 710 370" fill="none" stroke="#8a6b45" stroke-width="26" stroke-linecap="round"/>
+  <circle cx="300" cy="410" r="26" fill="#b78354"/>
+  <circle cx="480" cy="370" r="26" fill="#b78354"/>
+  <circle cx="660" cy="370" r="26" fill="#b78354"/>
+  <rect x="220" y="500" width="520" height="38" rx="19" fill="#8a6b45"/>
+  <text x="480" y="625" text-anchor="middle" font-family="Noto Serif SC, Songti SC, serif" font-size="34" fill="#6b5536">北京焦庄户地道战遗址纪念馆</text>
+  <text x="480" y="664" text-anchor="middle" font-family="Noto Sans SC, Microsoft YaHei, sans-serif" font-size="22" fill="#7f6c5d">北京市顺义区龙湾屯镇焦庄户村纪念馆路38号</text>
+</svg>

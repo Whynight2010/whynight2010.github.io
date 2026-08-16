@@ -110,10 +110,10 @@ const CombatModule = {
                     const destroyed = EnemyModule.damageEnemy(p.target, p.damage);
                     EffectModule.addTracer(p.startX, p.startY, p.x, p.y, p.color);
                     if (destroyed) {
-                        EffectModule.addFloatingText(p.x, p.y - 30, '🎯 拦截成功！', '#00ffcc');
+                        EffectModule.addFloatingText(p.x, p.y - 30, '拦截成功！', '#00ffcc');
                         // 蜂群击杀特殊提示
                         if (p.target.isSwarm) {
-                            EffectModule.addFloatingText(p.x, p.y - 45, '🐝 蜂群-1', '#ff6699');
+                            EffectModule.addFloatingText(p.x, p.y - 45, '蜂群-1', '#ff6699');
                         }
                     }
                 } else {

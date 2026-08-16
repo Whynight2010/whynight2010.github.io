@@ -2,6 +2,7 @@
 // units.js — 玩家单位管理、单位显示、单位弹窗（第3个加载）
 // ============================================================
 
+// --- 获取单位图标 ---
 function getUnitIcon(type) {
     const icons = {
         'scout': '侦',
@@ -13,6 +14,7 @@ function getUnitIcon(type) {
     return icons[type] || '单';
 }
 
+// --- 获取单位简称 ---
 function getUnitShortName(fullName) {
     const parts = fullName.split('-');
     if (parts.length === 2) {
@@ -22,6 +24,7 @@ function getUnitShortName(fullName) {
     return fullName.slice(0, 4);
 }
 
+// --- 获取敌方图标 ---
 function getEnemyIcon(type) {
     const icons = {
         'aa_short': '近',
@@ -33,6 +36,7 @@ function getEnemyIcon(type) {
     return icons[type] || '敌';
 }
 
+// --- 更新单位显示 ---
 function updateUnitDisplay(unit) {
     const el = document.querySelector(`.unit.friendly[data-id="${unit.id}"]`) ||
                document.querySelector(`.unit.friendly[style*="left: ${Math.round(unit.x)}px"]`);
@@ -44,6 +48,7 @@ function updateUnitDisplay(unit) {
     updateUnitsList();
 }
 
+// --- 生成我方单位 ---
 function spawnUnits() {
     const view = document.getElementById('satellite-view');
 
@@ -66,6 +71,7 @@ function spawnUnits() {
     });
 }
 
+// --- 更新单位列表 ---
 function updateUnitsList() {
     const list = document.getElementById('units-list');
 
@@ -113,6 +119,7 @@ function updateUnitsList() {
     list.innerHTML = html;
 }
 
+// --- 单位点击处理 ---
 function handleUnitClick(e, unitId) {
     // 强制阻止事件冒泡和默认行为
     if (e) {
@@ -133,6 +140,7 @@ function handleUnitClick(e, unitId) {
     }
 }
 
+// --- 获取可用指令 ---
 function getAvailableActions(unit) {
     // 已在编组中的单位不可独立操作
     if (isUnitInFormation(unit)) {
@@ -165,6 +173,7 @@ function getAvailableActions(unit) {
     return actions;
 }
 
+// --- 打开单位弹窗 ---
 function openUnitModal(unit) {
     selectedUnit = unit;
     selectedSquad = null;
@@ -210,6 +219,7 @@ function openUnitModal(unit) {
     document.getElementById('unit-modal').classList.add('active');
 }
 
+// --- 关闭单位弹窗 ---
 function closeUnitModal() {
     document.getElementById('unit-modal').classList.remove('active');
     selectedUnit = null;
@@ -841,6 +851,7 @@ function executeFormationAction(action) {
     }
 }
 
+// --- 执行单位指令 ---
 function executeUnitAction(action) {
     if (!selectedUnit) return;
 
@@ -938,6 +949,7 @@ function executeUnitAction(action) {
     closeUnitModal();
 }
 
+// --- 更新敌方显示 ---
 function updateEnemyDisplay() {
     const view = document.getElementById('satellite-view');
 
@@ -975,6 +987,7 @@ function updateEnemyDisplay() {
     });
 }
 
+// --- 攻击方式选择 ---
 function showAttackTargetModeSelector(unit) {
     closeUnitModal();
     attackTargetUnits = [unit];
@@ -999,6 +1012,7 @@ function showAttackTargetModeSelector(unit) {
     document.getElementById('satellite-view').style.cursor = 'default';
 }
 
+// --- 设置攻击模式 ---
 function setAttackSelectionMode(mode) {
     attackSelectionMode = mode;
     hideAttackTargetModePanel();
@@ -1014,6 +1028,7 @@ function setAttackSelectionMode(mode) {
     }
 }
 
+// --- 取消攻击选择 ---
 function cancelAttackTargetSelection() {
     attackTargetUnits = [];
     attackSelectionMode = 'point';
@@ -1022,6 +1037,7 @@ function cancelAttackTargetSelection() {
     hideEnemyTargetTooltip();
 }
 
+// --- 隐藏模式面板 ---
 function hideAttackTargetModePanel() {
     var panel = document.getElementById('attack-target-mode');
     if (!panel) return;
@@ -1030,6 +1046,7 @@ function hideAttackTargetModePanel() {
     panel.innerHTML = '';
 }
 
+// --- 敌方点击处理 ---
 function handleEnemyTargetClick(unit, e) {
     if (attackSelectionMode !== 'enemy' || attackTargetUnits.length === 0) return;
     if (e) {
@@ -1039,6 +1056,7 @@ function handleEnemyTargetClick(unit, e) {
     confirmEnemyAttackTarget(unit);
 }
 
+// --- 确认攻击目标 ---
 function confirmEnemyAttackTarget(enemy) {
     var selectedUnits = attackTargetUnits.slice();
     if (selectedUnits.length === 0) return;
@@ -1060,6 +1078,7 @@ function confirmEnemyAttackTarget(enemy) {
     hideEnemyTargetTooltip();
 }
 
+// --- 显示敌方提示 ---
 function showEnemyTargetTooltip(unit, e) {
     if (attackSelectionMode !== 'enemy' || attackTargetUnits.length === 0) return;
 
@@ -1089,6 +1108,7 @@ function showEnemyTargetTooltip(unit, e) {
     tip.classList.add('active');
 }
 
+// --- 隐藏敌方提示 ---
 function hideEnemyTargetTooltip() {
     enemyTargetTooltipUnit = null;
     var tip = document.getElementById('enemy-target-tooltip');

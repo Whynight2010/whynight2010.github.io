@@ -69,7 +69,7 @@ window.onload = function() {
     Game.init();
     setTimeout(() => {
         const cx = CONFIG.centerX, cy = CONFIG.centerY;
-        EffectModule.addFloatingText(cx, cy - 80, '🛡 城市防空系统就绪', '#B8DADD');
+        EffectModule.addFloatingText(cx, cy - 80, '城市防空系统就绪', '#B8DADD');
     }, 500);
     setTimeout(() => {
         const cx = CONFIG.centerX, cy = CONFIG.centerY;

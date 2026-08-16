@@ -587,18 +587,18 @@ const UIModule = {
                 const btn = document.getElementById('btnStart');
                 btn.classList.add('btn-shake');
                 setTimeout(() => btn.classList.remove('btn-shake'), 500);
-                EffectModule.addFloatingText(CONFIG.centerX, CONFIG.centerY - 40, '⚠ 请先部署防空装备', '#FF5C5C');
+                EffectModule.addFloatingText(CONFIG.centerX, CONFIG.centerY - 40, '请先部署防空装备', '#FF5C5C');
                 return;
             }
             Game.isRunning = !Game.isRunning;
-            document.getElementById('btnStart').textContent = Game.isRunning ? '⏸ 暂停推演' : '▶ 开始推演';
+            document.getElementById('btnStart').textContent = Game.isRunning ? '暂停推演' : '开始推演';
             if (Game.isRunning) {
                 EnemyModule.startWaves();
-                EffectModule.addFloatingText(CONFIG.centerX, CONFIG.centerY - 60, '⚡ 防空系统启动', '#B8DADD');
+                EffectModule.addFloatingText(CONFIG.centerX, CONFIG.centerY - 60, '防空系统启动', '#B8DADD');
                 CONFIG.threatLevel = 0;
                 this.hideBattleReport();
             } else {
-                EffectModule.addFloatingText(CONFIG.centerX, CONFIG.centerY - 60, '⏸ 推演暂停', '#A8C7D8');
+                EffectModule.addFloatingText(CONFIG.centerX, CONFIG.centerY - 60, '推演暂停', '#A8C7D8');
             }
         });
 
@@ -655,7 +655,7 @@ const UIModule = {
         const speedBtn = document.getElementById('btnSpeed');
         if (!speedBtn) return;
         const isFast = (CONFIG.simulationSpeed || 1) === 5;
-        speedBtn.textContent = isFast ? '⏩ 倍速：5x' : '⏩ 倍速：1x';
+        speedBtn.textContent = isFast ? '倍速：5x' : '倍速：1x';
         speedBtn.classList.toggle('active', isFast);
         speedBtn.setAttribute('aria-pressed', isFast ? 'true' : 'false');
     },
@@ -815,7 +815,7 @@ const UIModule = {
         }
         if (brk === 0 && kill >= 10) rank = SCORE_RANKS[SCORE_RANKS.length - 1];
 
-        const stars = '⭐'.repeat(rank.stars) + '☆'.repeat(5 - rank.stars);
+        const stars = '★'.repeat(rank.stars) + '☆'.repeat(5 - rank.stars);
 
         // 击杀分类统计
         const killTypes = CONFIG.killStats || {};
@@ -825,11 +825,11 @@ const UIModule = {
         // 防御薄弱点分析
         let weakSpotAnalysis = '';
         if (brk === 0) {
-            weakSpotAnalysis = '✅ 防线保持完整，所有来袭方向均被有效压制。';
+            weakSpotAnalysis = '防线保持完整，所有来袭方向均被有效压制。';
         } else if (EnemyModule.breachedSectors.length > 0) {
             const sectorNames = ['北', '东', '南', '西'];
             const sectors = EnemyModule.breachedSectors.map(s => sectorNames[s]).join('、');
-            weakSpotAnalysis = '⚠ 防线薄弱方位：<b>' + sectors + '</b>。建议在这些方向补充近防炮或防空导弹。';
+            weakSpotAnalysis = '防线薄弱方位：<b>' + sectors + '</b>。建议在这些方向补充近防炮或防空导弹。';
         }
 
         // 武器效能分析：根据部署的雷达、导弹、近防炮数量，给出体系是否完整的文字建议。
@@ -842,15 +842,15 @@ const UIModule = {
         if (radars === 0) equipAdvice += '▪ 未部署预警雷达，防空体系效能下降约30%。<br>';
         if (missiles === 0 && guns > 0) equipAdvice += '▪ 仅有近防炮，缺乏远程拦截能力，弹道导弹和隐身目标将难以应对。<br>';
         if (guns === 0 && missiles > 0) equipAdvice += '▪ 仅有导弹，缺乏末端防御，漏网目标可能直接突防。<br>';
-        if (ews > 0) equipAdvice += '✅ 电子对抗节点可压制低抗干扰目标，减轻蜂群和巡飞弹压力。<br>';
-        if (radars > 0 && missiles > 0 && guns > 0) equipAdvice += '✅ 装备配置合理，雷达-导弹-近防炮形成完整防御链。<br>';
+        if (ews > 0) equipAdvice += '电子对抗节点可压制低抗干扰目标，减轻蜂群和巡飞弹压力。<br>';
+        if (radars > 0 && missiles > 0 && guns > 0) equipAdvice += '装备配置合理，雷达-导弹-近防炮形成完整防御链。<br>';
 
         // 防御密度分析
         let densityAdvice = '';
         const totalEquips = EquipModule.list.length;
-        if (totalEquips < 3) densityAdvice = '⚠ 装备数量不足，建议至少部署5件装备形成交叉火力。';
-        else if (totalEquips < 5) densityAdvice = '💡 装备数量适中，可增加1-2件装备提升火力密度。';
-        else densityAdvice = '✅ 装备密度充足，火力覆盖良好。';
+        if (totalEquips < 3) densityAdvice = '装备数量不足，建议至少部署5件装备形成交叉火力。';
+        else if (totalEquips < 5) densityAdvice = '装备数量适中，可增加1-2件装备提升火力密度。';
+        else densityAdvice = '装备密度充足，火力覆盖良好。';
 
         // 构建报告
         let html = '<div class="battle-report-overlay" id="battleReport"><div class="battle-report">';
@@ -883,7 +883,7 @@ const UIModule = {
         // 击杀分类图表
         html += '<div class="report-divider"></div><div class="report-detail"><div class="detail-title">目标分类统计</div>';
         const barColors = { cruise: '#FF5C5C', fighter: '#FF8A3D', drone: '#FFD08A', ballistic: '#FF4F8A', stealth: '#A58BFF', swarm: '#FF8AB2' };
-        const icons = { cruise: '🚀', fighter: '✈️', drone: '🛸', ballistic: '◆', stealth: '◒', swarm: '✺' };
+        const icons = { cruise: '→', fighter: '△', drone: '◌', ballistic: '◆', stealth: '◒', swarm: '✺' };
         for (const [type, count] of Object.entries(CONFIG.killStats)) {
             if (count >= 0) {
                 const name = ENEMY_TYPES[type]?.name || type;
@@ -904,7 +904,7 @@ const UIModule = {
         html += '<p><b>单位装备效率：</b>每件装备平均击毁' + overallRate + ' 个目标</p>';
         let actionTip = '';
         if (brk > 0 && totalEquips >= 5) {
-            actionTip = '💡 虽然有装备覆盖，但仍有突防。检查近防炮是否部署在保护区内侧关键位置。';
+            actionTip = '虽然有装备覆盖，但仍有突防。检查近防炮是否部署在保护区内侧关键位置。';
             html += '<p class="action-tip">' + actionTip + '</p>';
         }
         html += '</div>';

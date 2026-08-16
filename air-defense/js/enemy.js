@@ -258,7 +258,7 @@ const EnemyModule = {
             this.waveActive = false;
             CONFIG.demoMode = false;
             Game.isRunning = false;
-            document.getElementById('btnStart').textContent = '▶ 开始推演';
+            document.getElementById('btnStart').textContent = '开始推演';
             if (typeof BattleLog !== 'undefined') BattleLog.add('system', '全部波次结束，生成战报档案', {});
             UIModule.showBattleReport();
         }
@@ -355,7 +355,7 @@ const EnemyModule = {
                 CONFIG.lastBreakthroughPos = { x: e.x, y: e.y };
 
                 EffectModule.addExplosion(e.x, e.y, '#ff0000', 3);
-                EffectModule.addFloatingText(e.x, e.y - 20, '⚠ 突防！', '#ff4444');
+                EffectModule.addFloatingText(e.x, e.y - 20, '突防！', '#ff4444');
                 if (typeof BattleLog !== 'undefined') BattleLog.add('breach', (e.logName || ENEMY_TYPES[e.type].name) + ' 突破保护圈', {
                     sector,
                     waveNumber: e.waveNumber || this.waveIndex,
@@ -897,7 +897,7 @@ const EnemyModule = {
                 EffectModule.addExplosion(enemy.x, enemy.y, enemy.color, enemy.size + 2);
             }
             if (comboBonus > 0) {
-                EffectModule.addFloatingText(enemy.x, enemy.y - 35, '🔥 连击 x' + CONFIG.comboCount + '!', '#ffcc00');
+                EffectModule.addFloatingText(enemy.x, enemy.y - 35, '连击 x' + CONFIG.comboCount + '!', '#ffcc00');
             }
             EffectModule.addFloatingText(enemy.x, enemy.y - 15, '+' + finalScore, '#00ff88');
             if (typeof BattleLog !== 'undefined') {

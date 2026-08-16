@@ -50,10 +50,12 @@ let formationCmdPending = null; // {formation, command} 等待地图点击目标
 // 长机等级排序（数字越小级别越高，强击预留给未来）
 const TIER_RANK = { 'strike_assault': 1, 'attack': 2, 'strike': 3, 'scout': 4 };
 
+// 获取单位等级排序
 function getUnitTier(unit) {
     return TIER_RANK[unit.type] || 99;
 }
 
+// 判断单位是否已编组
 function isUnitInFormation(unit) {
     for (var i = 0; i < formations.length; i++) {
         for (var j = 0; j < formations[i].units.length; j++) {
@@ -68,6 +70,8 @@ let scoutCounter = 0;
 let moveCounter = 0;
 
 // --- 工具函数 ---
+
+// 状态文案映射
 function getStatusText(status) {
     const statusMap = {
         'ready': '待命',
@@ -83,6 +87,7 @@ function getStatusText(status) {
     return statusMap[status] || status;
 }
 
+// 状态样式映射
 function getStatusClass(status) {
     switch(status) {
         case 'deployed': return 'deployed';
@@ -96,6 +101,7 @@ function getStatusClass(status) {
     }
 }
 
+// 行动文案映射
 function getActionText(action) {
     const actionMap = {
         'deploy': '部署/出动',
@@ -111,6 +117,7 @@ function getActionText(action) {
     return actionMap[action] || action;
 }
 
+// 格式化时间显示
 function formatTime(seconds) {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -234,6 +241,7 @@ function generateEnemyUnits() {
     ];
 }
 
+// 生成敌军单位实例
 const mockEnemyUnits = generateEnemyUnits();
 
 // --- 战报历史数据 ---
@@ -249,18 +257,21 @@ const mockBattles = [
     { id: 3, mission: '保护我方基地', result: 'lose', completion: 60, lossRate: 60, score: 45, time: '2024-01-13 16:45', duration: '10:00', timeline: [], analysis: { strengths: [], weaknesses: [], suggestions: [] }}
 ];
 
+// 获取可作战空中单位
 function getFriendlyUnits() {
     return mockUnits.filter(function(unit) {
         return unit.type !== 'swarm';
     });
 }
 
+// 统计友军损毁数
 function getCurrentFriendlyLoss() {
     return getFriendlyUnits().filter(function(unit) {
         return unit.health <= 0;
     }).length;
 }
 
+// 生成战报时间戳
 function getBattleTimestamp() {
     var now = new Date();
     var date = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');

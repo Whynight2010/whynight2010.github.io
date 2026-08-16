@@ -1,12 +1,15 @@
+// --- 加载依赖 ---
 const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
 const assert = require('assert');
 
+// --- 读取脚本工具 ---
 function readJs(file) {
     return fs.readFileSync(path.join(__dirname, '..', 'js', file), 'utf8');
 }
 
+// --- 数据沙盒 ---
 function loadDataSandbox() {
     const sandbox = { console };
     const source = readJs('data.js') + `
@@ -30,6 +33,7 @@ function loadDataSandbox() {
     return vm.runInNewContext(source, sandbox);
 }
 
+// --- 游戏沙盒 ---
 function loadGameSandbox() {
     const sandbox = {
         console,
@@ -94,13 +98,16 @@ function loadGameSandbox() {
     return vm.runInNewContext(source, sandbox);
 }
 
+// --- 加载数据 ---
 const data = loadDataSandbox();
 
+// --- 装备目录检查 ---
 const equipmentModelCount = Object.values(data.EQUIP_DATA)
     .reduce((sum, group) => sum + (group.models || []).length, 0);
 assert.ok(equipmentModelCount >= 8, 'expanded equipment catalog should contain at least eight models');
 assert.ok(data.EQUIP_DATA.ew, 'electronic warfare equipment category should exist');
 
+// --- 敌机目录检查 ---
 const enemyKeys = Object.keys(data.ENEMY_TYPES);
 assert.ok(enemyKeys.length >= 10, 'expanded enemy catalog should contain at least ten target types');
 for (const key of enemyKeys) {
@@ -111,16 +118,19 @@ for (const key of enemyKeys) {
     assert.notStrictEqual(enemy.jamResist, undefined, `${key} should define jamming resistance`);
 }
 
+// --- 地形区域检查 ---
 assert.ok(Array.isArray(data.TERRAIN_ZONES) && data.TERRAIN_ZONES.length >= 4, 'terrain zones should be configured');
 const mountain = data.TERRAIN_ZONES.find(zone => zone.kind === 'mountain');
 assert.ok(mountain, 'mountain terrain should exist');
 assert.strictEqual(data.canDeployAt(mountain.x + 5, mountain.y + 5, 'gun').ok, false, 'mountain should block gun deployment');
 assert.strictEqual(data.canDeployAt(mountain.x + 5, mountain.y + 5, 'radar').ok, true, 'mountain should allow radar deployment');
 
+// --- 波次生成检查 ---
 const planA = data.generateWavePlan({ waveIndex: 5, breaches: [1], killStats: { drone: 8 }, seed: 11 });
 const planB = data.generateWavePlan({ waveIndex: 5, breaches: [3], killStats: { ballistic: 5 }, seed: 29 });
 assert.notDeepStrictEqual(planA.enemies, planB.enemies, 'adaptive wave generation should vary by context and seed');
 
+// --- 防御阵地检查 ---
 assert.strictEqual(typeof data.generateDefenseSites, 'function', 'defense site generator should exist');
 const threeSites = data.generateDefenseSites(3, 31, 900, 600);
 assert.strictEqual(threeSites.length, 3, 'three-city mode should generate three sites');
@@ -134,6 +144,7 @@ assert.strictEqual(data.CONFIG.defenseMode, 3, 'setDefenseMode should store sele
 assert.strictEqual(data.getDefenseSites().length, 3, 'getDefenseSites should return active cities');
 assert.strictEqual(data.CONFIG.centerX, data.getDefenseSites()[0].x, 'primary center should follow first generated city');
 
+// --- 敌脑攻击计划 ---
 assert.strictEqual(typeof data.EnemyBrain.chooseAttackPlan, 'function', 'enemy brain should choose attack plans');
 const brainPlan = data.EnemyBrain.chooseAttackPlan({
     waveIndex: 6,
@@ -154,6 +165,7 @@ assert.ok(brainPlan.assignments.length > 0, 'enemy brain should produce attack a
 assert.ok(brainPlan.assignments.some(item => item.targetId === 'city-b'), 'enemy brain should favor the weaker or previously breached city');
 assert.ok(brainPlan.assignments.some(item => item.role === 'main') && brainPlan.assignments.some(item => item.role === 'feint'), 'enemy brain should mix main effort and feints');
 
+// --- 三城攻击计划 ---
 const threeCityPlan = data.EnemyBrain.chooseAttackPlan({
     waveIndex: 4,
     sites: [
@@ -173,6 +185,7 @@ assert.deepStrictEqual(
     'three-city attack plans should assign enemies to every protected site'
 );
 
+// --- 战斗日志检查 ---
 const game = loadGameSandbox();
 assert.strictEqual(typeof game.BattleLog.add, 'function', 'BattleLog.add should exist');
 game.BattleLog.reset();
@@ -180,6 +193,7 @@ for (let i = 0; i < 80; i++) game.BattleLog.add('test', 'entry ' + i, { index: i
 assert.ok(game.BattleLog.entries.length <= game.BattleLog.maxEntries, 'battle log should cap stored entries');
 assert.strictEqual(game.BattleLog.entries[game.BattleLog.entries.length - 1].message, 'entry 79', 'battle log should keep newest entries');
 
+// --- 作战日志渲染 ---
 const opLine = game.UIModule.renderOperationLogLine({
     frame: 61,
     type: 'spawn',
@@ -188,6 +202,7 @@ const opLine = game.UIModule.renderOperationLogLine({
 });
 assert.strictEqual(opLine, '[00:01] 第2波 预警雷达-1 已录入战场情报', 'operation log line should use timestamp, wave number and readable event text');
 
+// --- 波间倒计时检查 ---
 const oneX = game.CONFIG.interWaveDuration;
 game.CONFIG.simulationSpeed = 5;
 game.CONFIG.interWavePhase = true;
@@ -196,17 +211,20 @@ game.EnemyModule.updateInterWaveCountdown();
 assert.strictEqual(game.CONFIG.interWaveTimer, 1, 'inter-wave timer should advance once per visual frame at 5x');
 assert.strictEqual(oneX, game.CONFIG.interWaveDuration, 'inter-wave duration should stay stable');
 
+// --- 提示框定位检查 ---
 assert.strictEqual(typeof game.UIModule.getTooltipPosition, 'function', 'tooltip boundary helper should exist');
 const flipped = game.UIModule.getTooltipPosition({ clientX: 320, clientY: 730 }, { width: 260, height: 180 }, { innerWidth: 500, innerHeight: 820 });
 assert.ok(flipped.top < 730, 'tooltip should open upward when it would overflow the bottom edge');
 assert.ok(flipped.left <= 500 - 260 - 8, 'tooltip should stay inside right viewport edge');
 
+// --- 刷怪间隔检查 ---
 const earlyInterval = game.EnemyModule.getSpawnIntervalForWave(0, 1);
 const lateInterval = game.EnemyModule.getSpawnIntervalForWave(8, 1);
 const fastLateInterval = game.EnemyModule.getSpawnIntervalForWave(8, 5);
 assert.ok(earlyInterval > lateInterval, 'later waves should use shorter attack intervals');
 assert.ok(lateInterval > fastLateInterval, 'simulation speed should still shorten spawn spacing inside a wave');
 
+// --- 波次清空进入部署期 ---
 game.EnemyModule.list = [];
 game.EnemyModule.pendingSpawns = 0;
 game.EnemyModule.waveActive = true;
@@ -226,6 +244,7 @@ game.EnemyModule.waveActive = false;
 game.EnemyModule.list = [];
 game.EnemyModule.pendingSpawns = 0;
 
+// --- 侧翼敌机路径检查 ---
 game.EquipModule.list = [];
 const flanker = {
     x: 0,
@@ -258,6 +277,7 @@ for (let frame = 0; frame < 900; frame++) {
 }
 assert.strictEqual(flankerReachedTarget, true, 'flanker enemies should eventually converge on the target instead of orbiting forever');
 
+// --- 突破目标统计 ---
 game.EnemyModule.list = [{
     x: game.CONFIG.centerX,
     y: game.CONFIG.centerY,
@@ -289,6 +309,7 @@ assert.strictEqual(game.Game.enemiesBreakthrough, 1, 'breached target should be 
 assert.strictEqual(game.EnemyModule.list.length, 0, 'breached target should be removed from active enemy list');
 assert.strictEqual(game.CONFIG.threatLevel, 0, 'threat warning should clear after breached target is removed');
 
+// --- 战报数据检查 ---
 const report = game.UIModule.buildBattleReportData({
     finalScore: 88,
     rate: 80,
@@ -315,4 +336,5 @@ assert.ok(detailHtml.includes('<details class="archive-collapse archive-log-coll
 assert.ok(detailHtml.includes('[00:'), 'archived battle logs should render timestamped operation lines');
 assert.ok((detailHtml.match(/<details class="archive-collapse/g) || []).length >= 5, 'long archive report sections should be collapsible');
 
+// --- 输出结果 ---
 console.log('mechanics regressions passed');

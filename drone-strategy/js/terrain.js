@@ -9,6 +9,7 @@ let cloudUpdateInterval = null;
 // --- 地形数据 ---
 let terrainData = { mountains: [], hills: [] };
 
+// 判断位置是否安全可放
 function isPositionSafe(x, y, width, height, existingTerrains = []) {
     for (const zone of FORBIDDEN_ZONES) {
         if (x < zone.x + zone.width + 50 &&
@@ -30,6 +31,7 @@ function isPositionSafe(x, y, width, height, existingTerrains = []) {
     return true;
 }
 
+// 生成山地与丘陵
 function generateTerrain() {
     const view = document.getElementById('satellite-view');
 
@@ -115,6 +117,7 @@ function generateTerrain() {
     addTerrainLegend(view);
 }
 
+// 添加地形图例
 function addTerrainLegend(view) {
     const existingLegend = view.querySelector('.terrain-legend');
     if (existingLegend) existingLegend.remove();
@@ -132,6 +135,7 @@ function addTerrainLegend(view) {
     view.appendChild(legend);
 }
 
+// 生成随机云层
 function generateClouds() {
     const view = document.getElementById('satellite-view');
     clouds.length = 0;
@@ -182,6 +186,7 @@ function generateClouds() {
     }, 15000);
 }
 
+// 更新云层漂移
 function updateClouds() {
     clouds.forEach((cloud, i) => {
         cloud.x += cloud.speedX;
@@ -200,6 +205,7 @@ function updateClouds() {
     });
 }
 
+// 判断坐标是否在云内
 function isPointInCloud(x, y) {
     for (const cloud of clouds) {
         const centerX = cloud.x + cloud.width / 2;
@@ -215,6 +221,7 @@ function isPointInCloud(x, y) {
     return false;
 }
 
+// 判断坐标是否在山地
 function isPointInMountain(x, y) {
     for (const mountain of terrainData.mountains) {
         if (x >= mountain.x && x <= mountain.x + mountain.width &&
@@ -225,6 +232,7 @@ function isPointInMountain(x, y) {
     return null;
 }
 
+// 判断单位是否受地形掩护
 function isUnitInTerrainCover(unit, terrainType) {
     if (terrainType === 'mountain') {
         const mountain = isPointInMountain(unit.x, unit.y);
@@ -233,6 +241,7 @@ function isUnitInTerrainCover(unit, terrainType) {
     return false;
 }
 
+// 更新电子干扰区域
 function updateElectronicJamming() {
     const view = document.getElementById('satellite-view');
     document.querySelectorAll('.electronic-jamming').forEach(el => el.remove());
@@ -251,6 +260,7 @@ function updateElectronicJamming() {
     });
 }
 
+// 判断坐标是否被干扰
 function isPointInJamming(x, y) {
     const radarStations = mockEnemyUnits.filter(e => e.type === 'radar' && e.health > 0);
 

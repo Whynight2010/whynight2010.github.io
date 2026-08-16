@@ -21,6 +21,7 @@ function startGameLoop() {
     }, 1000 / gameSpeed);
 }
 
+// --- 战斗主循环 ---
 function updateGame() {
     updateUnitsList();
     updateEnemyList();
@@ -36,12 +37,14 @@ function updateGame() {
     checkBattleOutcome();
 }
 
+// --- 编组视图切换 ---
 function toggleGroupView() {
     showFormationManager();
 }
 
 // --- 战斗日志 ---
 
+// 追加一条战斗日志
 function addBattleLog(message) {
     const log = document.getElementById('battle-log');
     const time = formatTime(gameTime);
@@ -56,6 +59,7 @@ function addBattleLog(message) {
     }
 }
 
+// 定时生成随机日志
 function updateBattleLog() {
     if (gameTime % 30 === 0 && gameTime > 0) {
         const randomEvents = ['侦察范围更新', '单位状态检查', '敌方动向监测', '战术分析中'];
@@ -63,6 +67,7 @@ function updateBattleLog() {
     }
 }
 
+// 刷新战斗统计显示
 function updateBattleStats() {
     var lossEl = document.getElementById('friendly-loss');
     var foundEl = document.getElementById('enemy-found');
@@ -79,6 +84,7 @@ function updateBattleStats() {
     }
 }
 
+// 检查战斗胜负条件
 function checkBattleOutcome() {
     if (!gameRunning || battleResolved) return;
 
@@ -105,6 +111,7 @@ function checkBattleOutcome() {
     }
 }
 
+// 结束战斗并结算
 function finalizeBattle(result, summary) {
     battleResolved = true;
     gameRunning = false;
@@ -119,6 +126,7 @@ function finalizeBattle(result, summary) {
     loadReports();
 }
 
+// 生成并写入战报
 function persistBattleReport(result, summary) {
     var completion = Math.min(100, Math.round((parseFloat(document.getElementById('mission-progress').style.width) || 0)));
     var lossRate = Math.round((getCurrentFriendlyLoss() / getFriendlyUnits().length) * 100);
@@ -176,6 +184,7 @@ function persistBattleReport(result, summary) {
 
 // --- 任务进度 ---
 
+// 计算并更新任务进度
 function updateProgress() {
     const hiddenEnemies = mockEnemyUnits.filter(e => e.hidden);
     const totalHiddenEnemies = hiddenEnemies.length;
